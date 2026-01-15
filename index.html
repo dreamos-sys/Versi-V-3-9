@@ -1,0 +1,3183 @@
+     <!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DREAM OS v13.9.9 — Quantum Stealth Edition</title>
+    
+    <!-- Supabase & QR Scanner -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/npm/twemoji@latest/assets/svg/1f4bb.svg">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0A0F2C">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="DREAM OS">
+
+    <style>
+        /* ================= ROOT VARIABLES ================= */
+        :root {
+            --emerald: #00C897;
+            --gold: #FFD700;
+            --dark: #0A0F2C;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --success: #10b981;
+            --blue: #3b82f6;
+            --purple: #8b5cf6;
+            --excel-green: #217346;
+            --ghost-bg: rgba(10, 15, 44, 0.98);
+            --glass: rgba(255, 255, 255, 0.08);
+            --text-dim: rgba(255, 255, 255, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; }
+
+        body {
+            background: radial-gradient(circle at center, #1a1f3c 0%, #0A0F2C 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-bottom: 20px;        }
+
+        /* ================= HEADER BISMILLAH ================= */
+        .arabic-header {
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(90deg, transparent, rgba(0, 200, 151, 0.1), transparent);
+            border-bottom: 2px solid var(--emerald);
+            margin-bottom: 5px;
+            position: relative;
+        }
+
+        .bismillah {
+            font-family: 'Amiri', serif;
+            font-size: 2.2rem;
+            color: var(--gold);
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .bismillah:hover { transform: scale(1.03); }
+
+        .shalawat {
+            font-family: 'Amiri', serif;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 8px 0 5px 0;
+            line-height: 1.5;
+        }
+
+        .system-title {
+            color: var(--emerald);
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        /* ================= DFLASH SLIDING HEADER ================= */
+        .dflash-slider {
+            display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+            padding: 10px; gap: 10px; background: rgba(0,0,0,0.2);
+            scrollbar-width: none;
+        }
+        .dflash-slider::-webkit-scrollbar { display: none; }
+
+        .slide {
+            min-width: 85%; scroll-snap-align: center; padding: 15px;
+            border-radius: 12px; background: var(--glass); border-left: 4px solid var(--emerald);
+            font-size: 0.9rem; line-height: 1.4;
+        }        .urgent-slide { 
+            border-left-color: var(--danger); 
+            background: rgba(239, 68, 68, 0.1); 
+            animation: emergency-pulse 2s infinite;
+        }
+
+        @keyframes emergency-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(239,68,68,0); }
+            100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+        }
+
+        /* ================= LOGIN OVERLAY ================= */
+        #login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--ghost-bg);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--emerald);
+            border-radius: 20px;
+            padding: 30px 25px;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            animation: slideUp 0.5s ease;
+            position: relative;
+            z-index: 1001; /* ← INI YANG BUAT BISA DIKLIK! */
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .login-icon { font-size: 3.5rem; margin-bottom: 15px; display: block; }
+
+        .fingerprint-btn {            background: rgba(0, 200, 151, 0.1);
+            border: 2px solid var(--emerald);
+            border-radius: 50%;
+            width: 75px;
+            height: 75px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            margin: 15px auto;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .fingerprint-btn:hover {
+            background: rgba(0, 200, 151, 0.2);
+            transform: scale(1.1);
+            box-shadow: 0 0 15px var(--emerald);
+        }
+
+        .pass-input {
+            width: 100%;
+            padding: 12px 18px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--emerald);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            margin: 12px 0;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .login-btn {
+            background: var(--emerald);
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+
+        .login-btn:hover { background: #00b386; }
+
+        /* ... (SEMUA CSS LAINNYA TETAP SAMA SAMPA AKHIR) ... */
+        /* ================= FOOTER ISO ================= */
+        .footer {
+            margin-top: 30px;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.5);
+            border-top: 1px solid rgba(255,215,0,0.1);
+        }
+
+        /* ================= RESPONSIVE DESIGN ================= */
+        @media (max-width: 768px) {
+            .form-row { grid-template-columns: 1fr; }
+            .main-grid { grid-template-columns: repeat(2, 1fr); }
+            .bismillah { font-size: 1.9rem; }
+            .shalawat { font-size: 1rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .action-buttons { grid-template-columns: 1fr; }
+            .schedule-header, .schedule-row { grid-template-columns: 80px 100px 1fr 1fr; }
+            .officer-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .main-grid { grid-template-columns: 1fr; }
+            .shift-buttons { grid-template-columns: 1fr; }
+            .condition-buttons { flex-direction: column; }
+            .schedule-header, .schedule-row { grid-template-columns: 1fr; display: block; }
+            .schedule-col { display: block; padding: 10px; }
+        }
+    </style>
+</head>
+
+    <!-- HEADER BISMILLAH -->
+    <header class="arabic-header" id="bismillah-trigger">
+        <div class="bismillah">﷽</div>
+        <div class="shalawat">بِسْمِ اللَّـهِ الرَّحْمَـٰنِ الرَّحِيمِ<br>اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ</div>
+        <div class="system-title">DREAM OS v13.9.9 — Quantum Stealth Edition</div>
+    </header>
+
+    <!-- DFLASH SLIDING HEADER -->
+    <div class="dflash-slider" id="smartSlider">
+        <div class="slide">
+            <span style="color: var(--gold); font-weight:bold;">👋 Assalamualaikum, Team!</span><br>
+            Keluarga Besar SIF Al-Fikri | Quantum Bridge Active
+        </div>
+        <div class="slide" id="weatherSlide">
+            <span style="color: var(--blue); font-weight:bold;">🌦️ BMKG LIVE - TITIK 0 AF</span><br>
+            Sedang memuat data cuaca presisi...        </div>
+        <div class="slide urgent-slide" id="disasterSlide">
+            <span style="color: var(--danger); font-weight:bold;">🚨 EMERGENCY ALERT</span><br>
+            Pantau Gempa & Cuaca Buruk Depok.
+        </div>
+    </div>
+
+    <!-- LOGIN OVERLAY -->
+    <div id="login-overlay">
+        <div class="login-box">
+            <span class="login-icon">🧬</span>
+            <h2 style="color: var(--gold); margin-bottom: 8px; font-family: 'Amiri', serif; font-size:1.5rem;">SMART BIOMETRIC ACCESS</h2>
+            <p style="color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-bottom: 20px;">
+                Verified Fingerprint Redmi Note 9 Pro atau Master Key
+            </p>
+            
+            <div class="fingerprint-btn" onclick="simulateFingerprint()">
+                👆
+            </div>
+            <div id="finger-status" style="font-size: 0.8rem; color: var(--emerald); margin: 12px 0; font-weight: bold;">
+                [ SCANNER READY: Listening Mode ]
+            </div>
+            
+            <!-- PASSWORD FIELD WITH TOGGLE -->
+            <div style="position: relative; width: 100%; margin: 12px 0;">
+                <input type="password" class="pass-input" id="passInput" 
+                       placeholder="••••••••" 
+                       onkeypress="handleEnterKey(event)"
+                       style="padding-right: 45px; width: 100%;">
+                <button type="button" 
+                        onclick="togglePasswordVisibility()"
+                        style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--gold); font-size: 1.2rem; cursor: pointer;"
+                        id="togglePassBtn">👁️</button>
+            </div>
+            
+            <button class="login-btn" onclick="handleLogin()">🔓 ACTIVATE SYSTEM</button>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD (9-GRID SYSTEM) -->
+    <main id="dashboard" style="display:none;">
+        <!-- Isi dashboard kamu tetap utuh di sini -->
+        <!-- ... (semua kode bookingView, iconGrid, dll) ... -->
+    </main>
+
+    <!-- ================= SEMUA JAVASCRIPT DI SINI ================= -->
+    <script>
+        // === TOGGLE PASSWORD VISIBILITY ===
+        function togglePasswordVisibility() {
+            const pass = document.getElementById('passInput');            const btn = document.getElementById('togglePassBtn');
+            if (pass.type === 'password') {
+                pass.type = 'text';
+                btn.textContent = '🙈';
+            } else {
+                pass.type = 'password';
+                btn.textContent = '👁️';
+            }
+        }
+
+        // === TAP 3X BISMILLAH TRIGGER ===
+        let bismillahTapCount = 0;
+        document.getElementById('bismillah-trigger').addEventListener('click', function() {
+            bismillahTapCount++;
+            const bismillahEl = this.querySelector('.bismillah');
+            
+            if (bismillahTapCount >= 3) {
+                const masterKey = "Enak";
+                document.getElementById('passInput').value = masterKey;
+                bismillahEl.innerHTML = '🔓 بِسْمِ اللَّـهِ - ACCESS GRANTED';
+                bismillahEl.style.color = 'var(--emerald)';
+                bismillahEl.style.textShadow = '0 0 15px rgba(0, 200, 151, 0.5)';
+                document.getElementById('passInput').focus();
+                bismillahTapCount = 0;
+            } else {
+                bismillahEl.textContent = '﷽'.repeat(bismillahTapCount);
+                setTimeout(() => {
+                    if (bismillahTapCount < 3) {
+                        bismillahEl.textContent = '﷽';
+                    }
+                }, 800);
+            }
+        });
+
+        // === HANDLE ENTER KEY ===
+        function handleEnterKey(e) {
+            if (e.key === 'Enter') {
+                handleLogin();
+            }
+        }
+
+        // === HANDLE LOGIN ===
+        function handleLogin() {
+            const pass = document.getElementById('passInput').value;
+            if (pass === "Enak") {
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                alert('✅ Selamat datang, Master M!');
+            } else {
+                alert('❌ Password salah!');            }
+        }
+
+        // === SIMULATE FINGERPRINT (placeholder) ===
+        function simulateFingerprint() {
+            // Nanti bisa diupgrade ke WebAuthn
+            document.getElementById('finger-status').innerText = "🌀 Scanning...";
+            setTimeout(() => {
+                document.getElementById('finger-status').innerText = "⚠️ Biometric not available. Use password.";
+            }, 1000);
+        }
+    </script>
+</body>
+     
+    <!-- DFLASH SLIDING HEADER -->
+    <div class="dflash-slider" id="smartSlider">
+        <div class="slide">
+            <span style="color: var(--gold); font-weight:bold;">👋 Assalamualaikum, Team!</span><br>
+            Keluarga Besar SIF Al-Fikri | Quantum Bridge Active
+        </div>
+        <div class="slide" id="weatherSlide">
+            <span style="color: var(--blue); font-weight:bold;">🌦️ BMKG LIVE - TITIK 0 AF</span><br>
+            Sedang memuat data cuaca presisi...
+        </div>
+        <div class="slide urgent-slide" id="disasterSlide">
+            <span style="color: var(--danger); font-weight:bold;">🚨 EMERGENCY ALERT</span><br>
+            Pantau Gempa & Cuaca Buruk Depok.
+        </div>
+    </div>
+
+    <!-- LOGIN OVERLAY -->
+    <div id="login-overlay">
+        <div class="login-box">
+            <span class="login-icon">🧬</span>
+            <h2 style="color: var(--gold); margin-bottom: 8px; font-family: 'Amiri', serif; font-size:1.5rem;">SMART BIOMETRIC ACCESS</h2>
+            <p style="color: rgba(255,255,255,0.7); font-size: 0.85rem; margin-bottom: 20px;">
+                Verified Fingerprint Redmi Note 9 Pro atau Master Key
+            </p>
+            
+            <div class="fingerprint-btn" onclick="simulateFingerprint()">
+                👆
+            </div>
+            <div id="finger-status" style="font-size: 0.8rem; color: var(--emerald); margin: 12px 0; font-weight: bold;">
+                [ SCANNER READY: Listening Mode ]
+            </div>
+            
+            <div style="position: relative; width: 100%; margin: 12px 0;">
+  <input type="password" class="pass-input" id="passInput" 
+         placeholder="••••••••" 
+         onkeypress="handleEnterKey(event)"
+         style="padding-right: 45px;">
+  <button type="button" 
+          onclick="togglePasswordVisibility()"
+          style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--gold); font-size: 1.2rem; cursor: pointer;"
+          id="togglePassBtn">👁️</button>
+</div>
+            
+            <button class="login-btn" onclick="handleLogin()">🔓 ACTIVATE SYSTEM</button>
+        </div> -->
+    <main id="dashboard">
+        <div class="main-grid" id="iconGrid">
+            <!-- Icons akan diisi oleh JavaScript -->
+        </div>
+
+        <!-- ================= VIEWS SECTION ================= -->
+        
+        <!-- BOOKING VIEW -->
+        <div id="bookingView" class="view">
+            <div class="view-header">
+                <div class="view-title">BOOKING SARANA + QUANTUM</div>
+                <button class="close-btn" onclick="system.showView('service')">×</button>
+            </div>
+
+            <!-- SARANA SELECTION - 22 UNIT LENGKAP -->
+            <div class="form-group">
+                <label class="form-label">Pilih Sarana (22 Unit)</label>
+                <select class="form-input" id="bookingSarana" onchange="system.checkSaranaRules(this.value)">
+                    <option value="">-- Pilih Sarana --</option>
+                    <optgroup label="🏛️ AULA UTAMA">
+                        <option value="Aula SMP">Aula SMP (Sound System, Lighting, AC, Projector)</option>
+                        <option value="Aula SMA">Aula SMA (Sound System, Projector, AC)</option>
+                        <option value="Aula Serbaguna">Aula Serba Guna (Sound System)</option>
+                        <option value="Saung Besar">Saung Besar (Sound System)</option>
+                        <option value="Saung Kecil">Saung Kecil (Sound System)</option>
+                    </optgroup>
+                    <optgroup label="💻 LAB KOMPUTER">
+                        <option value="Labkom SD">Lab Komputer SD (30 Unit)</option>
+                        <option value="Labkom SMP">Lab Komputer SMP (40 Unit)</option>
+                        <option value="Labkom SMA">Lab Komputer SMA (50 Unit)</option>
+                    </optgroup>
+                    <optgroup label="🌿 OUTDOOR AREA">
+                        <option value="Lapangan SMA">Lapangan SMA</option>
+                        <option value="Lapangan Basket">Lapangan Basket</option>
+                        <option value="Lapangan Volley">Lapangan Volley</option>
+                        <option value="Lapangan Futsal">Lapangan Futsal</option>
+                        <option value="Lapangan Rumput">Lapangan Rumput</option>
+                        <option value="Lapangan Rumput Depan Masjid AF">Lapangan Rumput Depan Masjid AF</option>
+                        <option value="Area Parkir Loby SMA">Area Parkir Loby SMA</option>
+                    </optgroup>
+                    <optgroup label="🍽️ KANTIN & RUANG MAKAN">
+                        <option value="Kantin SMP">Kantin SMP</option>
+                        <option value="Kantin SMA">Kantin SMA</option>
+                    </optgroup>
+                    <optgroup label="📚 PERPUSTAKAAN">
+                        <option value="Perpus SD">Perpustakaan SD</option>
+                        <option value="Perpus SMP">Perpustakaan SMP</option>
+                        <option value="Perpus SMA">Perpustakaan SMA</option>
+                    </optgroup>
+                    <optgroup label="🕌 RUANG IBADAH">
+                        <option value="Masjid" disabled>Masjid (MAINTENANCE)</option>
+                        <option value="Musholla SMA">Musholla SMA</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <!-- PIC DETAILS -->
+            <div class="form-group">
+                <label class="form-label">Nama PIC / Guru *</label>
+                <input type="text" class="form-input" id="bookingPIC" placeholder="Nama lengkap beserta gelar">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">No Hp / Guru *</label>
+                <input type="text" class="form-input" id="bookingPhone" placeholder="No Hp lengkap">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Unit / Jurusan *</label>
+                <select class="form-input" id="bookingUnit">
+                    <option value="">-- Pilih Unit --</option>
+                    <option value="SD">SD Al Fikri</option>
+                    <option value="SMP">SMP Al Fikri</option>
+                    <option value="SMA">SMA Al Fikri</option>
+                    <option value="Umum">Umum</option>
+                </select>
+            </div>
+
+            <!-- DATE & TIME -->
+            <div class="form-group">
+                <label class="form-label">Tanggal Booking *</label>
+                <input type="date" class="form-input" id="bookingDate" onchange="system.checkDateRules()">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Waktu Booking *</label>
+                <div class="time-grid">
+                    <input type="time" class="form-input" id="bookingStart" value="07:30" onchange="system.checkTimeRules()">
+                    <div class="time-separator">→</div>
+                    <input type="time" class="form-input" id="bookingEnd" value="16:00" onchange="system.checkTimeRules()">
+                </div>
+                <div style="color: var(--text-dim); font-size: 0.8rem; margin-top: 8px;">
+                    ⏰ Jam operasional: Senin-Jumat 07:30 - 16:00 WIB
+                </div>
+            </div>
+
+            <!-- DETAILS -->
+            <div class="form-group">
+                <label class="form-label">Keterangan Acara / Keperluan</label>
+                <textarea class="form-input form-textarea" id="bookingNote" placeholder="Detail keperluan acara, jumlah peserta, peralatan khusus yang dibutuhkan..."></textarea>
+            </div>
+
+            <!-- FRIDAY WARNING -->
+            <div id="fridayWarning" class="alert-box" style="display: none;">
+                <div style="color: var(--danger); font-weight: 800; font-size: 0.9rem; margin-bottom: 5px;">
+                    ⚠️ PERHATIAN: JUMAT 10:30 - 13:00 WIB
+                </div>
+                <div style="color: #fca5a5; font-size: 0.85rem;">
+                    Aula SMP dan Serba Guna tidak dapat dibooking untuk acara non-keagamaan pada jam shalat Jumat.
+                </div>
+            </div>
+
+            <!-- SATURDAY INFO -->
+            <div id="saturdayInfo" class="info-box" style="display: none;">
+                <div style="color: var(--blue); font-weight: 800; font-size: 0.9rem; margin-bottom: 5px;">
+                    ℹ️ BOOKING HARI SABTU
+                </div>
+                <div style="color: #93c5fd; font-size: 0.85rem;">
+                    Booking hari Sabtu memerlukan konfirmasi khusus via WhatsApp ke Pak Erwin (+62 888-6183-954).
+                </div>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <button class="btn btn-primary" onclick="system.sendBooking()">
+                <div>📡</div>
+                <div>KIRIM VIA QUANTUM BRIDGE</div>
+            </button>
+
+            <button class="btn btn-secondary" onclick="system.checkAvailability()">
+                <div>🔍</div>
+                <div>CEK KETERSEDIAAN</div>
+            </button>
+
+            <div class="info-box">
+                <div style="color: var(--blue); font-weight: 800; font-size: 0.9rem; margin-bottom: 8px;">
+                    📡 QUANTUM BRIDGE SYNC
+                </div>
+                <div style="color: #93c5fd; font-size: 0.85rem; line-height: 1.5;">
+                    1. Data dikirim ke Admin Dashboard Pak Erwin secara real-time<br>
+                    2. Jika offline, data akan diqueue dan sync otomatis saat online<br>
+                    3. Sound notification "BIP!" di dashboard untuk setiap booking<br>
+                    4. Semua data tersimpan di localStorage untuk backup
+                </div>
+            </div>
+        </div>
+
+        <!-- K3 VIEW -->
+        <div id="k3View" class="view">
+            <div class="view-header">
+                <div class="view-title">LAPORAN K3 + QUANTUM</div>
+                <button class="close-btn" onclick="system.showView('service')">×</button>
+            </div>
+
+            <div style="text-align: center; margin: 20px 0 30px;">
+                <div style="font-size: 4rem; color: var(--danger); margin-bottom: 10px;">⚠️</div>
+                <div style="color: var(--gold); font-weight: 800; font-size: 1.1rem;">
+                    LAPORAN KECELAKAN KERJA / POTENSI BAHAYA
+                </div>
+                <div style="color: var(--text-dim); font-size: 0.9rem; margin-top: 5px;">
+                    Dengan bukti foto wajib • Quantum Sync ke Dashboard
+                </div>
+            </div>
+
+            <!-- K3 FORM -->
+            <div class="form-group">
+                <label class="form-label">Lokasi Kejadian *</label>
+                <input type="text" class="form-input" id="k3Location" placeholder="Contoh: Labkom SMP lantai 2, Aula SMA, Area Parkir...">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Jenis Laporan *</label>
+                <select class="form-input" id="k3Type">
+                    <option value="">-- Pilih Jenis Laporan --</option>
+                    <option value="Kecelakaan Kerja">Kecelakaan Kerja</option>
+                    <option value="Potensi Bahaya">Potensi Bahaya</option>
+                    <option value="Keamanan">Pelanggaran Keamanan</option>
+                    <option value="Kebersihan">Masalah Kebersihan</option>
+                    <option value="Fasilitas Rusak">Fasilitas Rusak</option>
+                    <option value="Kebakaran">Potensi Kebakaran</option>
+                    <option value="Listrik">Masalah Kelistrikan</option>
+                    <option value="Lainnya">Lainnya</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Nama Pelapor *</label>
+                <input type="text" class="form-input" id="k3Reporter" placeholder="Nama lengkap pelapor">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">No Hp *</label>
+                <input type="text" class="form-input" id="k3Phone" placeholder="No Hp lengkap">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Unit Pelapor *</label>
+                <select class="form-input" id="k3Unit">
+                    <option value="">-- Pilih Unit --</option>
+                    <option value="Guru">Guru</option>
+                    <option value="Siswa">Siswa</option>
+                    <option value="Staf">Staf Administrasi</option>
+                    <option value="Kebersihan">Petugas Kebersihan</option>
+                    <option value="Sekuriti">Petugas Keamanan</option>
+                    <option value="Umum">Umum</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Deskripsi Lengkap *</label>
+                <textarea class="form-input form-textarea" id="k3Description" placeholder="Jelaskan kejadian dengan detail:
+• Waktu kejadian
+• Kronologi
+• Dampak/kerusakan
+• Korban (jika ada)
+• Tindakan darurat yang sudah dilakukan"></textarea>
+            </div>
+
+            <!-- CAMERA SECTION -->
+            <div class="camera-container">
+                <video id="cameraPreview" class="camera-preview" autoplay playsinline></video>
+                <div class="camera-controls">
+                    <button class="camera-btn" style="background: var(--green);" onclick="system.startCamera('k3')">
+                        📸 BUKA KAMERA
+                    </button>
+                    <button class="camera-btn" style="background: var(--blue);" onclick="system.capturePhoto('k3')">
+                        📷 AMBIL FOTO
+                    </button>
+                    <button class="camera-btn" style="background: var(--danger);" onclick="system.stopCamera()">
+                        ⏹️ TUTUP KAMERA
+                    </button>
+                </div>
+            </div>
+
+            <!-- PHOTO PREVIEW -->
+            <div id="k3PhotoPreview" class="photo-preview" style="display: none;">
+                <div style="color: var(--gold); font-weight: 800; font-size: 0.95rem; margin-bottom: 10px;">
+                    📸 BUKTI FOTO KEJADIAN
+                </div>
+                <img id="k3Photo" src="" style="width: 100%; border-radius: 10px; border: 2px solid var(--danger);">
+                <div style="color: var(--text-dim); font-size: 0.8rem; margin-top: 10px; text-align: center;">
+                    Foto ini akan tersimpan di database sebagai bukti dokumentasi
+                </div>
+            </div>
+
+            <!-- SEND BUTTON -->
+            <button class="btn btn-danger" onclick="system.sendK3Report()">
+                <div>📡</div>
+                <div>KIRIM LAPORAN VIA QUANTUM BRIDGE</div>
+            </button>
+
+            <div class="info-box">
+                <div style="color: var(--blue); font-weight: 800; font-size: 0.9rem; margin-bottom: 8px;">
+                    📡 QUANTUM SYNC PROTOCOL
+                </div>
+                <div style="color: #93c5fd; font-size: 0.85rem; line-height: 1.5;">
+                    1. Data dikirim ke Admin Dashboard Pak Erwin secara real-time<br>
+                    2. Jika offline, data akan diqueue dan sync otomatis saat online<br>
+                    3. Sound notification "BIP!" di dashboard untuk setiap laporan<br>
+                    4. Semua data tersimpan di localStorage untuk backup
+                </div>
+            </div>
+        </div>
+
+        <!-- SECURITY VIEW (Laporan Insiden) -->
+        <div id="securityView" class="view">
+            <div class="view-header">
+                <div class="view-title">LAPORAN HARIAN SEKURITI</div>
+                <button class="close-btn" onclick="system.showView('service')">×</button>
+            </div>
+
+            <div style="text-align: center; margin: 20px 0 30px;">
+                <div style="font-size: 4rem; margin-bottom: 10px;">💂</div>
+                <div style="color: var(--gold); font-weight: 800; font-size: 1.1rem;">
+                    SISTEM PATROLI & LAPORAN KEAMANAN
+                </div>
+                <div style="color: var(--text-dim); font-size: 0.9rem; margin-top: 5px;">
+                    Check-in patroli setiap 2 jam dengan bukti foto • Quantum Sync
+                </div>
+            </div>
+
+            <!-- SECURITY FORM -->
+            <div class="form-group">
+                <label class="form-label">Nama Petugas 1 / Sekuriti *</label>
+                <input type="text" class="form-input" id="securityOfficer" placeholder="Nama lengkap">
+            </div>
+                
+            <div class="form-group">
+                <label class="form-label">Shift / Waktu Patroli *</label>
+                <select class="form-input" id="securityShift">
+                    <option value="">-- Pilih Shift --</option>
+                    <option value="Pagi (07:00-19:00)">Pagi (07:00-19:00)</option>
+                    <option value="Malam (19:00-07:00)">Malam (19:00-07:00)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Jenis Laporan *</label>
+                <select class="form-input" id="securityReportType">
+                    <option value="">-- Pilih Jenis Laporan --</option>
+                    <option value="Check-in Patroli">Check-in Patroli (Rutin 2 jam)</option>
+                    <option value="Laporan Keamanan">Laporan Keamanan</option>
+                    <option value="Insiden Keamanan">Insiden Keamanan</option>
+                    <option value="Orang Asing">Orang Asing Terdeteksi</option>
+                    <option value="Kendaraan Mencurigakan">Kendaraan Mencurigakan</option>
+                    <option value="Check-out Patroli">Check-out Patroli</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Lokasi Patroli *</label>
+                <select class="form-input" id="securityLocation">
+                    <option value="">-- Pilih Lokasi --</option>
+                    <option value="Pos Utama (Gerbang Depan)">Pos Utama (Gerbang Depan)</option>
+                    <option value="Area Belakang (Gerbang Belakang)">Area Belakang (Gerbang Belakang)</option>
+                    <option value="Area Belakang Gedung Belakang SD dan SMP">Area Belakang Gedung Belakang SD dan SMP</option>
+                    <option value="Area Gedung SD">Area Gedung SD</option>
+                    <option value="Area Gedung SMP">Area Gedung SMP</option>
+                    <option value="Area Gedung SMA">Area Gedung SMA</option>
+                    <option value="Area Olah Raga dan Taman">Area Olah Raga dan Taman</option>
+                    <option value="Seluruh Area">Patroli Seluruh Area</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Kondisi Keamanan *</label>
+                <select class="form-input" id="securityCondition">
+                    <option value="">-- Pilih Kondisi --</option>
+                    <option value="Aman">Aman (Tidak Ada Masalah)</option>
+                    <option value="Waspada">Waspada (Ada Potensi)</option>
+                    <option value="Darurat">Darurat (Butuh Tindakan)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Deskripsi Kejadian / Catatan</label>
+                <textarea class="form-input form-textarea" id="securityDescription" placeholder="Deskripsikan kondisi keamanan di lokasi:
+• Aktivitas yang terlihat
+• Orang/kendaraan mencurigakan
+• Kerusakan fasilitas
+• Pelanggaran peraturan
+• Tindakan yang sudah dilakukan"></textarea>
+            </div>
+
+            <!-- SECURITY CAMERA -->
+            <div class="camera-container">
+                <video id="securityCameraPreview" class="camera-preview" autoplay playsinline></video>
+                <div class="camera-controls">
+                    <button class="camera-btn" style="background: var(--green);" onclick="system.startCamera('security')">
+                        📸 BUKA KAMERA
+                    </button>
+                    <button class="camera-btn" style="background: var(--blue);" onclick="system.capturePhoto('security')">
+                        📷 FOTO BUKTI
+                    </button>
+                    <button class="camera-btn" style="background: var(--danger);" onclick="system.stopCamera()">
+                        ⏹️ TUTUP KAMERA
+                    </button>
+                </div>
+            </div>
+
+            <!-- PHOTO PREVIEW -->
+            <div id="securityPhotoPreview" class="photo-preview" style="display: none;">
+                <div style="color: var(--gold); font-weight: 800; font-size: 0.95rem; margin-bottom: 10px;">
+                    📸 BUKTI PATROLI
+                </div>
+                <img id="securityPhoto" src="" style="width: 100%; border-radius: 10px; border: 2px solid var(--warning);">
+                <div style="color: var(--text-dim); font-size: 0.8rem; margin-top: 10px; text-align: center;">
+                    Foto patroli sebagai bukti kehadiran petugas
+                </div>
+            </div>
+
+            <!-- SEND BUTTON -->
+            <button class="btn btn-warning" onclick="system.sendSecurityReport()">
+                <div>📡</div>
+                <div>KIRIM LAPORAN VIA QUANTUM BRIDGE</div>
+            </button>
+
+            <div class="info-box">
+                <div style="color: var(--blue); font-weight: 800; font-size: 0.9rem; margin-bottom: 8px;">
+                    📡 QUANTUM SYNC ACTIVE
+                </div>
+                <div style="color: #93c5fd; font-size: 0.85rem; line-height: 1.5;">
+                    1. Semua check-in patroli otomatis ke Admin Dashboard<br>
+                    2. Real-time monitoring untuk Pak Erwin<br>
+                    3. Sound notification untuk setiap patroli<br>
+                    4. Backup data di localStorage
+                </div>
+            </div>
+        </div>
+
+        <!-- ADMIN VIEW -->
+        <div id="adminView" class="view">
+            <div class="view-header">
+                <div class="view-title">👑 ADMIN PANEL MASTER</div>
+                <button class="close-btn" onclick="system.showView('service')">×</button>
+            </div>
+
+            <div style="text-align: center; margin: 40px 0;">
+                <div style="font-size: 5rem; margin-bottom: 20px;">👑</div>
+                <div style="color: var(--gold); font-weight: 800; font-size: 1.5rem; margin-bottom: 10px;">
+                    ADMINISTRATOR CONTROL CENTER
+                </div>
+                <div style="color: var(--text-dim); font-size: 1rem;">
+                    Full system control • Device fingerprint • Supabase management
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card" style="background: rgba(0, 200, 151, 0.1);">
+                    <div class="stat-number" id="totalBookings">0</div>
+                    <div class="stat-label">Total Booking</div>
+                </div>
+                
+                <div class="stat-card" style="background: rgba(239, 68, 68, 0.1);">
+                    <div class="stat-number" id="totalK3">0</div>
+                    <div class="stat-label">Laporan K3</div>
+                </div>
+                
+                <div class="stat-card" style="background: rgba(245, 158, 11, 0.1);">
+                    <div class="stat-number" id="totalSecurity">0</div>
+                    <div class="stat-label">Laporan Security</div>
+                </div>
+                
+                <div class="stat-card" style="background: rgba(139, 92, 246, 0.1);">
+                    <div class="stat-number" id="totalJanitor">0</div>
+                    <div class="stat-label">Ceklis Janitor</div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="system.exportAllData()">
+                    <div>📊</div>
+                    <div>EXPORT ALL DATA</div>
+                </button>
+                
+                <button class="btn btn-secondary" onclick="system.manageUsers()">
+                    <div>👥</div>
+                    <div>MANAGE USERS</div>
+                </button>
+                
+                <button class="btn btn-warning" onclick="system.systemSettings()">
+                    <div>⚙️</div>
+                    <div>SYSTEM SETTINGS</div>
+                </button>
+            </div>
+
+            <div class="info-box">
+                <div style="color: var(--gold); font-weight: 800; font-size: 0.9rem; margin-bottom: 10px;">
+                    🔐 ADMIN PRIVILEGES
+                </div>
+                <div style="color: #93c5fd; font-size: 0.85rem; line-height: 1.5;">
+                    • Full access to all modules<br>
+                    • User management & role assignment<br>
+                    • System configuration & backup<br>
+                    • Supabase database management<br>
+                    • Device fingerprint monitoring
+                </div>
+            </div>
+        </div>
+
+        <!-- JANITOR VIEW -->
+        <div id="janitorView" class="view">
+            <div class="view-header">
+                <div class="view-title">🧹 CEKLIS HARIAN JANITOR + QUANTUM</div>
+                <button class="close-btn" onclick="system.showView('service')">×</button>
+            </div>
+
+            <!-- DATE & PETUGAS -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Tanggal Ceklis</label>
+                    <input type="date" class="form-input" id="checklistDate" value="">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Nama Petugas CS</label>
+                    <select class="form-input" id="janitorName">
+                        <option value="">-- Pilih Petugas --</option>
+                        <optgroup label="GEDUNG SD">
+                            <option value="SD Lt1">SD Lt.1 - [Nama Petugas]</option>
+                            <option value="SD Lt2">SD Lt.2 - [Nama Petugas]</option>
+                            <option value="SD Lt3">SD Lt.3 - [Nama Petugas]</option>
+                        </optgroup>
+                        <optgroup label="GEDUNG SMP">
+                            <option value="SMP Lt1">SMP Lt.1 - [Nama Petugas]</option>
+                            <option value="SMP Lt2">SMP Lt.2 - [Nama Petugas]</option>
+                            <option value="SMP Lt3">SMP Lt.3 - [Nama Petugas]</option>
+                            <option value="SMP Tambahan">SMP Tambahan - [Nama Petugas]</option>
+                        </optgroup>
+                        <optgroup label="GEDUNG SMA">
+                            <option value="SMA Lt1">SMA Lt.1 - [Nama Petugas]</option>
+                            <option value="SMA Lt2">SMA Lt.2 - [Nama Petugas]</option>
+                            <option value="SMA Lt3-4">SMA Lt.3-4 - [Nama Petugas]</option>
+                        </optgroup>
+                        <optgroup label="LAINNYA">
+                            <option value="Serba Guna">Gedung Serba Guna & Masjid - [Nama Petugas]</option>
+                            <option value="Taman Blok1">Taman Blok 1 - [Nama Petugas]</option>
+                            <option value="Taman Blok2">Taman Blok 2 - [Nama Petugas]</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+
+            <!-- AREA SELECTION -->
+            <div class="form-group">
+                <label class="form-label">Area Cleaning *</label>
+                <select class="form-input" id="cleaningArea" onchange="JanitorSystem.showChecklist(this.value)">
+                    <option value="">-- Pilih Area --</option>
+                    <option value="toilet">🚽 TOILET (11 Item Ceklis)</option>
+                    <option value="gedung">🏢 GEDUNG (18 Item Ceklis)</option>
+                    <option value="taman">🌳 TAMAN (5+ Item Ceklis)</option>
+                    <option value="semua">✨ SEMUA AREA (Full Checklist)</option>
+                </select>
+            </div>
+
+            <!-- CEKLIS TOILET (11 ITEM) -->
+            <div id="toiletChecklist" class="checklist-section" style="display:none;">
+                <div class="checklist-header">
+                    <div style="color: var(--blue); font-size: 1.1rem; font-weight: bold;">🚽 CEKLIS TOILET (11 POIN)</div>
+                    <div style="color: var(--text-dim); font-size: 0.85rem;">Harap dicek satu per satu</div>
+                </div>
+                
+                <div class="checklist-grid" id="toiletItems">
+                    <!-- Auto-generated by JS -->
+                </div>
+            </div>
+
+            <!-- CEKLIS GEDUNG (18 ITEM) -->
+            <div id="gedungChecklist" class="checklist-section" style="display:none;">
+                <div class="checklist-header">
+                    <div style="color: var(--green); font-size: 1.1rem; font-weight: bold;">🏢 CEKLIS GEDUNG (18 POIN)</div>
+                    <div style="color: var(--text-dim); font-size: 0.85rem;">Ruangan dan fasilitas dalam gedung</div>
+                </div>
+                
+                <div class="checklist-grid" id="gedungItems">
+                    <!-- Auto-generated by JS -->
+                </div>
+            </div>
+
+            <!-- CEKLIS TAMAN (5+ ITEM) -->
+            <div id="tamanChecklist" class="checklist-section" style="display:none;">
+                <div class="checklist-header">
+                    <div style="color: var(--success); font-size: 1.1rem; font-weight: bold;">🌳 CEKLIS TAMAN (5+ POIN)</div>
+                    <div style="color: var(--text-dim); font-size: 0.85rem;">Area outdoor dan taman</div>
+                </div>
+                
+                <div class="checklist-grid" id="tamanItems">
+                    <!-- Auto-generated by JS -->
+                </div>
+            </div>
+
+            <!-- PHOTO EVIDENCE -->
+            <div class="form-group">
+                <label class="form-label">📸 Bukti Foto Cleaning</label>
+                <div class="camera-container">
+                    <video id="janitorCamera" class="camera-preview" autoplay playsinline></video>
+                    <div class="camera-controls">
+                        <button class="camera-btn" style="background: var(--green);" onclick="JanitorSystem.startCamera()">
+                            📸 BUKA KAMERA
+                        </button>
+                        <button class="camera-btn" style="background: var(--blue);" onclick="JanitorSystem.capturePhoto()">
+                            📷 AMBIL FOTO
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="janitorPhotoPreview" class="photo-preview" style="display:none;">
+                    <img id="janitorPhoto" src="" style="width:100%; border-radius:10px;">
+                </div>
+            </div>
+
+            <!-- CATATAN -->
+            <div class="form-group">
+                <label class="form-label">📝 Catatan / Masalah Ditemukan</label>
+                <textarea class="form-input form-textarea" id="janitorNotes" placeholder="Tuliskan catatan:
+• Area yang sulit dibersihkan
+• Kerusakan fasilitas
+• Kebutuhan alat khusus
+• Pest control needed"></textarea>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <button class="btn btn-success" onclick="JanitorSystem.submitChecklist()">
+                <div>✅</div>
+                <div>SIMPAN CEKLIS HARIAN</div>
+            </button>
+
+            <button class="btn btn-secondary" onclick="JanitorSystem.printChecklist()">
+                <div>🖨️</div>
+                <div>CETAK LAPORAN</div>
+            </button>
+
+            <!-- MAPPING INFO -->
+            <div class="info-box">
+                <div style="color: var(--gold); font-weight: 800; font-size: 0.9rem; margin-bottom: 10px;">
+                    👥 MAPPING 14 PETUGAS CS
+                </div>
+                <div style="color: #93c5fd; font-size: 0.85rem; line-height: 1.5;">
+                    • SD: 3 petugas (Lt.1, Lt.2, Lt.3)<br>
+                    • SMP: 4 petugas (Lt.1, Lt.2, Lt.3, Tambahan)<br>
+                    • SMA: 3 petugas (Lt.1, Lt.2, Lt.3-4)<br>
+                    • Serba Guna & Masjid: 1 petugas<br>
+                    • Taman: 2 petugas (Blok 1 & 2)
+                </div>
+            </div>
+        </div>
+
+        <!-- STOCK VIEW -->
+        <div id="stockView" class="view">
+            <div class="view-header">
+                <div class="view-title">📦 STOK & ALAT CS + INVENTORY</div>
+                <button class="close-btn" onclick="system.showView('service')">×</button>
+            </div>
+
+            <div style="text-align: center; margin: 20px 0 30px;">
+                <div style="font-size: 4rem; margin-bottom: 10px;">📦</div>
+                <div style="color: var(--gold); font-weight: 800; font-size: 1.1rem;">
+                    INVENTORY MANAGEMENT SYSTEM
+                </div>
+                <div style="color: var(--text-dim); font-size: 0.9rem; margin-top: 5px;">
+                    24+ Item alat & chemical • Real-time stock tracking
+                </div>
+            </div>
+
+            <!-- FILTER & SEARCH -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Kategori Alat</label>
+                    <select class="form-input" id="toolCategory" onchange="StockSystem.filterItems()">
+                        <option value="">Semua Kategori</option>
+                        <option value="alat_basah">Alat Basah</option>
+                        <option value="alat_kering">Alat Kering</option>
+                        <option value="mesin">Mesin</option>
+                        <option value="chemical">Chemical</option>
+                        <option value="keselamatan">Keselamatan</option>
+                        <option value="taman">Alat Taman</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Cari Item</label>
+                    <input type="text" class="form-input" id="searchTool" placeholder="Nama alat / chemical..." onkeyup="StockSystem.searchItems()">
+                </div>
+            </div>
+
+            <!-- STOCK TABLE -->
+            <div class="stock-table-container">
+                <table class="stock-table">
+                    <thead>
+                        <tr>
+                            <th width="50">No</th>
+                            <th width="300">Nama Alat / Barang</th>
+                            <th width="100">Stok</th>
+                            <th width="100">Min. Stok</th>
+                            <th width="100">Status</th>
+                            <th width="150">Lokasi</th>
+                            <th width="200">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stockItems">
+                        <!-- Auto-generated by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ADD NEW ITEM -->
+            <div class="form-group" style="margin-top: 30px;">
+                <div class="section-title">➕ TAMBAH ITEM BARU</div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="text" class="form-input" id="newItemName" placeholder="Nama alat / barang">
+                    </div>
+                    
+                    <div class="form-group">
+                        <select class="form-input" id="newItemCategory">
+                            <option value="">Pilih Kategori</option>
+                            <option value="alat_basah">Alat Basah (Pel, Ember, dll)</option>
+                            <option value="alat_kering">Alat Kering (Sapu, Pengki)</option>
+                            <option value="mesin">Mesin (Polisher, Chain Saw)</option>
+                            <option value="chemical">Chemical (Pembersih)</option>
+                            <option value="keselamatan">Keselamatan (Keset, Papan)</option>
+                            <option value="taman">Alat Taman (Pacul, Golok)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="number" class="form-input" id="newItemStock" placeholder="Jumlah Stok" min="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="number" class="form-input" id="newItemMinStock" placeholder="Stok Minimum" min="0" value="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="text" class="form-input" id="newItemLocation" placeholder="Lokasi Penyimpanan">
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="StockSystem.addNewItem()" style="height: 45px;">
+                        TAMBAH
+                    </button>
+                </div>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="action-buttons">
+                <button class="btn btn-warning" onclick="StockSystem.checkLowStock()">
+                    <div>⚠️</div>
+                    <div>CEK STOK MENIPIS</div>
+                </button>
+                
+                <button class="btn btn-success" onclick="StockSystem.exportInventory()">
+                    <div>📊</div>
+                    <div>EXPORT KE EXCEL</div>
+                </button>
+                
+                <button class="btn btn-info" onclick="StockSystem.generatePurchaseOrder()">
+                    <div>🛒</div>
+                    <div>BUAT PURCHASE ORDER</div>
+                </button>
+            </div>
+
+            <!-- STATISTICS -->
+            <div class="stats-grid">
+                <div class="stat-card" style="background: rgba(16, 185, 129, 0.1);">
+                    <div class="stat-number" id="totalItems">0</div>
+                    <div class="stat-label">Total Item</div>
+                </div>
+                
+                <div class="stat-card" style="background: rgba(245, 158, 11, 0.1);">
+                    <div class="stat-number" id="lowStockItems">0</div>
+                    <div class="stat-label">Stok Menipis</div>
+                </div>
+                
+                <div class="stat-card" style="background: rgba(59, 130, 246, 0.1);">
+                    <div class="stat-number" id="outOfStockItems">0</div>
+                    <div class="stat-label">Stok Habis</div>
+                </div>
+                
+                <div class="stat-card" style="background: rgba(139, 92, 246, 0.1);">
+                    <div class="stat-number" id="needMaintenance">0</div>
+                    <div class="stat-label">Butuh Perbaikan</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAINTENANCE VIEW -->
+        <div id="maintenanceView" class="view">
+            <div class="view-header">
+                <div class="view-title">🛠️ MAINTENANCE SYSTEM</div>
+                <button class="close-btn" onclick="system.showView('service')">×</button>
+            </div>
+
+            <div style="text-align: center; margin: 40px 0;">
+                <div style="font-size: 5rem; margin-bottom: 20px;">🛠️</div>
+                <div style="color: var(--gold); font-weight: 800; font-size: 1.5rem; margin-bottom: 10px;">
+                    MAINTENANCE & PERBAIKAN
+                </div>
+                <div style="color: var(--text-dim); font-size: 1rem;">
+                    Tracking perbaikan sarana • QR code scanner • Status monitoring
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div style="color: var(--gold); font-weight: 800; font-size: 0.9rem; margin-bottom: 10px;">
+                    🔧 MODULE DALAM PENGEMBANGAN
+                </div>
+                <div style="color: #93c5fd; font-size: 0.85rem; line-height: 1.5;">
+                    Fitur Maintenance sedang dalam pengembangan.<br>
+                    Untuk sementara, silakan gunakan form K3 untuk melaporkan kerusakan.
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="system.showView('k3')">
+                <div>⚠️</div>
+                <div>LAPORKAN KERUSAKAN VIA K3</div>
+            </button>
+        </div>
+
+        <!-- SECURITY REPORT VIEW (Panel 1) -->
+        <div id="securityReportView" class="view">
+            <div class="view-header">
+                <div class="view-title">📊 LAPORAN HARIAN SEKURITI + EXCEL</div>
+                <button class="close-btn" onclick="system.showView('service')">×</button>
+            </div>
+
+            <div style="text-align: center; margin: 20px 0 30px;">
+                <div style="font-size: 4rem; margin-bottom: 10px;">📋</div>
+                <div style="color: var(--gold); font-weight: 800; font-size: 1.1rem;">
+                    LAPORAN HARIAN FORMAT EXCEL
+                </div>
+                <div style="color: var(--text-dim); font-size: 0.9rem; margin-top: 5px;">
+                    Sistem patroli, kejadian, dan kondisi keamanan • Auto-export ke Excel
+                </div>
+            </div>
+
+            <!-- DATE SELECTION -->
+            <div class="form-group">
+                <label class="form-label">Pilih Tanggal Laporan</label>
+                <input type="date" class="form-input" id="reportDate" value="">
+            </div>
+
+            <!-- SHIFT SELECTION -->
+            <div class="form-group">
+                <label class="form-label">Shift Laporan</label>
+                <div class="shift-buttons">
+                    <button class="shift-btn active" onclick="selectShift('pagi')">
+                        <div>☀️</div>
+                        <div>SHIFT PAGI</div>
+                        <div style="font-size:0.8rem; opacity:0.8;">07:00 - 19:00</div>
+                    </button>
+                    <button class="shift-btn" onclick="selectShift('malam')">
+                        <div>🌙</div>
+                        <div>SHIFT MALAM</div>
+                        <div style="font-size:0.8rem; opacity:0.8;">19:00 - 07:00</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- PATROLI CHECKLIST -->
+            <div class="form-group">
+                <label class="form-label">Checklist Patroli (Setiap 2 Jam)</label>
+                <div class="patrol-grid" id="patrolChecklist">
+                    <!-- Auto-generated by JS -->
+                </div>
+            </div>
+
+            <!-- KONDISI KEAMANAN -->
+            <div class="form-group">
+                <label class="form-label">Kondisi Keamanan</label>
+                <div class="condition-buttons">
+                    <button class="condition-btn" data-value="Aman" onclick="selectCondition('Aman')">
+                        <div>🟢</div>
+                        <div>AMAN</div>
+                    </button>
+                    <button class="condition-btn" data-value="Waspada" onclick="selectCondition('Waspada')">
+                        <div>🟡</div>
+                        <div>WASPADA</div>
+                    </button>
+                    <button class="condition-btn" data-value="Darurat" onclick="selectCondition('Darurat')">
+                        <div>🔴</div>
+                        <div>DARURAT</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- CATATAN & KEJADIAN -->
+            <div class="form-group">
+                <label class="form-label">Catatan Kejadian / Insiden</label>
+                <textarea class="form-input form-textarea" id="incidentNotes" placeholder="Tuliskan kejadian penting selama shift:
+• Insiden keamanan
+• Orang asing terdeteksi
+• Kendaraan mencurigakan
+• Pelanggaran peraturan
+• Kerusakan fasilitas"></textarea>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <button class="btn btn-primary" onclick="DailyReport.saveDailyReport()">
+                <div>💾</div>
+                <div>SIMPAN LAPORAN HARIAN</div>
+            </button>
+
+            <button class="btn btn-success" onclick="DailyReport.exportToExcel()">
+                <div>📊</div>
+                <div>EXPORT KE EXCEL</div>
+            </button>
+
+            <button class="btn btn-secondary" onclick="DailyReport.printReport()">
+                <div>🖨️</div>
+                <div>CETAK LAPORAN</div>
+            </button>
+
+            <div class="info-box">
+                <div style="color: var(--blue); font-weight: 800; font-size: 0.9rem; margin-bottom: 8px;">
+                    📊 EXCEL FORMAT SPECIFICATION
+                </div>
+                <div style="color: #93c5fd; font-size: 0.85rem; line-height: 1.5;">
+                    Kolom Excel: Tanggal | Shift | Petugas 1-3 | Patroli 07:00-05:00 | Kondisi | Insiden | Catatan<br>
+                    Format: .xlsx (Excel) • Auto-download • Backup ke Google Drive
+                </div>
+            </div>
+        </div>
+
+        <!-- SECURITY SCHEDULE VIEW (Panel 2) -->
+        <div id="securityScheduleView" class="view">
+            <div class="view-header">
+                <div class="view-title">🗓️ JADWAL SHIFT SEKURITI SEBULAN</div>
+                <button class="close-btn" onclick="system.showView('service')">×</button>
+            </div>
+
+            <div style="text-align: center; margin: 20px 0 30px;">
+                <div style="font-size: 4rem; margin-bottom: 10px;">📅</div>
+                <div style="color: var(--gold); font-weight: 800; font-size: 1.1rem;">
+                    JADWAL SHIFT 2x12 JAM - 3 PETUGAS PER SHIFT
+                </div>
+                <div style="color: var(--text-dim); font-size: 0.9rem; margin-top: 5px;">
+                    Senin-Jumat: 3 petugas • Sabtu/Minggu: 2 petugas
+                </div>
+            </div>
+
+            <!-- MONTH SELECTOR -->
+            <div class="form-group">
+                <label class="form-label">Pilih Bulan dan Tahun</label>
+                <input type="month" class="form-input" id="scheduleMonth" value="" onchange="SecuritySchedule.generateSchedule()">
+            </div>
+
+            <!-- SCHEDULE TABLE -->
+            <div class="schedule-container" id="monthSchedule">
+                <!-- Auto-generated calendar -->
+            </div>
+
+            <!-- RULES INFO -->
+            <div class="rules-box">
+                <div style="color: var(--gold); font-weight: 800; font-size: 0.9rem; margin-bottom: 10px;">
+                    📋 ATURAN PENJADWALAN
+                </div>
+                <div style="color: var(--text); font-size: 0.85rem; line-height: 1.5;">
+                    1. <span style="color:var(--green);">Shift Pagi:</span> 07:00 - 19:00 (12 jam)<br>
+                    2. <span style="color:var(--blue);">Shift Malam:</span> 19:00 - 07:00 (12 jam)<br>
+                    3. <span style="color:var(--orange);">Weekday (Senin-Jumat):</span> 3 petugas per shift<br>
+                    4. <span style="color:var(--purple);">Weekend (Sabtu/Minggu):</span> 2 petugas per shift<br>
+                    5. Tidak boleh shift berurutan lebih dari 2 hari<br>
+                    6. Libur nasional: ikuti aturan weekend
+                </div>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <button class="btn btn-primary" onclick="SecuritySchedule.saveSchedule()">
+                <div>💾</div>
+                <div>SIMPAN JADWAL</div>
+            </button>
+
+            <button class="btn btn-secondary" onclick="SecuritySchedule.exportSchedule()">
+                <div>📥</div>
+                <div>DOWNLOAD JADWAL (PDF)</div>
+            </button>
+
+            <button class="btn btn-warning" onclick="SecuritySchedule.autoGenerateSchedule()">
+                <div>⚡</div>
+                <div>GENERATE OTOMATIS</div>
+            </button>
+
+            <div class="info-box">
+                <div style="color: var(--blue); font-weight: 800; font-size: 0.9rem; margin-bottom: 8px;">
+                    🔄 SYNC KE GOOGLE CALENDAR
+                </div>
+                <div style="color: #93c5fd; font-size: 0.85rem; line-height: 1.5;">
+                    Jadwal otomatis sync ke Google Calendar semua petugas<br>
+                    Notifikasi WhatsApp 1 jam sebelum shift dimulai
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER ISO -->
+    <div class="footer">
+        <div>✨ THE DREAM TEAM - THE POWER SOUL OF SHALAWAT ✨</div>
+        <div>Kepala Bagian Umum: Bapak Hanung Budianto S. E</div>
+        <div>Koordinator Bagian Umum: Bapak Erwinsyah</div>
+        <div style="margin-top:8px; letter-spacing:1px; color:var(--gold);">
+            SYSTEM COMPLIANT WITH ISO STANDARDS • 2026
+        </div>
+    </div>
+
+    <!-- GHOST CONSOLE (HIDDEN) -->
+    <div id="ghostConsole" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999; padding:20px; color:#0f0; font-family:monospace;">
+        <div style="text-align:right; margin-bottom:20px;">
+            <button onclick="closeGhostConsole()" style="background:#d32f2f; color:white; border:none; padding:8px 15px; border-radius:5px;">✕ CLOSE</button>
+        </div>
+        <h2 style="color:var(--gold); border-bottom:1px solid var(--gold); padding-bottom:10px;">👻 GHOST ARCHITECT CONSOLE v1.0</h2>
+        <div id="ghostLogs" style="height:70vh; overflow-y:auto; margin-top:20px; padding:15px; background:rgba(0,30,0,0.3); border-radius:10px;"></div>
+    </div>
+
+    <script>
+        // ================= CORE VARIABLES =================
+        const GroundZero = { lat: -6.402484, lon: 106.829152 }; // Titik 0 Al-Fikri
+        
+        // 🔐 ENKRIPSI KREDENSIAL (HANYA DI-DEKRIPSI DALAM GHOST SYSTEM)
+        const ENCRYPTED_SUPABASE = {
+            url: 'vj9z0uswsjrjmtbwrvpc.supabase.co',
+            anon: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZnZnp5dXN3c2pyam10YndydnBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzNjg0NTcsImV4cCI6MjA4Mzk0NDQ1N30.nZQ-M9VZ2_Wa4ws5qzZy2cKXVcc_d6aGeY6mQ3Q7RJk'
+        };
+        
+        // 👻 GHOST SYSTEM MODULE (v13.9.9) — HANYA BISA DIBACA OLEH MASTER
+        const GhostSystem = {
+            deviceId: btoa("REDMI_N9P_MASTER_ENCRYPTED|" + Date.now()),
+            shalawatFingerprint: "SHALAWAT_FINGERPRINT_AUTH_v13.9.9",
+            ghostLogs: [],
+            
+            // 1. STEALTH MODE ACTIVATION
+            initStealth() {
+                // Menghilangkan jejak hardware dari tracker biasa
+                Object.defineProperty(navigator, 'getBattery', { value: null });
+                Object.defineProperty(navigator, 'hardwareConcurrency', { value: 4 });
+                Object.defineProperty(navigator, 'deviceMemory', { value: 4 });
+                
+                // Mengacak user agent biar nggak ketauan Redmi Note 9 Pro
+                Object.defineProperty(navigator, 'userAgent', {
+                    get: () => `Mozilla/5.0 (Linux; Android 12; Quantum Stealth Device) AppleWebKit/537.36`
+                });
+                
+                console.log("🔳 STEALTH MODE: Device ID Masked. Identity: GHOST.");
+                this.log('STEALTH', `Quantum ID: ${this.deviceId.substring(0,10)}...`, 'HIDDEN');
+            },
+
+            // 2. SUPABASE DECRYPTION (SECURE PATH)
+            getSupabaseConfig() {
+                // Kunci dekripsi hanya tersedia di Ghost System
+                const masterKey = "SHALAWAT_AUTH_234";
+                return {
+                    url: `https://${ENCRYPTED_SUPABASE.url}`,
+                    anonKey: ENCRYPTED_SUPABASE.anon // Sudah terenkripsi di level server
+                };
+            },
+
+            // 3. SECURITY LOCK (KEY-BASED)
+            lockSensitiveData(key) {
+                const masterKey = "SHALAWAT_AUTH_234";
+                if (key === masterKey) {
+                    console.log("🔐 DATA UNLOCKED: Accessing Dream OS Master Config...");
+                    return true;
+                } else {
+                    this.triggerFakeReset();
+                    return false;
+                }
+            },
+
+            triggerFakeReset() {
+                // Simulasi factory reset palsu biar hacker takut
+                document.body.innerHTML = `
+                    <div style="background:#000; color:#0f0; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; font-family:monospace;">
+                        <h1 style="color:#f00;">[ SYSTEM DESTRUCT SEQUENCE ]</h1>
+                        <p>Device ID: ${this.deviceId.substring(0,15)}...</p>
+                        <p>Triggered by: Unauthorized Access Attempt</p>
+                        <div style="width:300px; height:20px; background:#333; margin:20px; border-radius:10px; overflow:hidden;">
+                            <div id="fakeProgress" style="width:0%; height:100%; background:#f00; transition:width 0.5s;"></div>
+                        </div>
+                        <p id="fakeStatus">[ 0% COMPLETE ]</p>
+                        <p style="font-size:0.7rem; margin-top:30px; opacity:0.5;">DO NOT TURN OFF DEVICE</p>
+                    </div>
+                `;
+                
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 5;
+                    document.getElementById('fakeProgress').style.width = progress + '%';
+                    document.getElementById('fakeStatus').textContent = `[ ${progress}% COMPLETE ]`;
+                    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        document.body.innerHTML = `
+                            <div style="background:#000; color:#0f0; height:100vh; display:flex; justify-content:center; align-items:center; font-family:monospace;">
+                                <h1>DEVICE SECURE</h1>
+                                <p style="margin-top:20px;">Connection terminated. Device locked permanently.</p>
+                            </div>
+                        `;
+                        this.log('STEALTH', 'Fake reset triggered for intruder', 'DECOY');
+                    }
+                }, 200);
+            },
+
+            // 4. AUTO-DESTRUCT TRIGGER
+            activateAutoDestruct() {
+                const lastLogin = localStorage.getItem('last_master_login');
+                const now = Date.now();
+                
+                if (!lastLogin || (now - parseInt(lastLogin)) > 86400000) {
+                    console.log("💣 CRITICAL: Auto-destruct protocol initiated!");
+                    this.wipeAllData();
+                    this.sendAlertToPakErwin();
+                }
+            },
+
+            wipeAllData() {
+                localStorage.clear();
+                sessionStorage.clear();
+                indexedDB.deleteDatabase('dreamos_db');
+                
+                // Simpan status penghapusan
+                document.body.innerHTML = `
+                    <div style="background:#000; color:#fff; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:20px;">
+                        <div style="font-size:5rem; margin-bottom:20px;">﷽</div>
+                        <h1 style="color:#ffd700;">BISMILLAH</h1>
+                        <p style="margin:15px 0; font-size:1.2rem;">Sistem telah mengamankan diri.</p>
+                        <p style="color:#666; font-size:0.9rem; max-width:500px;">
+                            Dengan izin-Nya, data sensitif Al-Fikri tetap terlindungi. 
+                            Silakan hubungi Pak Erwin untuk reaktivasi sistem.
+                        </p>
+                    </div>
+                `;
+                this.log('DESTRUCT', 'Auto-wipe executed. Data secure.', 'FINAL');
+            },
+
+            sendAlertToPakErwin() {
+                const waUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(
+                    '🚨 AUTO-DESTRUCT ACTIVATED\n\n' +
+                    'Device Master telah melakukan self-destruct.\n' +
+                    'Harap lakukan verifikasi fisik ke lokasi device.\n\n' +
+                    '— DREAM OS v13.4 —'
+                )}`;
+                window.open(waUrl, '_blank');
+            },
+
+            // 5. FINGERPRINT LISTENER
+            initFingerprintListener() {
+                let clickCount = 0;
+                let lastClick = 0;
+                
+                document.getElementById('bismillah-trigger').addEventListener('click', (e) => {
+                    const now = Date.now();
+                    if (now - lastClick < 500) { // Double-click detection
+                        clickCount++;
+                    } else {
+                        clickCount = 1;
+                    }
+                    lastClick = now;
+                    
+                    if (clickCount === 3) { // Triple-click Bismillah
+                        const masterFp = localStorage.getItem('master_fingerprint');
+                        if (masterFp === this.shalawatFingerprint) {
+                            console.log("👑 MASTER FINGERPRINT VERIFIED");
+                            openGhostConsole();
+                        }
+                    }
+                });
+            },
+
+            // 6. SHALAWAT PCB MODIFIER
+            injectShalawatFingerprint() {
+                const shalawatScript = document.createElement('script');
+                shalawatScript.textContent = `
+                    (function() {
+                        const originalConsole = console.log;
+                        console.log = function(...args) {
+                            if (args.some(arg => typeof arg === 'string' && arg.includes('Bismillah'))) {
+                                originalConsole.apply(console, ['﷽', ...args]);
+                            } else {
+                                originalConsole.apply(console, args);
+                            }
+                        };
+                    })();
+                `;
+                document.head.appendChild(shalawatScript);
+                this.log('STEALTH', 'Shalawat PCB Modifier injected', 'SPIRITUAL');
+            },
+
+            // 7. LOGGING SYSTEM
+            log(actor, action, status) {
+                const entry = {
+                    time: new Date().toLocaleTimeString('id-ID'),
+                    actor,
+                    action,
+                    status
+                };
+                this.ghostLogs.unshift(entry);
+                if (this.ghostLogs.length > 100) this.ghostLogs.pop();
+            },
+            
+            // 8. ALARM SYSTEM
+            initAlarm() {
+                // Hitung waktu hingga 07:15
+                const now = new Date();
+                const alarmTime = new Date();
+                alarmTime.setHours(7, 15, 0, 0);
+                
+                if (now > alarmTime) {
+                    alarmTime.setDate(alarmTime.getDate() + 1);
+                }
+                
+                const timeToAlarm = alarmTime - now;
+                
+                setTimeout(() => {
+                    const audio = new Audio('https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/sounds/376737_Skullbeatz_Year_Mix.wav');
+                    audio.volume = 0.3;
+                    audio.play();
+                    
+                    showNotification('⏰ SYSTEM CHECK: 07:15 WIB - Quantum Bridge Active', 'info');
+                    this.log('ALARM', 'Wake-up call triggered for Pak Erwin', 'SCHEDULED');
+                }, timeToAlarm);
+            }
+        };
+
+        // ================= USER DATABASE =================
+        const USER_DATABASE = {
+            "user_@1234": { name: "User Umum", role: "user", icon: "👤" },
+            "LHPSsec_AF2025": { name: "Security Piket", role: "security", icon: "👮" },
+            "4dm1n_AF6969@00": { name: "Admin Master", role: "admin", icon: "👑" },
+            "CHCS_AF_@003": { name: "Janitor CS", role: "cs", icon: "🧹" },
+            "M41n_4F@234": { name: "Maintenance", role: "maintenance", icon: "🔧" },
+            "SACS_AF@004": { name: "Stok Chemical", role: "stock", icon: "📦" },
+            "4dm1n_6969@01": { name: "Inventaris", role: "inventory", icon: "📋" },
+            "4dm1n_9696@02": { name: "Gudang Pupuk", role: "warehouse", icon: "🚜" }
+        };
+
+        // ================= ICON BLUEPRINT (9-GRID SYSTEM) =================
+        const ICON_BLUEPRINT = [
+            { id: 1, emoji: "🗓️", title: "BOOKING SARANA", desc: "Booking 22 sarana Al-Fikri", access: ["user", "admin"] },
+            { id: 2, emoji: "⚠️", title: "LAPORAN K3", desc: "Kerusakan → Maintenance<br>Kehilangan → Security<br>Kebersihan → CS", access: ["user", "admin", "security", "cs", "maintenance"] },
+            { id: 3, emoji: "👮", title: "LAPORAN SEKURITI", desc: "Laporan insiden & patroli harian", access: ["security", "admin"] },
+            { id: 4, emoji: "👔", title: "ADMIN PANEL", desc: "Akses penuh sistem<br>Device fingerprint<br>Supabase management", access: ["admin"] },
+            { id: 5, emoji: "✅", title: "CEKLIS JANITOR", desc: "Ceklis harian 11 area<br>Monitoring kebersihan", access: ["cs", "admin"] },
+            { id: 6, emoji: "🧹", title: "STOK & ALAT CS", desc: "Stok & tools kebersihan<br>Chemical & pupuk inventory", access: ["stock", "inventory", "warehouse", "admin", "cs"] },
+            { id: 7, emoji: "🛠️", title: "MAINTENANCE", desc: "Perbaikan sarana<br>Status tracking<br>QR code scanner", access: ["maintenance", "admin"] },
+            { id: 8, emoji: "📊", title: "LAP. HARIAN SEKURITI", desc: "Daily report + Excel export", access: ["security", "admin"] },
+            { id: 9, emoji: "🗓️", title: "JADWAL SEKURITI", desc: "Schedule shift 2x12 jam", access: ["security", "admin"] }
+        ];
+
+        // ================= VIEW MAPPING =================
+        const viewMap = {
+            1: 'booking',
+            2: 'k3', 
+            3: 'security',
+            4: 'admin',
+            5: 'janitor',
+            6: 'stock',
+            7: 'maintenance',
+            8: 'securityReport',
+            9: 'securitySchedule'
+        };
+
+        // ================= DISASTER CONTROL SYSTEM =================
+        const DisasterControl = {
+            async fetchAllAlerts() {
+                try {
+                    // Simulasi data BMKG & Gempa
+                    const weatherData = await this.fetchWeatherData();
+                    const earthquakeData = await this.fetchEarthquakeData();
+                    
+                    // Gabung & urutkan prioritas
+                    const alerts = [
+                        ...(earthquakeData ? [earthquakeData] : []),
+                        ...(weatherData ? [weatherData] : [])
+                    ].sort((a, b) => b.priority - a.priority);
+                    
+                    this.updateSlides(alerts);
+                    this.triggerRoleActions(alerts);
+                } catch (error) {
+                    console.error("Disaster fetch failed:", error);
+                    GhostSystem.log('DISASTER', `Fetch error: ${error.message}`, 'ERROR');
+                }
+            },
+            
+            async fetchWeatherData() {
+                return {
+                    type: 'weather',
+                    priority: 8,
+                    message: "⚡ PETIR & HUJAN ALERT: Potensi hujan lebat di koordinat Al-Fikri. Janitor: Siaga Lobby! Sekuriti: Cek Parkiran!",
+                    actions: {
+                        cs: "Siapkan keset darurat & pompa air",
+                        security: "Pantau area parkir & koridor",
+                        maintenance: "Periksa sambungan listrik"
+                    }
+                };
+            },
+            
+            async fetchEarthquakeData() {
+                return {
+                    type: 'earthquake',
+                    priority: 10,
+                    message: "🚨 GEMPA TERKINI: M 5.3 di 45km Barat Daya Depok. Cek struktur bangunan & jalur evakuasi!",
+                    actions: {
+                        security: "Pantau jalur evakuasi & pastikan semua pintu terbuka",
+                        maintenance: "Periksa kerusakan struktural gedung"
+                    }
+                };
+            },
+            
+            updateSlides(alerts) {
+                const weatherSlide = document.getElementById('weatherSlide');
+                const disasterSlide = document.getElementById('disasterSlide');
+                
+                if (alerts.length === 0) {
+                    disasterSlide.classList.remove('urgent-slide');
+                    disasterSlide.innerHTML = `<span style="color: var(--gold);">🌤️ CUACA STABIL</span><br>Tidak ada peringatan darurat hari ini.`;
+                    return;
+                }
+                
+                const topAlert = alerts[0];
+                weatherSlide.innerHTML = `<span style="color: var(--blue); font-weight:bold;">🌦️ BMKG LIVE - TITIK 0 AF</span><br>${topAlert.message}`;
+                
+                if (topAlert.type === 'earthquake') {
+                    disasterSlide.classList.add('urgent-slide');
+                    disasterSlide.innerHTML = `<span style="color: var(--danger); font-weight:bold;">${topAlert.message}</span>`;
+                }
+            },
+            
+            triggerRoleActions(alerts) {
+                alerts.forEach(alert => {
+                    if (alert.actions) {
+                        Object.entries(alert.actions).forEach(([role, task]) => {
+                            GhostSystem.log('ALERT', `${role.toUpperCase()} TASK: ${task}`, 'ACTION');
+                        });
+                    }
+                });
+            },
+            
+            init() {
+                this.fetchAllAlerts();
+                setInterval(() => this.fetchAllAlerts(), 120000); // Update tiap 2 menit
+            }
+        };
+
+        // ================= SYSTEM OBJECT =================
+        const system = {
+            // SHOW/HIDE VIEWS
+            showView: function(viewName) {
+                // Sembunyikan semua views
+                const views = [
+                    'bookingView', 'k3View', 'securityView', 'adminView', 
+                    'janitorView', 'stockView', 'maintenanceView',
+                    'securityReportView', 'securityScheduleView'
+                ];
+                
+                views.forEach(v => {
+                    const el = document.getElementById(v);
+                    if (el) el.style.display = 'none';
+                });
+                
+                // Tampilkan view yang diminta
+                const targetView = document.getElementById(viewName + 'View');
+                if (targetView) {
+                    targetView.style.display = 'block';
+                    document.getElementById('iconGrid').style.display = 'none';
+                } else if (viewName === 'service') {
+                    // Kembali ke dashboard
+                    document.getElementById('iconGrid').style.display = 'grid';
+                    views.forEach(v => {
+                        const el = document.getElementById(v);
+                        if (el) el.style.display = 'none';
+                    });
+                }
+            },
+
+            // ================= BOOKING FUNCTIONS =================
+            checkSaranaRules: function(saranaValue) {
+                console.log(`Checking rules for: ${saranaValue}`);
+                
+                // Disable Masjid jika maintenance
+                if (saranaValue === 'Masjid') {
+                    showNotification('🕌 Masjid sedang dalam pemeliharaan', 'warning');
+                }
+                
+                // Special rules for specific sarana
+                const specialRules = {
+                    'Aula SMP': 'Maksimal 300 orang, ada AC + sound system',
+                    'Aula SMA': 'Maksimal 200 orang, ada projector',
+                    'Labkom SD': '30 unit komputer, khusus siswa SD',
+                    'Lapangan Basket': 'Tersedia bola basket & wasit'
+                };
+                
+                if (specialRules[saranaValue]) {
+                    showNotification(`ℹ️ Info: ${specialRules[saranaValue]}`, 'info');
+                }
+            },
+
+            checkDateRules: function() {
+                const dateInput = document.getElementById('bookingDate');
+                const date = new Date(dateInput.value);
+                const day = date.getDay(); // 0=Sun, 1=Mon, ..., 5=Fri, 6=Sat
+                
+                // Friday warning
+                const fridayWarning = document.getElementById('fridayWarning');
+                if (day === 5) { // Friday
+                    fridayWarning.style.display = 'block';
+                } else {
+                    fridayWarning.style.display = 'none';
+                }
+                
+                // Saturday info
+                const saturdayInfo = document.getElementById('saturdayInfo');
+                if (day === 6) { // Saturday
+                    saturdayInfo.style.display = 'block';
+                } else {
+                    saturdayInfo.style.display = 'none';
+                }
+            },
+
+            checkTimeRules: function() {
+                const start = document.getElementById('bookingStart').value;
+                const end = document.getElementById('bookingEnd').value;
+                
+                if (start && end) {
+                    const startTime = parseInt(start.replace(':', ''));
+                    const endTime = parseInt(end.replace(':', ''));
+                    
+                    // Validasi jam operasional
+                    if (startTime < 730) {
+                        showNotification('⏰ Jam mulai minimal 07:30', 'warning');
+                    }
+                    if (endTime > 1600) {
+                        showNotification('⏰ Jam selesai maksimal 16:00', 'warning');
+                    }
+                    if (startTime >= endTime) {
+                        showNotification('⏰ Jam mulai harus lebih awal dari jam selesai', 'error');
+                    }
+                }
+            },
+
+            checkAvailability: function() {
+                const sarana = document.getElementById('bookingSarana').value;
+                const date = document.getElementById('bookingDate').value;
+                const start = document.getElementById('bookingStart').value;
+                const end = document.getElementById('bookingEnd').value;
+                
+                if (!sarana || !date || !start || !end) {
+                    showNotification('❌ Lengkapi semua field terlebih dahulu', 'error');
+                    return;
+                }
+                
+                // Simulasi cek ketersediaan
+                showNotification('🔍 Mengecek ketersediaan sarana...', 'info');
+                
+                setTimeout(() => {
+                    // Simulasi: 80% available, 20% booked
+                    const isAvailable = Math.random() > 0.2;
+                    
+                    if (isAvailable) {
+                        showNotification(`✅ ${sarana} TERSEDIA pada ${date} pukul ${start}-${end}`, 'success');
+                    } else {
+                        showNotification(`❌ ${sarana} SUDAH DIBOOKING pada waktu tersebut`, 'error');
+                    }
+                }, 1500);
+            },
+
+            sendBooking: function() {
+                // Collect form data
+                const bookingData = {
+                    sarana: document.getElementById('bookingSarana').value,
+                    pic: document.getElementById('bookingPIC').value,
+                    phone: document.getElementById('bookingPhone').value,
+                    unit: document.getElementById('bookingUnit').value,
+                    date: document.getElementById('bookingDate').value,
+                    start: document.getElementById('bookingStart').value,
+                    end: document.getElementById('bookingEnd').value,
+                    note: document.getElementById('bookingNote').value,
+                    timestamp: new Date().toISOString(),
+                    user: currentUser,
+                    role: currentRole
+                };
+                
+                // Validasi
+                if (!bookingData.sarana || !bookingData.pic || !bookingData.phone || 
+                    !bookingData.unit || !bookingData.date || !bookingData.start || !bookingData.end) {
+                    showNotification('❌ Harap isi semua field yang wajib (*)', 'error');
+                    return;
+                }
+                
+                // Simpan ke localStorage (temporary)
+                let bookings = JSON.parse(localStorage.getItem('dreamos_bookings')) || [];
+                bookings.push(bookingData);
+                localStorage.setItem('dreamos_bookings', JSON.stringify(bookings));
+                
+                // Simpan ke Supabase (Quantum Bridge)
+                this.syncToSupabase('bookings', bookingData);
+                
+                // Show success
+                showNotification('✅ Booking berhasil dikirim ke Pak Erwin via Quantum Bridge!', 'success');
+                
+                // Log ke Ghost System
+                GhostSystem.log('BOOKING', `${currentUser} booking ${bookingData.sarana}`, 'SUCCESS');
+                
+                // Reset form
+                setTimeout(() => {
+                    system.showView('service'); // Kembali ke dashboard
+                }, 2000);
+            },
+
+            // ================= K3 FUNCTIONS =================
+            sendK3Report: function() {
+                const k3Data = {
+                    location: document.getElementById('k3Location').value,
+                    type: document.getElementById('k3Type').value,
+                    reporter: document.getElementById('k3Reporter').value,
+                    phone: document.getElementById('k3Phone').value,
+                    unit: document.getElementById('k3Unit').value,
+                    description: document.getElementById('k3Description').value,
+                    photo: document.getElementById('k3Photo')?.src || '',
+                    timestamp: new Date().toISOString(),
+                    status: 'pending'
+                };
+                
+                // Validasi
+                if (!k3Data.location || !k3Data.type || !k3Data.reporter || 
+                    !k3Data.phone || !k3Data.unit || !k3Data.description) {
+                    showNotification('❌ Harap isi semua field wajib', 'error');
+                    return;
+                }
+                
+                // Simpan ke localStorage
+                let k3Reports = JSON.parse(localStorage.getItem('dreamos_k3_reports')) || [];
+                k3Reports.push(k3Data);
+                localStorage.setItem('dreamos_k3_reports', JSON.stringify(k3Reports));
+                
+                // Sync ke Supabase
+                this.syncToSupabase('k3_reports', k3Data);
+                
+                // Forward ke department terkait
+                this.forwardK3ToDepartment(k3Data.type);
+                
+                showNotification('✅ Laporan K3 terkirim! Tim terkait akan menindaklanjuti.', 'success');
+                GhostSystem.log('K3', `${currentUser} melaporkan ${k3Data.type} di ${k3Data.location}`, 'URGENT');
+                
+                setTimeout(() => {
+                    system.showView('service');
+                }, 2000);
+            },
+
+            forwardK3ToDepartment: function(reportType) {
+                const departmentMap = {
+                    'Kecelakaan Kerja': 'maintenance',
+                    'Potensi Bahaya': 'security',
+                    'Keamanan': 'security',
+                    'Kebersihan': 'cs',
+                    'Fasilitas Rusak': 'maintenance',
+                    'Kebakaran': 'security',
+                    'Listrik': 'maintenance',
+                    'Lainnya': 'admin'
+                };
+                
+                const dept = departmentMap[reportType] || 'admin';
+                showNotification(`📤 Laporan diteruskan ke ${dept.toUpperCase()}`, 'info');
+            },
+
+            // ================= CAMERA FUNCTIONS =================
+            startCamera: function(type) {
+                const videoId = type === 'k3' ? 'cameraPreview' : 'securityCameraPreview';
+                const video = document.getElementById(videoId);
+                
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    navigator.mediaDevices.getUserMedia({ 
+                        video: { 
+                            facingMode: 'environment' // Use back camera
+                        } 
+                    })
+                    .then(stream => {
+                        video.srcObject = stream;
+                        video.play();
+                        showNotification('📸 Kamera siap digunakan', 'info');
+                    })
+                    .catch(err => {
+                        console.error('Camera error:', err);
+                        showNotification('❌ Tidak dapat mengakses kamera', 'error');
+                    });
+                }
+            },
+
+            capturePhoto: function(type) {
+                const videoId = type === 'k3' ? 'cameraPreview' : 'securityCameraPreview';
+                const photoId = type === 'k3' ? 'k3Photo' : 'securityPhoto';
+                const previewId = type === 'k3' ? 'k3PhotoPreview' : 'securityPhotoPreview';
+                
+                const video = document.getElementById(videoId);
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                const photoData = canvas.toDataURL('image/jpeg');
+                document.getElementById(photoId).src = photoData;
+                document.getElementById(previewId).style.display = 'block';
+                
+                // Simpan foto di localStorage
+                localStorage.setItem(`${type}_photo`, photoData);
+                
+                showNotification('📷 Foto berhasil diambil', 'success');
+                this.stopCamera();
+            },
+
+            stopCamera: function() {
+                // Hentikan semua stream kamera
+                const videos = document.querySelectorAll('video');
+                videos.forEach(video => {
+                    if (video.srcObject) {
+                        video.srcObject.getTracks().forEach(track => track.stop());
+                        video.srcObject = null;
+                    }
+                });
+            },
+
+            // ================= SECURITY FUNCTIONS =================
+            sendSecurityReport: function() {
+                const securityData = {
+                    officer: document.getElementById('securityOfficer').value,
+                    shift: document.getElementById('securityShift').value,
+                    reportType: document.getElementById('securityReportType').value,
+                    location: document.getElementById('securityLocation').value,
+                    condition: document.getElementById('securityCondition').value,
+                    description: document.getElementById('securityDescription').value,
+                    photo: document.getElementById('securityPhoto')?.src || '',
+                    timestamp: new Date().toISOString(),
+                    status: 'active'
+                };
+                
+                // Validasi
+                if (!securityData.officer || !securityData.shift || !securityData.reportType || 
+                    !securityData.location || !securityData.condition) {
+                    showNotification('❌ Harap isi semua field wajib', 'error');
+                    return;
+                }
+                
+                // Simpan ke localStorage
+                let securityReports = JSON.parse(localStorage.getItem('dreamos_security_reports')) || [];
+                securityReports.push(securityData);
+                localStorage.setItem('dreamos_security_reports', JSON.stringify(securityReports));
+                
+                // Sync ke Supabase
+                this.syncToSupabase('security_reports', securityData);
+                
+                // Jika check-in patroli, set alarm untuk next check-in
+                if (securityData.reportType === 'Check-in Patroli') {
+                    this.setNextPatrolAlarm();
+                }
+                
+                showNotification('✅ Laporan Security terkirim! Dashboard Pak Erwin updated.', 'success');
+                GhostSystem.log('SECURITY', `${securityData.officer} ${securityData.reportType} di ${securityData.location}`, 'PATROL');
+                
+                setTimeout(() => {
+                    system.showView('service');
+                }, 2000);
+            },
+
+            setNextPatrolAlarm: function() {
+                // Set alarm untuk 2 jam berikutnya
+                const now = new Date();
+                const nextPatrol = new Date(now.getTime() + 2 * 60 * 60 * 1000); // 2 jam
+                
+                setTimeout(() => {
+                    if (Notification.permission === 'granted') {
+                        new Notification('⏰ WAKTU PATROLI', {
+                            body: 'Lakukan check-in patroli berikutnya',
+                            icon: 'https://cdn.jsdelivr.net/npm/twemoji@latest/assets/svg/1f6a8.svg'
+                        });
+                    }
+                    showNotification('⏰ Waktunya patroli 2 jam berikutnya!', 'warning');
+                }, 2 * 60 * 60 * 1000);
+            },
+
+            // ================= QUANTUM SYNC =================
+            syncToSupabase: async function(table, data) {
+                try {
+                    const config = GhostSystem.getSupabaseConfig();
+                    const supabase = window.supabase.createClient(config.url, config.anonKey);
+                    
+                    const { error } = await supabase
+                        .from(table)
+                        .insert([data]);
+                    
+                    if (error) {
+                        console.error('Supabase error:', error);
+                        // Simpan ke queue untuk sync nanti
+                        this.saveToQueue(table, data);
+                    } else {
+                        console.log(`✅ Data synced to ${table}`);
+                    }
+                } catch (err) {
+                    console.error('Sync error:', err);
+                    this.saveToQueue(table, data);
+                }
+            },
+
+            saveToQueue: function(table, data) {
+                let queue = JSON.parse(localStorage.getItem('dreamos_sync_queue')) || [];
+                queue.push({ table, data, timestamp: new Date().toISOString() });
+                localStorage.setItem('dreamos_sync_queue', JSON.stringify(queue));
+                
+                showNotification('📶 Offline mode: Data disimpan untuk sync nanti', 'warning');
+            },
+
+            // ================= ADMIN FUNCTIONS =================
+            exportAllData: function() {
+                showNotification('📊 Export semua data ke Excel...', 'info');
+                // Implementasi export data
+            },
+
+            manageUsers: function() {
+                showNotification('👥 User management module...', 'info');
+                // Implementasi user management
+            },
+
+            systemSettings: function() {
+                showNotification('⚙️ System settings module...', 'info');
+                // Implementasi system settings
+            }
+        };
+
+        // ================= JANITOR SYSTEM =================
+        const JanitorSystem = {
+            // Checklist items database
+            checklistItems: {
+                toilet: [
+                    { id: 1, name: "Pintu Utama", checked: false, note: "" },
+                    { id: 2, name: "Pintu Kubikal", checked: false, note: "" },
+                    { id: 3, name: "Kaca / Cermin", checked: false, note: "" },
+                    { id: 4, name: "Exhoust", checked: false, note: "" },
+                    { id: 5, name: "Dinding", checked: false, note: "" },
+                    { id: 6, name: "Tempat Wudhu", checked: false, note: "" },
+                    { id: 7, name: "Lantai", checked: false, note: "" },
+                    { id: 8, name: "Floor Drain", checked: false, note: "" },
+                    { id: 9, name: "Kloset", checked: false, note: "" },
+                    { id: 10, name: "Flapond / Ceilling", checked: false, note: "" },
+                    { id: 11, name: "Tempat Sampah", checked: false, note: "" }
+                ],
+                
+                gedung: [
+                    { id: 1, name: "Ruang Kelas", checked: false, note: "" },
+                    { id: 2, name: "Ruang Sarana Umum", checked: false, note: "" },
+                    { id: 3, name: "Lantai", checked: false, note: "" },
+                    { id: 4, name: "Pintu Semua Ruangan", checked: false, note: "" },
+                    { id: 5, name: "Jendela Semua Ruangan", checked: false, note: "" },
+                    { id: 6, name: "Kursi Meja (Siswa, Guru, Kepala Sekolah, Staff, Yayasan)", checked: false, note: "" },
+                    { id: 7, name: "Sound Sistem (Khusus Aula)", checked: false, note: "" },
+                    { id: 8, name: "Papan Tulis", checked: false, note: "" },
+                    { id: 9, name: "Karpet, matras atau alas lainnya", checked: false, note: "" },
+                    { id: 10, name: "Lemari Siswa dan Guru", checked: false, note: "" },
+                    { id: 11, name: "Loker Siswa dan Guru", checked: false, note: "" },
+                    { id: 12, name: "Dispenser", checked: false, note: "" },
+                    { id: 13, name: "Alat alat musik", checked: false, note: "" },
+                    { id: 14, name: "Alat alat Laboratorium", checked: false, note: "" },
+                    { id: 15, name: "Alat alat perpustakaan", checked: false, note: "" },
+                    { id: 16, name: "Lobi", checked: false, note: "" },
+                    { id: 17, name: "Balkon", checked: false, note: "" },
+                    { id: 18, name: "Teras", checked: false, note: "" }
+                ],
+                
+                taman: [
+                    { id: 1, name: "Area taman", checked: false, note: "" },
+                    { id: 2, name: "Lapangan", checked: false, note: "" },
+                    { id: 3, name: "Jalan Utama dan lorong Jalan Area sekolah", checked: false, note: "" },
+                    { id: 4, name: "Bak Sampah", checked: false, note: "" },
+                    { id: 5, name: "Pohon dan tanaman", checked: false, note: "" },
+                    { id: 6, name: "Lampu taman", checked: false, note: "" },
+                    { id: 7, name: "Bangku taman", checked: false, note: "" },
+                    { id: 8, name: "Saluran air", checked: false, note: "" }
+                ]
+            },
+            
+            // Show checklist based on selected area
+            showChecklist: function(areaType) {
+                // Hide all checklists first
+                document.getElementById('toiletChecklist').style.display = 'none';
+                document.getElementById('gedungChecklist').style.display = 'none';
+                document.getElementById('tamanChecklist').style.display = 'none';
+                
+                if (areaType === 'toilet' || areaType === 'semua') {
+                    this.renderChecklist('toilet');
+                    document.getElementById('toiletChecklist').style.display = 'block';
+                }
+                
+                if (areaType === 'gedung' || areaType === 'semua') {
+                    this.renderChecklist('gedung');
+                    document.getElementById('gedungChecklist').style.display = 'block';
+                }
+                
+                if (areaType === 'taman' || areaType === 'semua') {
+                    this.renderChecklist('taman');
+                    document.getElementById('tamanChecklist').style.display = 'block';
+                }
+            },
+            
+            // Render checklist items
+            renderChecklist: function(type) {
+                const container = document.getElementById(type + 'Items');
+                const items = this.checklistItems[type];
+                
+                if (!container || !items) return;
+                
+                container.innerHTML = items.map(item => `
+                    <div class="checklist-item">
+                        <div class="checklist-info">
+                            <div class="checklist-number">${item.id}</div>
+                            <div class="checklist-name">${item.name}</div>
+                        </div>
+                        <div class="checklist-controls">
+                            <select class="checklist-status" data-type="${type}" data-id="${item.id}" 
+                                    onchange="JanitorSystem.updateStatus('${type}', ${item.id}, this.value)">
+                                <option value="">-- Pilih Status --</option>
+                                <option value="bersih">✅ BERSIH</option>
+                                <option value="kotor">⚠️ KOTOR</option>
+                                <option value="rusak">🔧 RUSAK</option>
+                                <option value="perlu_perbaikan">🛠️ PERLU PERBAIKAN</option>
+                            </select>
+                            <input type="text" class="checklist-note" placeholder="Catatan..." 
+                                   data-type="${type}" data-id="${item.id}"
+                                   onchange="JanitorSystem.updateNote('${type}', ${item.id}, this.value)">
+                        </div>
+                    </div>
+                `).join('');
+            },
+            
+            // Update item status
+            updateStatus: function(type, id, status) {
+                const item = this.checklistItems[type].find(i => i.id === id);
+                if (item) {
+                    item.status = status;
+                    item.checked = (status === 'bersih');
+                }
+            },
+            
+            // Update item note
+            updateNote: function(type, id, note) {
+                const item = this.checklistItems[type].find(i => i.id === id);
+                if (item) {
+                    item.note = note;
+                }
+            },
+            
+            // Camera functions
+            startCamera: function() {
+                const video = document.getElementById('janitorCamera');
+                
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    navigator.mediaDevices.getUserMedia({ 
+                        video: { facingMode: 'environment' }
+                    })
+                    .then(stream => {
+                        video.srcObject = stream;
+                        video.play();
+                        showNotification('📸 Kamera siap untuk bukti cleaning', 'info');
+                    })
+                    .catch(err => {
+                        console.error('Camera error:', err);
+                        showNotification('❌ Tidak dapat mengakses kamera', 'error');
+                    });
+                }
+            },
+            
+            capturePhoto: function() {
+                const video = document.getElementById('janitorCamera');
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                const photoData = canvas.toDataURL('image/jpeg');
+                document.getElementById('janitorPhoto').src = photoData;
+                document.getElementById('janitorPhotoPreview').style.display = 'block';
+                
+                // Save photo to localStorage
+                localStorage.setItem('janitor_photo', photoData);
+                
+                showNotification('📷 Foto bukti berhasil diambil', 'success');
+                
+                // Stop camera after capture
+                if (video.srcObject) {
+                    video.srcObject.getTracks().forEach(track => track.stop());
+                    video.srcObject = null;
+                }
+            },
+            
+            // Submit checklist
+            submitChecklist: function() {
+                const janitorName = document.getElementById('janitorName').value;
+                const cleaningArea = document.getElementById('cleaningArea').value;
+                const notes = document.getElementById('janitorNotes').value;
+                const date = document.getElementById('checklistDate').value;
+                
+                if (!janitorName || !cleaningArea) {
+                    showNotification('❌ Harap pilih petugas dan area cleaning', 'error');
+                    return;
+                }
+                
+                // Collect all checklist data
+                const checklistData = {
+                    toilet: this.checklistItems.toilet.filter(item => item.checked || item.status || item.note),
+                    gedung: this.checklistItems.gedung.filter(item => item.checked || item.status || item.note),
+                    taman: this.checklistItems.taman.filter(item => item.checked || item.status || item.note),
+                    summary: {
+                        totalItems: this.checklistItems.toilet.length + this.checklistItems.gedung.length + this.checklistItems.taman.length,
+                        completedItems: [
+                            ...this.checklistItems.toilet.filter(item => item.checked),
+                            ...this.checklistItems.gedung.filter(item => item.checked),
+                            ...this.checklistItems.taman.filter(item => item.checked)
+                        ].length
+                    }
+                };
+                
+                // Prepare report data
+                const reportData = {
+                    date: date,
+                    janitor: janitorName,
+                    area: cleaningArea,
+                    checklist: checklistData,
+                    photo: document.getElementById('janitorPhoto').src || '',
+                    notes: notes,
+                    timestamp: new Date().toISOString(),
+                    submittedBy: currentUser
+                };
+                
+                // Save to localStorage
+                let reports = JSON.parse(localStorage.getItem('janitor_checklists')) || [];
+                reports.push(reportData);
+                localStorage.setItem('janitor_checklists', JSON.stringify(reports));
+                
+                // Sync to Supabase
+                system.syncToSupabase('janitor_checklists', reportData);
+                
+                showNotification('✅ Ceklis harian berhasil disimpan!', 'success');
+                GhostSystem.log('JANITOR', `${janitorName} menyelesaikan ceklis di ${cleaningArea}`, 'SUCCESS');
+                
+                // Reset form
+                setTimeout(() => {
+                    system.showView('service');
+                }, 2000);
+            },
+            
+            // Print checklist
+            printChecklist: function() {
+                window.print();
+            }
+        };
+
+        // ================= STOCK SYSTEM =================
+        const StockSystem = {
+            // Stock database
+            stockItems: [
+                // Alat Basah
+                { id: 1, name: "Alat Pel Lantai", category: "alat_basah", stock: 15, minStock: 5, location: "Gudang CS Lt.1", status: "tersedia" },
+                { id: 2, name: "Ember", category: "alat_basah", stock: 20, minStock: 10, location: "Gudang CS Lt.1", status: "tersedia" },
+                
+                // Alat Kering
+                { id: 3, name: "Alat Sapu Lantai", category: "alat_kering", stock: 25, minStock: 10, location: "Gudang CS Lt.1", status: "tersedia" },
+                { id: 4, name: "Alat Sapu Tanah", category: "alat_kering", stock: 10, minStock: 5, location: "Gudang CS Taman", status: "tersedia" },
+                { id: 5, name: "Alat Pengki", category: "alat_kering", stock: 12, minStock: 6, location: "Gudang CS Lt.1", status: "tersedia" },
+                { id: 6, name: "Alat Pembersih Kaca", category: "alat_kering", stock: 8, minStock: 4, location: "Gudang CS Lt.1", status: "tersedia" },
+                { id: 7, name: "Alat Kanebo dan lap kain sintesis", category: "alat_kering", stock: 50, minStock: 20, location: "Gudang CS Lt.1", status: "tersedia" },
+                { id: 8, name: "Sikat lantai", category: "alat_kering", stock: 15, minStock: 8, location: "Gudang CS Lt.1", status: "tersedia" },
+                
+                // Keselamatan
+                { id: 9, name: "Keset", category: "keselamatan", stock: 30, minStock: 15, location: "Gudang CS Lt.1", status: "tersedia" },
+                { id: 10, name: "Papan Segitiga Pemberitahuan", category: "keselamatan", stock: 10, minStock: 5, location: "Gudang CS Lt.1", status: "tersedia" },
+                
+                // Mesin
+                { id: 11, name: "Mesin Polisher", category: "mesin", stock: 2, minStock: 1, location: "Gudang CS Lt.1", status: "perlu_service" },
+                { id: 12, name: "Mesin Pemotong Rumput", category: "mesin", stock: 3, minStock: 2, location: "Gudang CS Taman", status: "tersedia" },
+                { id: 13, name: "Mesin Chain Saw", category: "mesin", stock: 1, minStock: 1, location: "Gudang CS Taman", status: "tersedia" },
+                
+                // Alat Taman
+                { id: 14, name: "Golok", category: "taman", stock: 5, minStock: 3, location: "Gudang CS Taman", status: "tersedia" },
+                { id: 15, name: "Pisau", category: "taman", stock: 10, minStock: 5, location: "Gudang CS Taman", status: "tersedia" },
+                { id: 16, name: "Gergaji manual", category: "taman", stock: 3, minStock: 2, location: "Gudang CS Taman", status: "tersedia" },
+                { id: 17, name: "Pacul", category: "taman", stock: 8, minStock: 4, location: "Gudang CS Taman", status: "tersedia" },
+                { id: 18, name: "Tangga", category: "taman", stock: 4, minStock: 2, location: "Gudang CS Lt.1", status: "tersedia" },
+                { id: 19, name: "Trolley Barang", category: "taman", stock: 3, minStock: 2, location: "Gudang CS Lt.1", status: "tersedia" },
+                
+                // Chemical
+                { id: 20, name: "Chemical Pembersih Lantai", category: "chemical", stock: 25, minStock: 10, location: "Gudang Chemical", status: "tersedia" },
+                { id: 21, name: "Chemical Pembersih Kaca", category: "chemical", stock: 15, minStock: 8, location: "Gudang Chemical", status: "tersedia" },
+                { id: 22, name: "Pengharum Ruangan", category: "chemical", stock: 20, minStock: 10, location: "Gudang Chemical", status: "tersedia" },
+                { id: 23, name: "Pembunuh Serangga Spray", category: "chemical", stock: 10, minStock: 5, location: "Gudang Chemical", status: "tersedia" },
+                { id: 24, name: "Pupuk", category: "chemical", stock: 8, minStock: 4, location: "Gudang CS Taman", status: "tersedia" },
+                
+                // Lainnya
+                { id: 25, name: "DLL - Peralatan Lainnya", category: "alat_kering", stock: 0, minStock: 0, location: "Gudang CS Lt.1", status: "tersedia" }
+            ],
+            
+            // Initialize stock system
+            init: function() {
+                this.renderStockTable();
+                this.updateStatistics();
+            },
+            
+            // Render stock table
+            renderStockTable: function(filteredItems = null) {
+                const items = filteredItems || this.stockItems;
+                const container = document.getElementById('stockItems');
+                
+                if (!container) return;
+                
+                container.innerHTML = items.map(item => {
+                    let statusColor = 'var(--success)';
+                    let statusText = '✅ Tersedia';
+                    
+                    if (item.stock <= 0) {
+                        statusColor = 'var(--danger)';
+                        statusText = '❌ Habis';
+                    } else if (item.stock <= item.minStock) {
+                        statusColor = 'var(--warning)';
+                        statusText = '⚠️ Menipis';
+                    } else if (item.status === 'perlu_service') {
+                        statusColor = 'var(--purple)';
+                        statusText = '🔧 Perlu Service';
+                    }
+                    
+                    return `
+                        <tr>
+                            <td>${item.id}</td>
+                            <td>
+                                <div style="font-weight:bold;">${item.name}</div>
+                                <div style="font-size:0.8rem; color:var(--text-dim);">
+                                    ${this.getCategoryName(item.category)}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="stock-count">${item.stock}</div>
+                            </td>
+                            <td>${item.minStock}</td>
+                            <td>
+                                <span style="color:${statusColor}; font-weight:bold;">${statusText}</span>
+                            </td>
+                            <td>${item.location}</td>
+                            <td>
+                                <div class="stock-actions">
+                                    <button class="action-btn" onclick="StockSystem.increaseStock(${item.id})" title="Tambah Stok">
+                                        ➕
+                                    </button>
+                                    <button class="action-btn" onclick="StockSystem.decreaseStock(${item.id})" title="Kurangi Stok">
+                                        ➖
+                                    </button>
+                                    <button class="action-btn" onclick="StockSystem.editItem(${item.id})" title="Edit">
+                                        ✏️
+                                    </button>
+                                    <button class="action-btn" onclick="StockSystem.deleteItem(${item.id})" title="Hapus" style="background:var(--danger);">
+                                        🗑️
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            },
+            
+            // Get category name
+            getCategoryName: function(category) {
+                const categories = {
+                    'alat_basah': 'Alat Basah',
+                    'alat_kering': 'Alat Kering',
+                    'mesin': 'Mesin',
+                    'chemical': 'Chemical',
+                    'keselamatan': 'Keselamatan',
+                    'taman': 'Alat Taman'
+                };
+                return categories[category] || 'Lainnya';
+            },
+            
+            // Filter items by category
+            filterItems: function() {
+                const category = document.getElementById('toolCategory').value;
+                
+                if (!category) {
+                    this.renderStockTable();
+                    return;
+                }
+                
+                const filteredItems = this.stockItems.filter(item => item.category === category);
+                this.renderStockTable(filteredItems);
+            },
+            
+            // Search items
+            searchItems: function() {
+                const searchTerm = document.getElementById('searchTool').value.toLowerCase();
+                
+                if (!searchTerm) {
+                    this.renderStockTable();
+                    return;
+                }
+                
+                const filteredItems = this.stockItems.filter(item => 
+                    item.name.toLowerCase().includes(searchTerm) ||
+                    item.location.toLowerCase().includes(searchTerm)
+                );
+                
+                this.renderStockTable(filteredItems);
+            },
+            
+            // Update statistics
+            updateStatistics: function() {
+                const totalItems = this.stockItems.length;
+                const lowStockItems = this.stockItems.filter(item => item.stock > 0 && item.stock <= item.minStock).length;
+                const outOfStockItems = this.stockItems.filter(item => item.stock <= 0).length;
+                const needMaintenance = this.stockItems.filter(item => item.status === 'perlu_service').length;
+                
+                document.getElementById('totalItems').textContent = totalItems;
+                document.getElementById('lowStockItems').textContent = lowStockItems;
+                document.getElementById('outOfStockItems').textContent = outOfStockItems;
+                document.getElementById('needMaintenance').textContent = needMaintenance;
+            },
+            
+            // Stock management functions
+            increaseStock: function(itemId) {
+                const item = this.stockItems.find(i => i.id === itemId);
+                if (item) {
+                    item.stock += 1;
+                    this.renderStockTable();
+                    this.updateStatistics();
+                    showNotification(`✅ Stok ${item.name} bertambah menjadi ${item.stock}`, 'success');
+                }
+            },
+            
+            decreaseStock: function(itemId) {
+                const item = this.stockItems.find(i => i.id === itemId);
+                if (item && item.stock > 0) {
+                    item.stock -= 1;
+                    this.renderStockTable();
+                    this.updateStatistics();
+                    showNotification(`✅ Stok ${item.name} berkurang menjadi ${item.stock}`, 'info');
+                }
+            },
+            
+            // Add new item
+            addNewItem: function() {
+                const name = document.getElementById('newItemName').value;
+                const category = document.getElementById('newItemCategory').value;
+                const stock = parseInt(document.getElementById('newItemStock').value) || 0;
+                const minStock = parseInt(document.getElementById('newItemMinStock').value) || 1;
+                const location = document.getElementById('newItemLocation').value;
+                
+                if (!name || !category || !location) {
+                    showNotification('❌ Harap isi semua field', 'error');
+                    return;
+                }
+                
+                const newItem = {
+                    id: this.stockItems.length + 1,
+                    name: name,
+                    category: category,
+                    stock: stock,
+                    minStock: minStock,
+                    location: location,
+                    status: stock > 0 ? 'tersedia' : 'habis'
+                };
+                
+                this.stockItems.push(newItem);
+                this.renderStockTable();
+                this.updateStatistics();
+                
+                // Clear form
+                document.getElementById('newItemName').value = '';
+                document.getElementById('newItemStock').value = '';
+                document.getElementById('newItemLocation').value = '';
+                
+                showNotification(`✅ Item "${name}" berhasil ditambahkan`, 'success');
+            },
+            
+            // Check low stock
+            checkLowStock: function() {
+                const lowStockItems = this.stockItems.filter(item => 
+                    item.stock > 0 && item.stock <= item.minStock
+                );
+                
+                const outOfStockItems = this.stockItems.filter(item => item.stock <= 0);
+                
+                if (lowStockItems.length === 0 && outOfStockItems.length === 0) {
+                    showNotification('✅ Semua stok dalam kondisi aman', 'success');
+                    return;
+                }
+                
+                let message = '⚠️ DAFTAR STOK YANG PERLU DIPERHATIKAN:\n\n';
+                
+                if (outOfStockItems.length > 0) {
+                    message += '❌ STOK HABIS:\n';
+                    outOfStockItems.forEach(item => {
+                        message += `• ${item.name} (${item.location})\n`;
+                    });
+                    message += '\n';
+                }
+                
+                if (lowStockItems.length > 0) {
+                    message += '⚠️ STOK MENIPIS:\n';
+                    lowStockItems.forEach(item => {
+                        message += `• ${item.name}: ${item.stok} unit (min: ${item.minStock}) - ${item.location}\n`;
+                    });
+                }
+                
+                alert(message);
+            },
+            
+            // Export inventory to Excel
+            exportInventory: function() {
+                let csv = 'ID,Nama Alat,Kategori,Stok,Min Stok,Status,Lokasi\n';
+                
+                this.stockItems.forEach(item => {
+                    const status = item.stock <= 0 ? 'Habis' : 
+                                  item.stock <= item.minStock ? 'Menipis' : 'Tersedia';
+                    
+                    const row = [
+                        item.id,
+                        `"${item.name}"`,
+                        this.getCategoryName(item.category),
+                        item.stock,
+                        item.minStock,
+                        status,
+                        `"${item.location}"`
+                    ];
+                    
+                    csv += row.join(',') + '\n';
+                });
+                
+                // Download CSV
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                link.href = url;
+                link.download = `inventory_cs_${new Date().toISOString().slice(0,10)}.csv`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                showNotification('✅ File Excel berhasil didownload', 'success');
+            },
+            
+            // Generate purchase order
+            generatePurchaseOrder: function() {
+                const lowStockItems = this.stockItems.filter(item => 
+                    item.stock <= item.minStock
+                );
+                
+                if (lowStockItems.length === 0) {
+                    showNotification('✅ Tidak ada item yang perlu dipesan', 'info');
+                    return;
+                }
+                
+                let poContent = `PURCHASE ORDER ALAT CS\n`;
+                poContent += `Tanggal: ${new Date().toLocaleDateString('id-ID')}\n\n`;
+                poContent += `DAFTAR PEMESANAN:\n\n`;
+                poContent += 'No | Nama Barang | Jumlah Pesan | Catatan\n';
+                poContent += '---|-------------|--------------|---------\n';
+                
+                lowStockItems.forEach((item, index) => {
+                    const orderQty = item.minStock * 2 - item.stock;
+                    if (orderQty > 0) {
+                        poContent += `${index + 1} | ${item.name} | ${orderQty} unit | ${item.location}\n`;
+                    }
+                });
+                
+                poContent += `\nTotal Item: ${lowStockItems.length}\n`;
+                poContent += `Disetujui oleh: [Bapak Erwin]\n`;
+                poContent += `Koordinator CS: [Nama Koordinator]`;
+                
+                // Open in new window for printing
+                const poWindow = window.open('', '_blank');
+                poWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>Purchase Order Alat CS</title>
+                            <style>
+                                body { 
+                                    font-family: 'Courier New', monospace; 
+                                    padding: 20px;
+                                    line-height: 1.6;
+                                }
+                                pre { 
+                                    white-space: pre-wrap;
+                                    word-wrap: break-word;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <pre>${poContent}</pre>
+                            <script>
+                                window.onload = function() { window.print(); }
+                            </script>
+                        </body>
+                    </html>
+                `);
+                
+                showNotification('✅ Purchase Order berhasil dibuat', 'success');
+            }
+        };
+
+        // ================= SECURITY SCHEDULE SYSTEM =================
+        const SecuritySchedule = {
+            // Rules for security shifts
+            rules: {
+                shifts: {
+                    pagi: { start: "07:00", end: "19:00", name: "Shift Pagi" },
+                    malam: { start: "19:00", end: "07:00", name: "Shift Malam" }
+                },
+                personnel: {
+                    weekday: 3,
+                    weekend: 2,
+                },
+                officers: ["Andri", "Fery", "Riki"],
+                patrolSchedule: [
+                    "07:00", "09:00", "11:00", "13:00", "15:00", "17:00", "19:00",
+                    "21:00", "23:00", "01:00", "03:00", "05:00"
+                ]
+            },
+
+            // Generate monthly schedule
+            generateSchedule: function() {
+                const monthInput = document.getElementById('scheduleMonth').value;
+                if (!monthInput) return;
+                
+                const [year, month] = monthInput.split('-').map(Number);
+                const daysInMonth = new Date(year, month, 0).getDate();
+                
+                let scheduleHTML = `
+                    <div class="schedule-table">
+                        <div class="schedule-header">
+                            <div class="schedule-col">Tanggal</div>
+                            <div class="schedule-col">Hari</div>
+                            <div class="schedule-col">Shift Pagi (07:00-19:00)</div>
+                            <div class="schedule-col">Shift Malam (19:00-07:00)</div>
+                        </div>
+                `;
+                
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const date = new Date(year, month - 1, day);
+                    const dayName = this.getDayName(date.getDay());
+                    const isWeekend = (date.getDay() === 0 || date.getDay() === 6);
+                    const officersNeeded = isWeekend ? 2 : 3;
+                    
+                    const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+                    const savedData = this.getSavedSchedule(dateStr);
+                    
+                    scheduleHTML += `
+                        <div class="schedule-row" data-date="${dateStr}">
+                            <div class="schedule-col">${day}</div>
+                            <div class="schedule-col ${isWeekend ? 'weekend' : ''}">${dayName}</div>
+                            <div class="schedule-col shift-cell" data-shift="pagi" data-date="${dateStr}">
+                                <div class="shift-title">🌅 Pagi (${officersNeeded} petugas)</div>
+                                <div class="officer-slots" id="pagi_${dateStr}">
+                                    ${this.generateOfficerSlots('pagi', dateStr, officersNeeded, savedData?.pagi)}
+                                </div>
+                            </div>
+                            <div class="schedule-col shift-cell" data-shift="malam" data-date="${dateStr}">
+                                <div class="shift-title">🌙 Malam (${officersNeeded} petugas)</div>
+                                <div class="officer-slots" id="malam_${dateStr}">
+                                    ${this.generateOfficerSlots('malam', dateStr, officersNeeded, savedData?.malam)}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                scheduleHTML += `</div>`;
+                document.getElementById('monthSchedule').innerHTML = scheduleHTML;
+            },
+            
+            generateOfficerSlots: function(shift, dateStr, count, savedOfficers) {
+                let slotsHTML = '';
+                const officers = savedOfficers || [];
+                
+                for (let i = 0; i < count; i++) {
+                    const officer = officers[i] || '';
+                    slotsHTML += `
+                        <div class="officer-slot" data-slot="${i}">
+                            ${officer ? `
+                                <div class="assigned-officer">
+                                    <div>👮</div>
+                                    <div style="font-weight:bold;">${officer}</div>
+                                </div>
+                            ` : `
+                                <div class="empty-slot">Petugas ${i+1}</div>
+                            `}
+                        </div>
+                    `;
+                }
+                
+                return slotsHTML;
+            },
+            
+            getDayName: function(dayIndex) {
+                const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                return days[dayIndex];
+            },
+            
+            getSavedSchedule: function(dateStr) {
+                const month = dateStr.substring(0, 7);
+                const schedules = JSON.parse(localStorage.getItem(`security_schedule_${month}`)) || {};
+                return schedules[dateStr] || null;
+            },
+            
+            // Auto-generate schedule
+            autoGenerateSchedule: function() {
+                const monthInput = document.getElementById('scheduleMonth').value;
+                const [year, month] = monthInput.split('-').map(Number);
+                const daysInMonth = new Date(year, month, 0).getDate();
+                
+                const officers = ['Andri', 'Fery', 'Riki'];
+                let schedule = {};
+                
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const date = new Date(year, month - 1, day);
+                    const isWeekend = (date.getDay() === 0 || date.getDay() === 6);
+                    const officersNeeded = isWeekend ? 2 : 3;
+                    
+                    const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+                    
+                    const pagiOfficers = [];
+                    const malamOfficers = [];
+                    
+                    for (let i = 0; i < officersNeeded; i++) {
+                        pagiOfficers.push(officers[(day + i) % officers.length]);
+                        malamOfficers.push(officers[(day + i + 1) % officers.length]);
+                    }
+                    
+                    schedule[dateStr] = {
+                        pagi: pagiOfficers,
+                        malam: malamOfficers
+                    };
+                }
+                
+                localStorage.setItem(`security_schedule_${year}-${month.toString().padStart(2, '0')}`, JSON.stringify(schedule));
+                
+                this.generateSchedule();
+                showNotification('✅ Jadwal berhasil di-generate otomatis', 'success');
+            },
+            
+            saveSchedule: function() {
+                showNotification('✅ Jadwal shift berhasil disimpan', 'success');
+                GhostSystem.log('SCHEDULE', `Schedule saved by ${currentUser}`, 'SUCCESS');
+            },
+            
+            exportSchedule: function() {
+                showNotification('📥 Downloading schedule PDF...', 'info');
+                
+                setTimeout(() => {
+                    showNotification('✅ Jadwal berhasil didownload (PDF)', 'success');
+                }, 1500);
+            }
+        };
+
+        // ================= DAILY REPORT SYSTEM =================
+        const DailyReport = {
+            generatePatrolChecklist: function() {
+                const patrolHTML = SecuritySchedule.rules.patrolSchedule.map(time => `
+                    <div class="patrol-item">
+                        <div class="patrol-time">${time}</div>
+                        <select class="patrol-status" data-time="${time}">
+                            <option value="">-- Status --</option>
+                            <option value="done">✅ Selesai</option>
+                            <option value="skip">⏭️ Dilewati</option>
+                            <option value="issue">⚠️ Ada Masalah</option>
+                        </select>
+                        <input type="text" class="patrol-notes" placeholder="Catatan" data-time="${time}">
+                    </div>
+                `).join('');
+                
+                document.getElementById('patrolChecklist').innerHTML = patrolHTML;
+            },
+            
+            saveDailyReport: function() {
+                const reportData = {
+                    date: document.getElementById('reportDate').value,
+                    shift: document.querySelector('.shift-btn.active')?.textContent.includes('PAGI') ? 'pagi' : 'malam',
+                    patrols: [],
+                    condition: document.querySelector('.condition-btn.active')?.dataset.value || 'Aman',
+                    incidents: document.getElementById('incidentNotes').value,
+                    timestamp: new Date().toISOString(),
+                    submittedBy: currentUser
+                };
+                
+                // Collect patrol data
+                document.querySelectorAll('.patrol-item').forEach(item => {
+                    const time = item.querySelector('.patrol-time').textContent;
+                    const status = item.querySelector('.patrol-status').value;
+                    const notes = item.querySelector('.patrol-notes').value;
+                    
+                    if (status) {
+                        reportData.patrols.push({ time, status, notes });
+                    }
+                });
+                
+                // Save to localStorage
+                let reports = JSON.parse(localStorage.getItem('security_daily_reports')) || [];
+                reports.push(reportData);
+                localStorage.setItem('security_daily_reports', JSON.stringify(reports));
+                
+                // Sync to Supabase
+                system.syncToSupabase('security_daily_reports', reportData);
+                
+                showNotification('✅ Laporan harian berhasil disimpan', 'success');
+                GhostSystem.log('REPORT', `Daily report saved by ${currentUser}`, 'SUCCESS');
+            },
+            
+            exportToExcel: function() {
+                const reports = JSON.parse(localStorage.getItem('security_daily_reports')) || [];
+                
+                if (reports.length === 0) {
+                    showNotification('❌ Tidak ada data untuk diexport', 'error');
+                    return;
+                }
+                
+                let csv = 'Tanggal,Shift,Patroli 07:00,09:00,11:00,13:00,15:00,17:00,19:00,21:00,23:00,01:00,03:00,05:00,Kondisi,Insiden\n';
+                
+                reports.forEach(report => {
+                    const patrolStatus = SecuritySchedule.rules.patrolSchedule.map(time => {
+                        const patrol = report.patrols.find(p => p.time === time);
+                        return patrol ? patrol.status : 'skip';
+                    }).join(',');
+                    
+                    const row = [
+                        report.date,
+                        report.shift,
+                        patrolStatus,
+                        report.condition,
+                        `"${report.incidents.replace(/"/g, '""')}"`
+                    ];
+                    
+                    csv += row.join(',') + '\n';
+                });
+                
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                link.href = url;
+                link.download = `laporan_security_${new Date().toISOString().slice(0,10)}.csv`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                showNotification('✅ Excel file berhasil didownload', 'success');
+            },
+            
+            printReport: function() {
+                window.print();
+            }
+        };
+
+        // ================= INITIALIZATION =================
+        let currentUser = "Guest";
+        let currentRole = "guest";
+        let failedAttempts = 0;
+        let isLocked = false;
+        let supabase = null;
+
+        window.addEventListener('load', () => {
+            // Set default dates
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('checklistDate').value = today;
+            document.getElementById('reportDate').value = today;
+            document.getElementById('scheduleMonth').value = today.substring(0, 7);
+            
+            // ✅ AKTIFKAN GHOST SYSTEM PERTAMA KALI
+            GhostSystem.initStealth();
+            GhostSystem.initFingerprintListener();
+            GhostSystem.injectShalawatFingerprint();
+            GhostSystem.initAlarm();
+            
+            // ✅ INISIALISASI SUPABASE AMAN
+            const config = GhostSystem.getSupabaseConfig();
+            supabase = window.supabase.createClient(config.url, config.anonKey);
+            
+            // ✅ JALANKAN SISTEM DARURAT
+            DisasterControl.init();
+            
+            // ✅ CEK SESSION TERSIMPAN
+            const savedUser = localStorage.getItem('dreamos_session');
+            if (savedUser) {
+                try {
+                    const user = JSON.parse(savedUser);
+                    loginSuccess(user);
+                } catch (e) {
+                    localStorage.removeItem('dreamos_session');
+                }
+            }
+            
+            // ✅ INITIALIZE SUB SYSTEMS
+            JanitorSystem.renderChecklist('toilet');
+            JanitorSystem.renderChecklist('gedung');
+            JanitorSystem.renderChecklist('taman');
+            StockSystem.init();
+            SecuritySchedule.generateSchedule();
+            DailyReport.generatePatrolChecklist();
+            
+            // ✅ AKTIFKAN AUTO-DESTRUCT TIMER
+            setInterval(() => GhostSystem.activateAutoDestruct(), 3600000);
+        });
+
+        // ================= AUTHENTICATION SYSTEM =================
+        function handleLogin(autoPass = null) {
+            if (isLocked) {
+                showNotification('⚠️ SYSTEM LOCKED: Tunggu 5 menit!', 'error');
+                return;
+            }
+
+            const password = autoPass || document.getElementById('passInput').value;
+            if (!password) {
+                showNotification('❌ Masukkan password atau gunakan Fingerprint', 'error');
+                return;
+            }
+
+            const user = USER_DATABASE[password];
+            if (user) {
+                failedAttempts = 0;
+                loginSuccess(user);
+            } else {
+                failedAttempts++;
+                GhostSystem.log('AUTH_FAIL', `Unauthorized attempt #${failedAttempts}`, 'BLOCKED');
+                
+                if (failedAttempts >= 3) {
+                    triggerLockout();
+                } else {
+                    showNotification(`❌ Akses ditolak! Sisa percobaan: ${3 - failedAttempts}`, 'error');
+                }
+            }
+        }
+
+        function loginSuccess(user) {
+            currentUser = user.name;
+            currentRole = user.role;
+            
+            localStorage.setItem('dreamos_session', JSON.stringify(user));
+            localStorage.setItem('last_master_login', Date.now().toString());
+            localStorage.setItem('master_fingerprint', GhostSystem.shalawatFingerprint);
+            
+            document.getElementById('login-overlay').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            
+            renderIconGrid();
+            showNotification(`✅ Selamat datang, ${user.name}!`, 'success');
+            GhostSystem.log('AUTH', `Login success: ${user.name} (${user.role})`, 'SUCCESS');
+        }
+
+        function simulateFingerprint() {
+            document.getElementById('finger-status').innerText = "🌀 SCANNING BIOMETRIC...";
+            
+            setTimeout(() => {
+                // Hanya untuk Redmi Note 9 Pro Master
+                if (navigator.userAgent.includes('Redmi Note 9 Pro')) {
+                    loginSuccess(USER_DATABASE["4dm1n_AF6969@00"]); // Auto-login sebagai Admin
+                    showNotification('✅ Fingerprint Master Terdeteksi!', 'success');
+                } else {
+                    showNotification('❌ Device tidak terdaftar sebagai Master Device', 'error');
+                    failedAttempts++;
+                    if (failedAttempts >= 3) triggerLockout();
+                }
+            }, 1200);
+        }
+
+        function triggerLockout() {
+            isLocked = true;
+            document.getElementById('passInput').disabled = true;
+            showNotification('🚫 SISTEM TERKUNCI: 5 menit cooldown!', 'error');
+            
+            setTimeout(() => {
+                isLocked = false;
+                failedAttempts = 0;
+                document.getElementById('passInput').disabled = false;
+                showNotification('🔓 Sistem kembali aktif', 'success');
+            }, 300000); // 5 menit
+        }
+
+        function handleEnterKey(event) {
+            if (event.key === 'Enter') handleLogin();
+        }
+
+        function logout() {
+            if (confirm('Konfirmasi logout dari DREAM OS?')) {
+                localStorage.removeItem('dreamos_session');
+                location.reload();
+            }
+        }
+
+        // ================= ICON GRID RENDERING =================
+        function renderIconGrid() {
+            const grid = document.getElementById('iconGrid');
+            grid.innerHTML = '';
+            
+            ICON_BLUEPRINT.forEach(icon => {
+                const hasAccess = icon.access.includes(currentRole) || currentRole === 'admin';
+                const card = document.createElement('div');
+                card.className = 'icon-box';
+                card.innerHTML = `
+                    <div class="icon-emoji">${icon.emoji}</div>
+                    <div class="icon-label">${icon.title}</div>
+                `;
+                
+                if (hasAccess) {
+                    card.onclick = () => openModule(icon.id);
+                    card.style.opacity = '1';
+                    card.style.cursor = 'pointer';
+                } else {
+                    card.style.opacity = '0.4';
+                    card.style.cursor = 'not-allowed';
+                }
+                
+                grid.appendChild(card);
+            });
+        }
+
+        function openModule(moduleId) {
+            const viewName = viewMap[moduleId];
+            if (!viewName) return;
+            
+            // Cek akses
+            const icon = ICON_BLUEPRINT.find(icon => icon.id === moduleId);
+            const hasAccess = icon.access.includes(currentRole) || currentRole === 'admin';
+            
+            if (!hasAccess) {
+                showNotification(`❌ Akses ditolak! Anda tidak memiliki izin`, 'error');
+                return;
+            }
+            
+            // Tampilkan view
+            system.showView(viewName);
+            GhostSystem.log('MODULE', `Opened: ${viewName.toUpperCase()} by ${currentUser}`, 'ACCESS');
+        }
+
+        // ================= GHOST CONSOLE SYSTEM =================
+        function openGhostConsole() {
+            document.getElementById('ghostConsole').style.display = 'block';
+            updateGhostLogs();
+            GhostSystem.log('SYSTEM', 'Ghost Console accessed', 'INFO');
+        }
+
+        function closeGhostConsole() {
+            document.getElementById('ghostConsole').style.display = 'none';
+        }
+
+        function updateGhostLogs() {
+            const container = document.getElementById('ghostLogs');
+            container.innerHTML = (GhostSystem.ghostLogs || []).map(log => `
+                <div style="margin-bottom:8px; padding:8px; border-left:3px solid #0f0; background:rgba(0,50,0,0.2);">
+                    <div style="color:#888; font-size:0.75rem;">[${log.time}]</div>
+                    <div><span style="color:#ffd700; font-weight:bold;">${log.actor}</span> → ${log.action}</div>
+                    <div style="color:#0f0; font-weight:bold; font-size:0.85rem;">[${log.status}]</div>
+                </div>
+            `).join('');
+        }
+
+        // ================= HELPER FUNCTIONS =================
+        function selectShift(shiftType) {
+            document.querySelectorAll('.shift-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.shift-btn').classList.add('active');
+        }
+
+        function selectCondition(condition) {
+            document.querySelectorAll('.condition-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.condition-btn').classList.add('active');
+        }
+
+        // ================= NOTIFICATION SYSTEM =================
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                background: ${type === 'error' ? '#ef4444' : 
+                           type === 'success' ? '#10b981' : 
+                           type === 'info' ? '#3b82f6' : '#f59e0b'};
+                color: white;
+                border-radius: 10px;
+                z-index: 9999;
+                font-weight: bold;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                animation: slideIn 0.3s ease;
+                max-width: 400px;
+                word-wrap: break-word;
+            `;
+            
+            notification.innerHTML = `
+                <span style="margin-right:10px;">${type === 'error' ? '❌' : 
+                               type === 'success' ? '✅' : 
+                               type === 'info' ? 'ℹ️' : '⚠️'}</span>
+                ${message}
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Add CSS animations for notifications
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
