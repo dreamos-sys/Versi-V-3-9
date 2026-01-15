@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DREAM OS v13.9.9.9 — The Power Soul of Shalawat</title>
+    
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ================= ROOT VARIABLES ================= */
+        :root {
+            --win-blue: #005a9e;
+            --win-grey: #f0f0f0;
+            --quantum-glow: #00f2ff;
+            --shadow-deep: rgba(0, 90, 158, 0.4);
+            --emerald: #00C897;
+            --gold: #FFD700;
+            --dark-bg: #0a0f2c;
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --glass: rgba(255, 255, 255, 0.08);
+        }
+        
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif;
+        }
+        
+        body { 
+            background: radial-gradient(circle at top, #001f3f 0%, #000814 50%, #000000 100%); 
+            color: #fff; 
+            margin: 0; 
+            overflow-x: hidden;
+            height: 100vh;
+        }
+
+        /* ================= LOGIN OVERLAY ================= */
+        #login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 15, 44, 0.98);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .login-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--emerald);
+            border-radius: 20px;
+            padding: 40px 35px;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 200, 151, 0.2);
+        }
+        
+        .bismillah-trigger {
+            font-family: 'Amiri', serif;
+            font-size: 3.5rem;
+            color: var(--gold);
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: transform 0.3s;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        .bismillah-trigger:hover {
+            transform: scale(1.1);
+        }
+        
+        .login-title {
+            color: var(--gold);
+            margin-bottom: 25px;
+            font-family: 'Amiri', serif;
+            font-size: 1.3rem;
+        }
+        
+        .login-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        /* ================= PASSWORD WITH EYE TOGGLE ================= */
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .pass-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--emerald);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        
+        .pass-input:focus {
+            outline: none;
+            border-color: var(--quantum-glow);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+        }
+        
+        .eye-toggle {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--emerald);
+            font-size: 1.3rem;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            border-radius: 50%;
+        }
+        
+        .eye-toggle:hover {
+            background: rgba(0, 200, 151, 0.1);
+            color: var(--gold);
+        }
+        
+        .login-btn {
+            background: linear-gradient(135deg, var(--emerald), #00b386);
+            color: white;
+            border: none;
+            padding: 16px 35px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(0, 200, 151, 0.3);
+        }
+        
+        .login-btn:hover {
+            background: linear-gradient(135deg, #00b386, var(--emerald));
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 200, 151, 0.4);
+        }
+        
+        .fingerprint-btn {
+            background: rgba(0, 200, 151, 0.1);
+            border: 2px solid var(--emerald);
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 20px auto;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .fingerprint-btn:hover {
+            background: rgba(0, 200, 151, 0.2);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px var(--emerald);
+        }
+        
+        .device-info {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 15px 0;
+            text-align: left;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            border-left: 3px solid var(--emerald);
+        }
+        
+        /* ================= WINDOW CONTAINER ================= */
+        .window {
+            width: 95%; 
+            max-width: 1400px; 
+            height: 85vh;
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+            color: #333; 
+            margin: 20px auto;
+            border-radius: 15px; 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column;
+            box-shadow: 0 15px 70px rgba(0, 242, 255, 0.3), 
+                        0 0 0 1px var(--quantum-glow),
+                        inset 0 1px 0 rgba(255,255,255,0.5);
+            display: none;
+            animation: windowFadeIn 0.5s ease-out;
+        }
+        
+        @keyframes windowFadeIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .title-bar {
+            background: linear-gradient(180deg, #005a9e 0%, #004080 100%);
+            padding: 15px 20px;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            font-weight: bold; 
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .window-controls {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .window-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .window-btn:hover {
+            transform: scale(1.2);
+        }
+        
+        .window-close { background: #ff5f57; }
+        .window-min { background: #ffbd2e; }
+        .window-max { background: #28ca42; }
+        
+        /* ================= MAIN LAYOUT ================= */
+        .main-layout {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .sidebar {
+            width: 250px; 
+            background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+            padding: 25px 20px; 
+            border-right: 1px solid #333;
+            box-shadow: 5px 0 20px rgba(0,0,0,0.3);
+            overflow-y: auto;
+        }
+        
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+        
+        .sidebar-title {
+            color: var(--quantum-glow);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(0, 242, 255, 0.2);
+        }
+        
+        .user-welcome {
+            color: var(--gold);
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin: 10px 0 20px 0;
+            padding: 12px;
+            background: rgba(255, 215, 0, 0.05);
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        
+        .stat-item {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: #999;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--quantum-glow);
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-online {
+            background: var(--success);
+            box-shadow: 0 0 10px var(--success);
+        }
+        
+        /* ================= DASHBOARD GRID ================= */
+        .main-content {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 1200px) {
+            .dashboard-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        
+        @media (max-width: 900px) {
+            .dashboard-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        
+        @media (max-width: 600px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+        }
+        
+        .icon-box {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 25px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            height: 170px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .icon-box:hover {
+            border-color: var(--win-blue);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 90, 158, 0.15);
+        }
+        
+        .icon-emoji {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        .icon-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #333;
+            line-height: 1.3;
+        }
+        
+        .emergency-box {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white !important;
+            border-color: #fff !important;
+            grid-column: span 4;
+            height: auto;
+            padding: 30px;
+            animation: pulseEmergency 2s infinite;
+        }
+        
+        .emergency-box .icon-label {
+            color: white !important;
+            font-size: 1.2rem;
+        }
+        
+        @keyframes pulseEmergency {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        
+        /* ================= TAB CONTENTS ================= */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            margin-top: 20px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--win-blue);
+        }
+        
+        .tab-title {
+            color: var(--win-blue);
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        
+        .close-tab {
+            background: #f0f0f0;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .close-tab:hover {
+            background: #e0e0e0;
+            transform: scale(1.1);
+        }
+        
+        /* ================= FORM STYLES (from index lama) ================= */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            color: var(--win-blue);
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            color: #333;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--win-blue);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(0, 90, 158, 0.1);
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--win-blue), #004080);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #004080, var(--win-blue));
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 90, 158, 0.2);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+        }
+        
+        .time-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .time-separator {
+            text-align: center;
+            color: var(--win-blue);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        /* ================= TASKBAR ================= */
+        .taskbar {
+            position: fixed; 
+            bottom: 0; 
+            width: 100%; 
+            height: 50px;
+            background: linear-gradient(180deg, rgba(20,20,20,0.97) 0%, rgba(0,0,0,0.98) 100%);
+            backdrop-filter: blur(15px);
+            display: flex; 
+            align-items: center; 
+            padding: 0 20px; 
+            border-top: 1px solid rgba(0, 242, 255, 0.3);
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.5);
+            z-index: 900;
+        }
+        
+        .start-btn {
+            background: linear-gradient(135deg, #005a9e, #003d6b);
+            border: none; 
+            color: white; 
+            font-weight: bold; 
+            cursor: pointer; 
+            padding: 8px 20px; 
+            border-radius: 6px; 
+            box-shadow: 0 2px 8px rgba(0,90,158,0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .start-btn:hover {
+            background: linear-gradient(135deg, #004080, #005a9e);
+        }
+        
+        .taskbar-info {
+            margin-left: 25px;
+            font-size: 0.8rem;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .system-heartbeat {
+            color: var(--quantum-glow);
+            font-weight: bold;
+        }
+        
+        .digital-clock {
+            margin-left: auto;
+            font-family: 'Consolas', monospace;
+            color: var(--quantum-glow);
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        /* ================= NOTIFICATION ================= */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            z-index: 10000;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            animation: slideInRight 0.3s ease;
+            max-width: 350px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .notification-success {
+            background: linear-gradient(135deg, var(--success), #059669);
+            border-left: 4px solid #059669;
+        }
+        
+        .notification-error {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            border-left: 4px solid #dc2626;
+        }
+        
+        .notification-warning {
+            background: linear-gradient(135deg, var(--warning), #d97706);
+            border-left: 4px solid #d97706;
+        }
+        
+        .notification-info {
+            background: linear-gradient(135deg, var(--win-blue), #004080);
+            border-left: 4px solid #004080;
+        }
+        
+        /* ================= QUANTUM BRIDGE STATUS ================= */
+        .quantum-status {
+            position: fixed;
+            bottom: 60px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            border-left: 3px solid var(--quantum-glow);
+            backdrop-filter: blur(10px);
+        }
+        
+        .status-online::before {
+            content: "●";
+            color: var(--success);
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY -->
+<div id="login-overlay">
+    <div class="login-box">
+        <div class="bismillah-trigger" onclick="tapBismillah()">﷽</div>
+        <div class="login-title">THE POWER SOUL OF SHALAWAT</div>
+        <div class="login-icon">🧬</div>
+        
+        <div class="password-wrapper">
+            <input type="password" id="passInput" class="pass-input" placeholder="Masukkan Password..." onkeypress="handleEnterKey(event)">
+            <span class="eye-toggle" onclick="togglePassword()">👁️</span>
+        </div>
+        
+        <div class="fingerprint-btn" onclick="simulateFingerprint()">
+            👆
+        </div>
+        
+        <div class="device-info">
+            <p>📱 <b>Dream Team Device:</b> Redmi Note 9 Pro</p>
+            <p>📍 <b>Zero Latitude:</b> -6.3980° S, 106.8242° E</p>
+            <p>💡 <b>Hint:</b> Tap 3x "﷽" untuk hint password</p>
+            <p style="color: var(--emerald); margin-top: 8px; font-size: 0.75rem;">
+                <b>Quantum Bridge:</b> <span id="quantum-status">READY</span>
+            </p>
+        </div>
+        
+        <button class="login-btn" onclick="handleLogin()">🔓 MASUK KE SISTEM</button>
+    </div>
+</div>
+
+<!-- MAIN WINDOW -->
+<div class="window" id="app-window">
+    <div class="title-bar">
+        <span style="display: flex; align-items: center; gap: 10px;">
+            <span style="color: var(--quantum-glow);">💠</span>
+            DREAM OS v13.9.9.9 — QUANTUM STEALTH EDITION
+        </span>
+        <div class="window-controls">
+            <div class="window-btn window-close" onclick="minimizeWindow()"></div>
+            <div class="window-btn window-min" onclick="maximizeWindow()"></div>
+            <div class="window-btn window-max" onclick="closeWindow()"></div>
+        </div>
+    </div>
+    
+    <div class="main-layout">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <div class="user-welcome" id="user-welcome">
+                    Selamat Datang!
+                </div>
+                
+                <div class="sidebar-title">📊 STATISTIK REALTIME</div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">Sarana Terdaftar</div>
+                        <div class="stat-value">22 Unit</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Laporan Hari Ini</div>
+                        <div class="stat-value" id="today-reports">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Status Sistem</div>
+                        <div class="stat-value">
+                            <span class="status-indicator status-online"></span>
+                            <span id="system-status">QUANTUM ONLINE</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Device Auth</div>
+                        <div class="stat-value" id="device-auth">REDMI N9P MASTER</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">⚡ QUICK ACTIONS</div>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <button class="btn btn-primary" style="width: 100%;" onclick="showTab('booking')">
+                        📅 Booking Cepat
+                    </button>
+                    <button class="btn btn-success" style="width: 100%;" onclick="showTab('k3')">
+                        ⚠️ Lapor K3
+                    </button>
+                    <button class="btn" style="width: 100%; background: #f0f0f0;" onclick="exportData()">
+                        📊 Export Data
+                    </button>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">🔐 SYSTEM INFO</div>
+                <div style="font-size: 0.75rem; color: #aaa; line-height: 1.5;">
+                    <p>ISO 9001:2026 Certified</p>
+                    <p>Quantum Bridge: Active</p>
+                    <p>Supabase Sync: Enabled</p>
+                    <p>Last Sync: <span id="last-sync">Just now</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <!-- DASHBOARD GRID -->
+            <div class="dashboard-grid">
+                <!-- Diambil dari index lama: 8 icon utama -->
+                <div class="icon-box" onclick="showTab('booking')">
+                    <div class="icon-emoji">🗓️</div>
+                    <div class="icon-label">BOOKING SARANA<br><small>22 Unit Lengkap</small></div>
+                </div>
+                
+                <div class="icon-box" onclick="showTab('k3')">
+                    <div class="icon-emoji">⚠️</div>
+                    <div class="icon-label">LAPORAN K3<br><small>Kerusakan → Maintenance</small></div>
+                </div>
+                
+                <div class="icon-box" onclick="showTab('security')">
+                    <div class="icon-emoji">👮</div>
+                    <div class="icon-label">LAPORAN SEKURITI<br><small>24 Jam Patroli</small></div>
+                </div>
+                
+                <div class="icon-box" onclick="showTab('janitor')">
+                    <div class="icon-emoji">✅</div>
+                    <div class="icon-label">CEKLIS JANITOR<br><small>11 Area Cleaning</small></div>
+                </div>
+                
+                <div class="icon-box" onclick="showTab('stock')">
+                    <div class="icon-emoji">📦</div>
+                    <div class="icon-label">STOK & ALAT CS<br><small>Inventory System</small></div>
+                </div>
+                
+                <div class="icon-box" onclick="showTab('maintenance')">
+                    <div class="icon-emoji">🛠️</div>
+                    <div class="icon-label">MAINTENANCE<br><small>Perbaikan Sarana</small></div>
+                </div>
+                
+                <div class="icon-box" onclick="showTab('schedule')">
+                    <div class="icon-emoji">📊</div>
+                    <div class="icon-label">LAP. HARIAN<br><small>Excel Export</small></div>
+                </div>
+                
+                <div class="icon-box" onclick="showTab('admin')">
+                    <div class="icon-emoji">👑</div>
+                    <div class="icon-label">ADMIN PANEL<br><small>Full System Control</small></div>
+                </div>
+                
+                <!-- EMERGENCY BUTTON -->
+                <div class="icon-box emergency-box" onclick="triggerEmergency()">
+                    <div class="icon-emoji">🚨</div>
+                    <div class="icon-label">SITUASI DARURAT<br><small>Tekan hanya untuk krisis</small></div>
+                </div>
+            </div>
+            
+            <!-- TAB CONTENTS -->
+            <!-- BOOKING TAB (diambil dari index lama) -->
+            <div id="booking-tab" class="tab-content">
+                <div class="tab-header">
+                    <div class="tab-title">📅 BOOKING SARANA + QUANTUM</div>
+                    <button class="close-tab" onclick="showDashboard()">×</button>
+                </div>
+                
+                <!-- Form Booking dari index lama -->
+                <div class="form-group">
+                    <label class="form-label">Pilih Sarana (22 Unit)</label>
+                    <select class="form-select" id="bookingSarana">
+                        <option value="">-- Pilih Sarana --</option>
+                        <optgroup label="🏛️ AULA UTAMA">
+                            <option value="Aula SMP">Aula SMP (Sound System, Lighting, AC, Projector)</option>
+                            <option value="Aula SMA">Aula SMA (Sound System, Projector, AC)</option>
+                            <option value="Aula Serbaguna">Aula Serba Guna (Sound System)</option>
+                        </optgroup>
+                        <optgroup label="💻 LAB KOMPUTER">
+                            <option value="Labkom SD">Lab Komputer SD (30 Unit)</option>
+                            <option value="Labkom SMP">Lab Komputer SMP (40 Unit)</option>
+                            <option value="Labkom SMA">Lab Komputer SMA (50 Unit)</option>
+                        </optgroup>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Nama PIC / Guru *</label>
+                    <input type="text" class="form-input" id="bookingPIC" placeholder="Nama lengkap beserta gelar">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Tanggal Booking *</label>
+                    <input type="date" class="form-input" id="bookingDate">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Waktu Booking *</label>
+                    <div class="time-grid">
+                        <input type="time" class="form-input" id="bookingStart" value="07:30">
+                        <div class="time-separator">→</div>
+                        <input type="time" class="form-input" id="bookingEnd" value="16:00">
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" style="width: 100%; padding: 15px;" onclick="sendBooking()">
+                    📡 KIRIM VIA QUANTUM BRIDGE
+                </button>
+            </div>
+            
+            <!-- K3 TAB -->
+            <div id="k3-tab" class="tab-content">
+                <div class="tab-header">
+                    <div class="tab-title">⚠️ LAPORAN K3 + QUANTUM</div>
+                    <button class="close-tab" onclick="showDashboard()">×</button>
+                </div>
+                <p>Form laporan K3 dari index lama...</p>
+            </div>
+            
+            <!-- SECURITY TAB -->
+            <div id="security-tab" class="tab-content">
+                <div class="tab-header">
+                    <div class="tab-title">👮 LAPORAN KEAMANAN 24 JAM</div>
+                    <button class="close-tab" onclick="showDashboard()">×</button>
+                </div>
+                <p>Form laporan security dari index lama...</p>
+            </div>
+            
+            <!-- JANITOR TAB -->
+            <div id="janitor-tab" class="tab-content">
+                <div class="tab-header">
+                    <div class="tab-title">✅ CEKLIS HARIAN JANITOR</div>
+                    <button class="close-tab" onclick="showDashboard()">×</button>
+                </div>
+                <p>Form ceklis janitor dari index lama...</p>
+            </div>
+            
+            <!-- STOCK TAB -->
+            <div id="stock-tab" class="tab-content">
+                <div class="tab-header">
+                    <div class="tab-title">📦 STOK & ALAT CS + INVENTORY</div>
+                    <button class="close-tab" onclick="showDashboard()">×</button>
+                </div>
+                <p>Form inventory dari index lama...</p>
+            </div>
+            
+            <!-- MAINTENANCE TAB -->
+            <div id="maintenance-tab" class="tab-content">
+                <div class="tab-header">
+                    <div class="tab-title">🛠️ MAINTENANCE SYSTEM</div>
+                    <button class="close-tab" onclick="showDashboard()">×</button>
+                </div>
+                <p>Form maintenance dari index lama...</p>
+            </div>
+            
+            <!-- SCHEDULE TAB -->
+            <div id="schedule-tab" class="tab-content">
+                <div class="tab-header">
+                    <div class="tab-title">📊 LAPORAN HARIAN + EXCEL</div>
+                    <button class="close-tab" onclick="showDashboard()">×</button>
+                </div>
+                <p>Form daily report dari index lama...</p>
+            </div>
+            
+            <!-- ADMIN TAB -->
+            <div id="admin-tab" class="tab-content">
+                <div class="tab-header">
+                    <div class="tab-title">👑 ADMIN PANEL MASTER</div>
+                    <button class="close-tab" onclick="showDashboard()">×</button>
+                </div>
+                <p>Admin panel dari index lama...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TASKBAR -->
+<div class="taskbar">
+    <button class="start-btn" onclick="toggleStartMenu()">
+        <span style="font-size: 1.2rem;">⊞</span> START
+    </button>
+    
+    <div class="taskbar-info">
+        <span class="system-heartbeat">THE POWER SOUL OF SHALAWAT</span>
+        <span>ISO 9001:2026</span>
+        <span id="connection-status">Quantum Bridge: ONLINE</span>
+    </div>
+    
+    <div class="digital-clock" id="digital-clock">
+        00:00:00
+    </div>
+</div>
+
+<!-- QUANTUM BRIDGE STATUS -->
+<div class="quantum-status">
+    <span class="status-online"></span> QUANTUM BRIDGE: <span id="bridge-status">SYNCING...</span>
+</div>
+
+<script>
+    // ================= INITIALIZATION =================
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize clock
+        updateClock();
+        setInterval(updateClock, 1000);
+        
+        // Initialize Quantum Bridge
+        initQuantumBridge();
+        
+        // Check for saved session
+        checkSavedSession();
+    });
+    
+    // ================= PASSWORD TOGGLE =================
+    function togglePassword() {
+        const passwordInput = document.getElementById('passInput');
+        const eyeToggle = document.querySelector('.eye-toggle');
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            eyeToggle.textContent = '🙈';
+            eyeToggle.title = 'Hide password';
+        } else {
+            passwordInput.type = 'password';
+            eyeToggle.textContent = '👁️';
+            eyeToggle.title = 'Show password';
+        }
+    }
+    
+    // ================= BISMILLAH TRIGGER =================
+    let bismillahTapCount = 0;
+    let lastTapTime = 0;
+    
+    function tapBismillah() {
+        const now = Date.now();
+        const bismillahElement = document.querySelector('.bismillah-trigger');
+        
+        if (now - lastTapTime < 500) {
+            bismillahTapCount++;
+        } else {
+            bismillahTapCount = 1;
+        }
+        lastTapTime = now;
+        
+        // Visual feedback
+        bismillahElement.style.transform = 'scale(1.2)';
+        setTimeout(() => {
+            bismillahElement.style.transform = 'scale(1)';
+        }, 200);
+        
+        // Triple tap for password hint
+        if (bismillahTapCount >= 3) {
+            const passwordHint = "Admin: 4dm1n_AF6969@00 | Security: LHPSsec_AF2025";
+            showNotification(`🔑 Password hint: ${passwordHint}`, 'info');
+            bismillahTapCount = 0;
+        }
+    }
+    
+    // ================= LOGIN SYSTEM =================
+    const USER_DATABASE = {
+        "4dm1n_AF6969@00": { name: "Admin Master", role: "admin", icon: "👑" },
+        "user_@1234": { name: "User Umum", role: "user", icon: "👤" },
+        "LHPSsec_AF2025": { name: "Security Officer", role: "security", icon: "👮" },
+        "CHCS_AF_@003": { name: "Petugas CS", role: "cs", icon: "🧹" },
+        "SACS_AF@004": { name: "Stok & Alat", role: "stock", icon: "📦" },
+        "M41n_4F@234": { name: "Maintenance", role: "maintenance", icon: "🔧" },
+        "4dm1n_6969@01": { name: "Inventaris", role: "inventory", icon: "🏢" },
+        "4dm1n_9696@02": { name: "Gudang", role: "warehouse", icon: "🏭" }
+    };
+    
+    let currentUser = null;
+    let currentRole = null;
+    
+    function handleLogin() {
+        const password = document.getElementById('passInput').value.trim();
+        const user = USER_DATABASE[password];
+        
+        if (user) {
+            loginSuccess(user);
+        } else {
+            showNotification('❌ Password salah! Coba password lain.', 'error');
+        }
+    }
+    
+    function handleEnterKey(event) {
+        if (event.key === 'Enter') {
+            handleLogin();
+        }
+    }
+    
+    function simulateFingerprint() {
+        // For Redmi Note 9 Pro Dream Team Device
+        const isRedmiNote9Pro = navigator.userAgent.includes('Redmi Note 9 Pro') || 
+                               navigator.userAgent.includes('M2003J15SC');
+        
+        if (isRedmiNote9Pro) {
+            document.querySelector('.fingerprint-btn').innerHTML = '🔐';
+            showNotification('🔐 Scanning fingerprint untuk Dream Team Device...', 'info');
+            
+            setTimeout(() => {
+                // Auto login as Admin for Dream Team Device
+                loginSuccess(USER_DATABASE["4dm1n_AF6969@00"]);
+                showNotification('✅ Fingerprint verified! Dream Team access granted.', 'success');
+            }, 1500);
+        } else {
+            showNotification('❌ Fingerprint hanya untuk Redmi Note 9 Pro Dream Team', 'warning');
+        }
+    }
+    
+    function loginSuccess(user) {
+        currentUser = user.name;
+        currentRole = user.role;
+        
+        // Save session
+        localStorage.setItem('dreamos_session', JSON.stringify(user));
+        
+        // Update UI
+        document.getElementById('login-overlay').style.display = 'none';
+        document.getElementById('app-window').style.display = 'flex';
+        document.getElementById('user-welcome').textContent = `👋 Halo, ${user.name}!`;
+        document.getElementById('device-auth').textContent = user.role.toUpperCase();
+        
+        // Show welcome notification
+        showNotification(`✅ Selamat datang, ${user.name}! Sistem Quantum siap.`, 'success');
+        
+        // Update stats
+        updateDashboardStats();
+    }
+    
+    // ================= DASHBOARD FUNCTIONS =================
+    function showDashboard() {
+        // Hide all tabs
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.style.display = 'none';
+        });
+    }
+    
+    function showTab(tabName) {
+        // Hide all tabs first
+        showDashboard();
+        
+        // Show selected tab
+        const tab = document.getElementById(`${tabName}-tab`);
+        if (tab) {
+            tab.style.display = 'block';
+            
+            // Update tab title
+            document.querySelector('.title-bar span').innerHTML = 
+                `💠 DREAM OS — ${tab.querySelector('.tab-title').textContent}`;
+        }
+    }
+    
+    // ================= WINDOW CONTROLS =================
+    function minimizeWindow() {
+        document.getElementById('app-window').style.transform = 'translateY(100vh)';
+        setTimeout(() => {
+            showNotification('🪟 Window minimized. Click START to restore.', 'info');
+        }, 300);
+    }
+    
+    function maximizeWindow() {
+        const window = document.getElementById('app-window');
+        if (window.style.width === '100%') {
+            window.style.width = '95%';
+            window.style.height = '85vh';
+            window.style.maxWidth = '1400px';
+        } else {
+            window.style.width = '100%';
+            window.style.height = '100vh';
+            window.style.maxWidth = 'none';
+            window.style.margin = '0';
+            window.style.borderRadius = '0';
+        }
+    }
+    
+    function closeWindow() {
+        if (confirm('Tutup DREAM OS? Anda akan logout dari sistem.')) {
+            localStorage.removeItem('dreamos_session');
+            location.reload();
+        }
+    }
+    
+    function toggleStartMenu() {
+        showNotification('🚀 Dream OS v13.9.9.9 — The Power Soul of Shalawat', 'info');
+    }
+    
+    // ================= QUANTUM BRIDGE =================
+    function initQuantumBridge() {
+        // Simulate Quantum Bridge connection
+        setTimeout(() => {
+            document.getElementById('bridge-status').textContent = 'ACTIVE';
+            document.getElementById('quantum-status').textContent = 'QUANTUM ONLINE';
+            document.getElementById('quantum-status').style.color = 'var(--emerald)';
+        }, 2000);
+    }
+    
+    // ================= EMERGENCY PROTOCOL =================
+    function triggerEmergency() {
+        if (confirm('🚨 AKTIFKAN PROTOKOL DARURAT?\n\nIni akan:\n1. Call Pak Erwin (628886183954)\n2. Kirim location ke semua petugas\n3. Aktifkan alarm sistem')) {
+            document.body.style.animation = 'pulseEmergency 0.5s infinite';
+            
+            // Show emergency overlay
+            const emergencyOverlay = document.createElement('div');
+            emergencyOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(239, 68, 68, 0.9);
+                z-index: 10000;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                color: white;
+                font-size: 2rem;
+                font-weight: bold;
+                animation: pulse 1s infinite;
+            `;
+            
+            emergencyOverlay.innerHTML = `
+                <div style="font-size: 5rem;">🚨</div>
+                <div>PROTOKOL DARURAT AKTIF</div>
+                <div style="font-size: 1rem; margin-top: 20px;">Menghubungi tim keamanan...</div>
+                <button onclick="this.parentElement.remove(); document.body.style.animation='';" 
+                        style="margin-top: 30px; padding: 10px 20px; background: white; color: #dc2626; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">
+                    CANCEL EMERGENCY
+                </button>
+            `;
+            
+            document.body.appendChild(emergencyOverlay);
+            
+            // Simulate emergency call
+            setTimeout(() => {
+                showNotification('📞 Menghubungi Pak Erwin...', 'info');
+            }, 1000);
+        }
+    }
+    
+    // ================= UTILITY FUNCTIONS =================
+    function updateClock() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('id-ID', {
+            hour12: false,
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+        document.getElementById('digital-clock').textContent = timeString;
+    }
+    
+    function updateDashboardStats() {
+        // Simulate updating stats
+        const today = new Date().getDate();
+        document.getElementById('today-reports').textContent = Math.floor(Math.random() * 10);
+        document.getElementById('last-sync').textContent = new Date().toLocaleTimeString('id-ID', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
+    
+    function checkSavedSession() {
+        const savedSession = localStorage.getItem('dreamos_session');
+        if (savedSession) {
+            try {
+                const user = JSON.parse(savedSession);
+                loginSuccess(user);
+            } catch (e) {
+                localStorage.removeItem('dreamos_session');
+            }
+        }
+    }
+    
+    function exportData() {
+        showNotification('📊 Menyiapkan data untuk export ke Excel...', 'info');
+        // In real implementation, this would generate Excel file
+    }
+    
+    function sendBooking() {
+        // Validate form
+        const sarana = document.getElementById('bookingSarana').value;
+        const pic = document.getElementById('bookingPIC').value;
+        const date = document.getElementById('bookingDate').value;
+        
+        if (!sarana || !pic || !date) {
+            showNotification('❌ Harap isi semua field yang wajib!', 'error');
+            return;
+        }
+        
+        // Simulate Quantum Bridge sync
+        showNotification('📡 Mengirim data via Quantum Bridge...', 'info');
+        
+        setTimeout(() => {
+            showNotification('✅ Booking berhasil! Data terkirim ke Pak Erwin.', 'success');
+            
+            // Reset form
+            document.getElementById('bookingSarana').value = '';
+            document.getElementById('bookingPIC').value = '';
+            document.getElementById('bookingDate').value = '';
+            
+            // Update stats
+            updateDashboardStats();
+        }, 2000);
+    }
+    
+    // ================= NOTIFICATION SYSTEM =================
+    function showNotification(message, type = 'info') {
+        // Remove existing notifications
+        document.querySelectorAll('.notification').forEach(n => n.remove());
+        
+        // Create notification
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `
+            <span style="font-size: 1.3rem;">
+                ${type === 'success' ? '✅' : 
+                  type === 'error' ? '❌' : 
+                  type === 'warning' ? '⚠️' : 'ℹ️'}
+            </span>
+            <span>${message}</span>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.style.animation = 'slideInRight 0.3s ease reverse';
+                setTimeout(() => notification.remove(), 300);
+            }
+        }, 5000);
+        
+        // Click to dismiss
+        notification.onclick = () => notification.remove();
+    }
+</script>
+
+<style>
+    /* Additional animations */
+    @keyframes pulse {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.05); opacity: 0.8; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    
+    /* Responsive fixes */
+    @media (max-width: 768px) {
+        .login-box {
+            padding: 25px 20px;
+        }
+        
+        .bismillah-trigger {
+            font-size: 2.5rem;
+        }
+        
+        .dashboard-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .emergency-box {
+            grid-column: span 2;
+        }
+        
+        .taskbar-info {
+            display: none;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .emergency-box {
+            grid-column: span 1;
+        }
+        
+        .window-controls {
+            display: none;
+        }
+    }
+</style>
+
+</body>
+</html>
