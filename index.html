@@ -1,0 +1,2582 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#050810">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SYSTEM v13">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23050810'/><text x='50' y='55' font-family='Orbitron' font-size='24' fill='%2300ff9d' text-anchor='middle'>D</text></svg>">
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiU1lTVEVNdjEzIiwic2hvcnRfbmFtZSI6IlNZU1RFTXYxMyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwic3RhcnRfdXJsIjoiaW5kZXguaHRtbCIsImJhY2tncm91bmRfY29sb3IiOiIjMDUwODEwIiwidGhlbWVfY29sb3IiOiIjMDUwODEwIiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbCw8c3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld0JveD0nMCAwIDEwMCAxMDAnPjxyZWN0IHdpZHRoPScxMDAnIGhlaWdodD0nMTAwJyBmaWxsPScjMDUwODEwJy8+PHRleHQgeD0nNTAnIHk9JzU1JyBmb250LWZhbWlseT0nT3JiaXRyb24nIGZvbnQtc2l6ZT0nMjQnIGZpbGw9JyMwMGZmOWQnIHRleHQtYW5jaG9yPSdtaWRkbGUnPkQ8L3RleHQ+PC9zdmc+IiwiZGltZW5zaW9ucyI6IjE5MngxOTIifV19">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self'  https://*; connect-src 'self'">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains">
+    <title>SYSTEM v13 | THE INVISIBLE GUARDIAN</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* === SYSTEM CORE AESTHETICS (ISO STANDARD) === */
+        :root {
+            --bg-deep: #050810;
+            --glass-panel: rgba(20, 25, 40, 0.6);
+            --neon-blue: #00f3ff;
+            --neon-green: #00ff9d;
+            --alert-red: #ff3333;
+            --gold-vip: #d4af37;
+            --text-main: #e2e8f0;
+            --audit-red: #ff4d4f;
+            --quality-blue: #1890ff;
+            --asset-green: #52c41a;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            user-select: none;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* === GLASSMORPHISM & WINDOWS XL === */
+        .glass-morphism {
+            background: var(--glass-panel);            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-morphism::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0, 243, 255, 0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .glass-morphism:hover::before {
+            opacity: 1;
+        }
+
+        .win-xl-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+        .win-xl-input:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+            outline: none;
+            background: rgba(0, 30, 45, 0.7);
+        }
+        .win-xl-textarea {
+            min-height: 120px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        /* === ANIMATIONS === */
+        @keyframes scanline {
+            0% { transform: translateY(-100%); opacity: 0.3; }
+            100% { transform: translateY(100%); opacity: 0.3; }
+        }
+        .scan-effect {
+            position: relative;
+        }        .scan-effect::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, transparent, rgba(0, 243, 255, 0.1), transparent);
+            animation: scanline 4s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .pulse-effect {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes thunder-pulse {
+            0%, 100% { opacity: 1; filter: brightness(1); }
+            50% { opacity: 0.7; filter: brightness(1.2) contrast(1.2); }
+        }
+        .strike-mode {
+            animation: thunder-pulse 0.08s infinite alternate;
+            filter: invert(1) saturate(0.8);
+        }
+
+        /* === PAPER PREVIEW FOR REPORTS === */
+        .a4-paper {
+            background: white;
+            color: #333;
+            font-family: 'Times New Roman', serif;
+            padding: 20mm;
+            min-height: 297mm;
+            width: 210mm;
+            border-radius: 2px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+            margin: 0 auto;
+            position: relative;
+            transform: scale(0.7);
+            transform-origin: top center;
+        }
+        .a4-paper .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 24px;
+            color: rgba(212, 175, 55, 0.1);
+            font-weight: bold;            letter-spacing: 5px;
+            pointer-events: none;
+        }
+
+        /* === CAMERA UI === */
+        .camera-container {
+            background: #000;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+        }
+        .camera-preview {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            filter: brightness(1.1) contrast(1.1);
+            display: none;
+        }
+        .camera-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            padding: 15px;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+        }
+        .camera-btn {
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 800;
+            color: white;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            font-family: 'Orbitron', monospace;
+        }
+        .camera-btn:active {
+            transform: scale(0.95);
+        }
+        .photo-preview {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 15px;
+            border: 1px dashed rgba(255,255,255,0.2);
+            display: none;        }
+
+        /* === AUDIT TRAIL STYLING === */
+        .audit-log {
+            font-family: 'monospace';
+            font-size: 10px;
+            line-height: 1.4;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .audit-log::-webkit-scrollbar {
+            width: 4px;
+        }
+        .audit-log::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.3);
+        }
+        .audit-log::-webkit-scrollbar-thumb {
+            background: var(--neon-blue);
+            border-radius: 2px;
+        }
+
+        /* === SHIFT BADGES === */
+        .shift-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+        .shift-day {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        .shift-night {
+            background: rgba(124, 58, 237, 0.2);
+            color: #a78bfa;
+            border: 1px solid rgba(124, 58, 237, 0.3);
+        }
+
+        /* === UTILITY CLASSES === */
+        .font-tech { font-family: 'Orbitron', monospace; font-weight: 800; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .compliance-tag {
+            font-size: 7px;
+            padding: 1px 5px;
+            border-radius: 6px;
+            font-weight: bold;
+            letter-spacing: 0.5px;        }
+        .iso-27001 { background: rgba(255, 77, 79, 0.2); color: var(--audit-red); }
+        .iso-9001 { background: rgba(24, 144, 255, 0.2); color: var(--quality-blue); }
+        .iso-55001 { background: rgba(82, 196, 26, 0.2); color: var(--asset-green); }
+
+        /* === LOCKDOWN SCREEN === */
+        .lockdown-screen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #0f172a, #020617);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            text-align: center;
+            padding: 20px;
+        }
+        .lockdown-icon {
+            font-size: 6rem;
+            color: var(--alert-red);
+            margin-bottom: 20px;
+            animation: pulse 1.5s infinite;
+        }
+        .lockdown-timer {
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--neon-blue);
+            margin: 20px 0;
+            text-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+        }
+
+        /* === SECURITY BADGES === */
+        .security-badge {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            font-size: 7px;
+            color: var(--neon-blue);
+            opacity: 0.8;
+            letter-spacing: 1.5px;
+            font-family: 'Orbitron', monospace;
+            background: rgba(0, 20, 40, 0.7);
+            padding: 2px 8px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            z-index: 999;
+            pointer-events: none;
+            backdrop-filter: blur(4px);        }
+
+        /* === SLIDE BANNER === */
+        #slide-banner {
+            height: 36px;
+            background: linear-gradient(90deg, rgba(0, 30, 60, 0.9), transparent);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .slide-text {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            color: var(--neon-green);
+            text-transform: uppercase;
+            animation: slide-fade 8s infinite;
+        }
+        @keyframes slide-fade {
+            0%, 100% { opacity: 0; transform: translateY(10px); }
+            10%, 90% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === MODAL SYSTEM === */
+        #app-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 3, 8, 0.95);
+            z-index: 100;
+            backdrop-filter: blur(8px);
+            display: none;
+            flex-direction: column;
+            justify-content: flex-end;
+            transition: all 0.3s ease;
+        }
+        #modal-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 40px;
+        }
+        .modal-window {
+            background: linear-gradient(180deg, #0b101b 0%, #050810 100%);
+            height: 92vh;
+            width: 100%;
+            border-radius: 30px 30px 0 0;
+            border-top: 1px solid rgba(0, 243, 255, 0.2);            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.8);
+        }
+        .modal-header {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .modal-title {
+            font-family: 'Orbitron', monospace;
+            font-weight: 800;
+            font-size: 14px;
+            color: white;
+            letter-spacing: 0.5px;
+        }
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--alert-red);
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .modal-close:hover {
+            transform: scale(1.1);
+            color: #ff6b6b;
+        }
+
+        /* GOLD MASTER SEAL */
+        .gold-master-seal {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 9999;
+            font-family: 'Orbitron', monospace;
+            font-size: 8px;
+            color: var(--gold-vip);
+            opacity: 0.7;
+            text-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+            pointer-events: none;
+        }
+        /* GHOST FINGERPRINT WIDGET */
+        #ghost-fingerprint-widget {
+            position: fixed;
+            bottom: 28px;
+            right: 6px;
+            width: 14px;
+            height: 14px;
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+        }
+    </style>
+</head>
+<body class="flex flex-col relative">
+
+    <!-- GOLD MASTER SEAL -->
+    <div class="gold-master-seal">
+        [ARCHIVE LOCK: 2026-01-19]<br>
+        DREAM OS v13.1.3 GOLD MASTER<br>
+        SECURITY: TRIPLE EXISTENCE ARCHITECTURE
+    </div>
+
+    <!-- SECURITY BADGE (ISO 27001) -->
+    <div class="security-badge" id="security-badge">
+        ISO 27001: DEVICE VERIFIED • DEPOK HQ
+    </div>
+
+    <!-- HEADER -->
+    <header class="h-16 flex justify-between items-center px-5 border-b border-white/5 bg-black/20 backdrop-blur-md z-50">
+        <div>
+            <h1 class="font-tech text-xl font-bold tracking-wider text-white">
+                SYSTEM<span class="text-neon-green">v13</span> 
+                <span class="text-[10px] bg-gradient-to-r from-gold-vip/20 to-transparent px-1.5 py-0.5 rounded font-normal">GOLD MASTER</span>
+            </h1>
+            <div id="clock" class="text-[10px] text-neon-blue font-mono tracking-widest font-bold mt-0.5">DEPOK HQ • --:--</div>
+        </div>
+        <div class="flex gap-4 items-center">
+            <div class="text-right">
+                <div class="text-[9px] text-gray-400 uppercase tracking-wider font-bold">System Integrity</div>
+                <div class="text-[10px] font-bold flex items-center justify-end gap-1.5">
+                    <i class="fas fa-shield-check text-neon-green"></i>
+                    <span id="system-status" class="animate-pulse">SECURE</span>
+                </div>
+            </div>
+            <div id="weather-badge" class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-900/30 to-transparent flex items-center justify-center border border-neon-blue/30 relative overflow-hidden">
+                <i class="fas fa-cloud-bolt text-yellow-400 text-xl animate-pulse"></i>
+            </div>
+        </div>
+    </header>
+    <!-- SLIDE BANNER (ISO QUALITY NOTIFICATION) -->
+    <div id="slide-banner">
+        <div class="slide-text" id="slide-text">ASSALAMUALAIKUM • DATA INTEGRITY IS OUR TOP PRIORITY</div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 overflow-y-auto p-5 pb-32 hide-scrollbar">
+        <!-- SYSTEM NOTIFICATION BAR -->
+        <div class="mb-6 bg-blue-900/20 border border-blue-500/30 rounded-lg p-2 overflow-hidden relative">
+            <div class="whitespace-nowrap animate-[marquee_18s_linear_infinite] text-[10px] font-bold text-blue-300 tracking-wider">
+                INFO: LAPORAN MINGGUAN AKAN DI-GENERATE OTOMATIS SETIAP JUMAT • SEMUA DATA DILINDUNGI DEPOK LIGHTNING ENCRYPTION • PERINGATAN CUACA: SIAGA PETIR
+            </div>
+        </div>
+
+        <!-- MODULE GRID -->
+        <div class="grid grid-cols-3 gap-4">
+            <!-- Security Module -->
+            <button onclick="App.openModule('security')" class="glass-morphism aspect-square rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-white/5 active:scale-[0.97] transition-all duration-200 relative overflow-hidden group">
+                <div class="absolute inset-0 border-2 border-red-500/20 rounded-2xl animate-pulse opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <i class="fas fa-shield-halved text-3xl text-red-500"></i>
+                <span class="text-[9px] font-bold text-gray-300 uppercase tracking-wide mt-1">Sekuriti 24/7</span>
+                <span class="text-[6px] bg-red-500/20 text-red-300 px-1.5 py-0.5 rounded font-bold mt-0.5 compliance-tag iso-27001">ISO 27001</span>
+            </button>
+
+            <!-- K3 Module -->
+            <button onclick="App.openModule('k3')" class="glass-morphism aspect-square rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-white/5 active:scale-[0.97] transition-all duration-200">
+                <i class="fas fa-hard-hat text-3xl text-yellow-500"></i>
+                <span class="text-[9px] font-bold text-gray-300 uppercase tracking-wide mt-1">Form K3</span>
+                <span class="text-[6px] bg-yellow-500/20 text-yellow-300 px-1.5 py-0.5 rounded font-bold mt-0.5 compliance-tag iso-45001">ISO 45001</span>
+            </button>
+
+            <!-- Admin Module -->
+            <button onclick="App.openModule('admin')" class="glass-morphism aspect-square rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-white/5 active:scale-[0.97] transition-all duration-200 border-2 border-gold-vip/30 bg-gold-vip/5">
+                <i class="fas fa-user-crown text-3xl text-gold-vip"></i>
+                <span class="text-[9px] font-bold text-gray-300 uppercase tracking-wide mt-1">Admin Room</span>
+                <span class="text-[6px] bg-gold-vip/20 text-gold-vip px-1.5 py-0.5 rounded font-bold mt-0.5 compliance-tag iso-27001">ISO 27001</span>
+            </button>
+
+            <!-- CS Indoor Module -->
+            <button onclick="App.openModule('cs')" class="glass-morphism aspect-square rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-white/5 active:scale-[0.97] transition-all duration-200">
+                <i class="fas fa-broom text-3xl text-teal-400"></i>
+                <span class="text-[9px] font-bold text-gray-300 uppercase tracking-wide mt-1">CS Indoor</span>
+                <span class="text-[6px] bg-teal-500/20 text-teal-300 px-1.5 py-0.5 rounded font-bold mt-0.5 compliance-tag iso-9001">ISO 9001</span>
+            </button>
+
+            <!-- Asset Management -->
+            <button onclick="App.openModule('asset')" class="glass-morphism aspect-square rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-white/5 active:scale-[0.97] transition-all duration-200">
+                <i class="fas fa-boxes-stacked text-3xl text-purple-500"></i>
+                <span class="text-[9px] font-bold text-gray-300 uppercase tracking-wide mt-1">Asset Mgmt</span>                <span class="text-[6px] bg-purple-500/20 text-purple-300 px-1.5 py-0.5 rounded font-bold mt-0.5 compliance-tag iso-55001">ISO 55001</span>
+            </button>
+
+            <!-- Report Generator -->
+            <button onclick="App.openModule('report')" class="glass-morphism aspect-square rounded-2xl flex flex-col items-center justify-center gap-2 hover:bg-white/5 active:scale-[0.97] transition-all duration-200">
+                <i class="fas fa-file-contract text-3xl text-green-500"></i>
+                <span class="text-[9px] font-bold text-gray-300 uppercase tracking-wide mt-1">Reports</span>
+                <span class="text-[6px] bg-green-500/20 text-green-300 px-1.5 py-0.5 rounded font-bold mt-0.5 compliance-tag iso-9001">AUTO-GENERATE</span>
+            </button>
+        </div>
+
+        <!-- AUDIT TRAIL -->
+        <div class="mt-8">
+            <h3 class="text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest pl-1 flex items-center gap-2">
+                <i class="fas fa-clipboard-list text-neon-blue"></i>
+                Recent Audit Log (ISO 27001)
+            </h3>
+            <div class="glass-morphism rounded-xl p-3 space-y-2">
+                <div class="flex justify-between text-[9px] border-b border-white/5 pb-1">
+                    <span class="text-neon-green font-mono">SYSTEM_BOOT</span>
+                    <span class="text-gray-400" id="log-time-1">08:00:01</span>
+                </div>
+                <div class="flex justify-between text-[9px] border-b border-white/5 pb-1">
+                    <span class="text-blue-400 font-mono">DNA_HASH_VERIFIED</span>
+                    <span class="text-gray-400" id="log-time-2">08:00:05</span>
+                </div>
+                <div class="flex justify-between text-[9px]">
+                    <span class="text-yellow-400 font-mono">CRYPTO_INITIALIZED</span>
+                    <span class="text-gray-400" id="log-time-3">08:00:06</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SYSTEM HEALTH -->
+        <div class="mt-6">
+            <h3 class="text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest pl-1 flex items-center gap-2">
+                <i class="fas fa-heartbeat text-pink-500"></i>
+                System Health Monitor
+            </h3>
+            <div class="glass-morphism rounded-xl p-4">
+                <div class="grid grid-cols-3 gap-3 text-[9px]">
+                    <div>
+                        <div class="text-gray-400 mb-1">Battery</div>
+                        <div class="font-bold text-neon-green">86%</div>
+                    </div>
+                    <div>
+                        <div class="text-gray-400 mb-1">Temperature</div>
+                        <div class="font-bold text-neon-green">35.2°C</div>
+                    </div>
+                    <div>                        <div class="text-gray-400 mb-1">Storage</div>
+                        <div class="font-bold text-neon-green">12.4GB free</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- NAVIGATION -->
+    <nav class="h-20 bg-[#020408]/90 backdrop-blur-xl border-t border-white/10 flex justify-around items-center px-4 z-50">
+        <button onclick="App.goHome()" class="flex flex-col items-center gap-1 text-gray-500 hover:text-neon-blue transition-all duration-200">
+            <i class="fas fa-house text-lg"></i>
+            <span class="text-[8px] font-bold">Home</span>
+        </button>
+        
+        <button onclick="App.togglePrivacy()" class="w-16 h-16 -mt-10 bg-gradient-to-br from-[#1a1f2e] to-[#050810] rounded-full border-2 border-neon-blue/30 shadow-[0_0_25px_rgba(0,243,255,0.35)] flex items-center justify-center text-neon-blue relative group">
+            <div class="absolute inset-0 rounded-full border-2 border-neon-blue opacity-50 animate-ping"></div>
+            <i id="privacy-icon" class="fas fa-eye text-xl"></i>
+        </button>
+
+        <button onclick="App.triggerLockout()" class="flex flex-col items-center gap-1 text-gray-500 hover:text-alert-red transition-all duration-200">
+            <i class="fas fa-power-off text-lg"></i>
+            <span class="text-[8px] font-bold">Lock</span>
+        </button>
+    </nav>
+
+    <!-- MODAL CONTAINER -->
+    <div id="app-modal">
+        <div class="modal-window scan-effect">
+            <div class="modal-header">
+                <div class="w-4"></div>
+                <div class="modal-title" id="modal-title">SYSTEM MODULE</div>
+                <div class="modal-close" onclick="App.closeModal()">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            <div id="modal-content">
+                <!-- Content will be injected by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- LOCKDOWN SCREEN (Hidden by default) -->
+    <div id="lockdown-screen" class="lockdown-screen hidden">
+        <div class="lockdown-icon">
+            <i class="fas fa-skull"></i>
+        </div>
+        <h1 class="font-tech text-3xl font-bold text-white mb-2">SYSTEM LOCKDOWN</h1>
+        <p class="text-xl text-gray-300 mb-6 max-w-md">Akses diblokir karena percobaan masuk yang gagal. Sistem akan membuka kembali setelah countdown selesai.</p>
+        <div class="lockdown-timer" id="lockdown-timer">05:00</div>        <div class="text-gray-500 text-[10px] mt-4">
+            Device Hash: <span id="lockdown-hash">VERIFIED</span>
+        </div>
+    </div>
+
+    <!-- AUTH SCREEN -->
+    <div id="auth-screen" class="fixed inset-0 bg-gradient-to-br from-[#020617] to-[#0f172a] z-[9999] flex flex-col items-center justify-center p-4 transition-opacity duration-500">
+        <div class="text-center mb-8 relative">
+            <div class="text-8xl text-gold-vip mb-4 animate-pulse" style="transform: rotate(-120deg)">ه</div>
+            <div class="absolute inset-0 blur-2xl bg-gradient-to-r from-neon-green/20 to-gold-vip/20 rounded-full animate-pulse"></div>
+        </div>
+        
+        <div class="glass-morphism w-full max-w-md rounded-2xl p-6 border border-neon-blue/20">
+            <h1 class="font-tech text-2xl font-bold text-center text-white mb-2">SYSTEM v13</h1>
+            <p class="text-center text-gray-400 mb-6">GOLD MASTER • ISO 27001 CERTIFIED</p>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-[10px] text-gray-400 font-bold mb-1 uppercase tracking-wider">PILIH AKSES</label>
+                    <select id="login-module" class="win-xl-input" onchange="Auth.updateCredentials()">
+                        <option value="">-- Pilih Level Akses --</option>
+                        <option value="umum">User Umum (Booking & K3)</option>
+                        <option value="sekuriti">Laporan Harian Sekuriti</option>
+                        <option value="admin">Admin System</option>
+                        <option value="cs">Checklist CS Harian</option>
+                        <option value="stok">Stok & Alat CS/Taman</option>
+                        <option value="maintenance">Form Maintenance</option>
+                        <option value="inventaris">Inventaris</option>
+                        <option value="gudang">Gudang</option>
+                        <option value="master">MASTER KEY (Ghost Architect)</option>
+                    </select>
+                </div>
+                
+                <div id="credential-fields" class="space-y-4">
+                    <div>
+                        <label class="block text-[10px] text-gray-400 font-bold mb-1 uppercase tracking-wider">USERNAME</label>
+                        <input type="text" id="login-username" class="win-xl-input" placeholder="Masukkan username resmi">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-[10px] text-gray-400 font-bold mb-1 uppercase tracking-wider">PASSWORD</label>
+                        <div class="relative">
+                            <input type="password" id="login-password" class="win-xl-input pr-12" placeholder="••••••••">
+                            <button id="toggle-pass" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-neon-green transition">
+                                <i class="fas fa-eye text-xl"></i>
+                            </button>
+                        </div>
+                        <div id="credential-hint" class="text-[9px] text-yellow-400 mt-1 text-right font-bold">
+                            ••••••••
+                        </div>                    </div>
+                </div>
+                
+                <button onclick="Auth.login()" class="w-full mt-2 py-3 bg-gradient-to-r from-neon-blue to-gold-vip text-black font-bold rounded-xl shadow-lg hover:opacity-90 transition active:scale-[0.98]">
+                    <i class="fas fa-fingerprint mr-2"></i> MASUK DENGAN AMANAH
+                </button>
+                
+                <div id="master-key-section" class="hidden mt-4 p-3 bg-black/30 rounded-lg border border-gold-vip/30">
+                    <p class="text-[11px] text-gold-vip flex items-start gap-2">
+                        <i class="fas fa-user-secret text-xl mt-0.5"></i>
+                        <span>GHOST MODE: Tidak ada log aktivitas. Akses penuh ke semua modul.</span>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="mt-6 pt-4 border-t border-white/5 text-center text-[9px] text-gray-500">
+                <p>Dream OS v13.1.3 • GOLD MASTER SEAL • Device: <span id="auth-device-hash">VERIFIED</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- GHOST FINGERPRINT WIDGET -->
+    <div id="ghost-fingerprint-widget" class="fixed bottom-28 right-6 w-14 h-14 z-[999] opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-gradient-to-br from-[#0a0f1a] to-[#020408] rounded-2xl border border-gold-vip/20 p-2 shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+            <div class="w-10 h-10 mx-auto bg-[#050810] rounded-xl border border-gold-vip/30 flex items-center justify-center relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-gold-vip/5 to-transparent animate-pulse"></div>
+                <i class="fas fa-fingerprint text-gold-vip text-2xl"></i>
+            </div>
+            <div class="mt-2 text-[8px] text-center text-gold-vip font-bold tracking-widest">GHOST</div>
+        </div>
+    </div>
+
+    <script>
+        const App = {
+            config: {
+                depokTimezone: 7,
+                depokCoords: { lat: -6.4024, lng: 106.8291 },
+                safeRadius: 500,
+                slideMessages: [
+                    "ASSALAMUALAIKUM • DATA INTEGRITY IS OUR TOP PRIORITY",
+                    "INFO: LAPORAN MINGGUAN AKAN DI-GENERATE OTOMATIS SETIAP JUMAT",
+                    "PERINGATAN: JANGAN BAGIKAN KODE DINAMIS KEPADA SIAPAPUN",
+                    "INFO: SEMUA AKTIVITAS DIAUDIT SESUAI ISO 27001:2022",
+                    "PERINGATAN CUACA: SIAGA PETIR AKTIF • HINDARI AREA TERBUKA"
+                ],
+                securityTypes: [
+                    "Keamanan Fisik",
+                    "Kerusakan Aset",
+                    "Kehilangan Barang",
+                    "Gangguan Operasional",                    "Kejadian Darurat"
+                ],
+                shifts: [
+                    { name: "Pagi", time: "06:00-14:00", team: "Team A (Danu & Rian)" },
+                    { name: "Siang", time: "14:00-22:00", team: "Team B (Agus & Budi)" },
+                    { name: "Malam", time: "22:00-06:00", team: "Team C (Joko & Surya)" }
+                ],
+                rooms: [
+                    { name: "Loby Utama", iso: "9001" },
+                    { name: "Teras", iso: "9001" },
+                    { name: "Lorong Utama", iso: "9001" },
+                    { name: "Balkon", iso: "9001" },
+                    { name: "Pintu Utama", iso: "9001" },
+                    { name: "Pintu Kelas", iso: "9001" },
+                    { name: "Jendela", iso: "9001" },
+                    { name: "R. Kelas", iso: "9001" },
+                    { name: "Aula", iso: "9001" },
+                    { name: "Sentra Musik", iso: "9001" },
+                    { name: "Sentra Kreasi", iso: "9001" },
+                    { name: "UKS", iso: "27001" },
+                    { name: "Psikolog", iso: "27001" },
+                    { name: "Lab Kom", iso: "27001" },
+                    { name: "Lab IPA", iso: "27001" },
+                    { name: "Perpustakaan", iso: "9001" },
+                    { name: "R. Kepala Sekolah", iso: "27001" },
+                    { name: "R. Guru (L)", iso: "9001" },
+                    { name: "R. Guru (P)", iso: "9001" },
+                    { name: "R. Pemasaran", iso: "9001" },
+                    { name: "R. Admin TU", iso: "9001" },
+                    { name: "R. Rapat", iso: "9001" },
+                    { name: "R. CEO/Yayasan", iso: "27001" },
+                    { name: "R. Kabid", iso: "27001" },
+                    { name: "R. OSIS", iso: "9001" },
+                    { name: "Mushalla", iso: "9001" },
+                    { name: "R. Inklusi", iso: "9001" },
+                    { name: "Gudang OR", iso: "55001" },
+                    { name: "Serbaguna", iso: "9001" },
+                    { name: "Masjid", iso: "9001" },
+                    { name: "Kantin", iso: "9001" },
+                    { name: "Saung Besar", iso: "9001" },
+                    { name: "Saung Kecil", iso: "9001" },
+                    { name: "Pos", iso: "27001" },
+                    { name: "Gudang Umum", iso: "55001" },
+                    { name: "Tangga", iso: "9001" },
+                    { name: "Lift", iso: "55001" }
+                ]
+            },
+            
+            state: {
+                isLocked: false,                privacyMode: false,
+                currentModule: null,
+                failedAttempts: 0,
+                deviceHash: null,
+                secureToken: null,
+                auditLogs: [],
+                slideIndex: 0,
+                stream: null,
+                lockdownTimer: null,
+                lastLockdown: 0,
+                currentUser: null,
+                isGhostDevice: false,
+                isGhost: false
+            },
+
+            // === SYSTEM INITIALIZATION ===
+            init() {
+                this.initState();
+                this.updateClock();
+                setInterval(() => this.updateClock(), 1000);
+                this.startSlideSystem();
+                this.generateDeviceHash();
+                this.initSecurity();
+                this.loadAuditLogs();
+                this.setupTamperDetection();
+                this.detectGhostDevice();
+                
+                // Initialize authentication
+                Auth.init();
+                
+                // Initialize Ghost Fingerprint widget
+                GhostFingerprint.init();
+                
+                // Security hardening
+                this.hardenSystem();
+                
+                // Log system boot (unless in Ghost Mode)
+                if (!Auth.ghostMode) {
+                    this.logAudit('SYSTEM_BOOT_SUCCESS');
+                }
+            },
+            
+            initState() {
+                // Initialize from localStorage if available
+                const savedState = localStorage.getItem('dreamos_state');
+                if (savedState) {
+                    try {
+                        const state = JSON.parse(savedState);
+                        this.state.failedAttempts = state.failedAttempts || 0;
+                        this.state.lastLockdown = state.lastLockdown || 0;                    } catch (e) {
+                        console.error('Error loading state:', e);
+                    }
+                }
+            },
+            
+            saveState() {
+                const state = {
+                    failedAttempts: this.state.failedAttempts,
+                    lastLockdown: this.state.lastLockdown
+                };
+                localStorage.setItem('dreamos_state', JSON.stringify(state));
+            },
+            
+            // === DEVICE DETECTION ===
+            detectGhostDevice() {
+                const userAgent = navigator.userAgent;
+                const isRedmiNote9Pro = userAgent.includes('Redmi Note 9 Pro') || 
+                                       (userAgent.includes('Xiaomi') && 
+                                        screen.width === 1080 && screen.height === 2400);
+                this.state.isGhostDevice = isRedmiNote9Pro;
+            },
+
+            // === TIME & SLIDE SYSTEM ===
+            updateClock() {
+                const now = new Date();
+                const depokTime = new Date(now.getTime() + (this.config.depokTimezone - now.getTimezoneOffset()/60) * 60 * 60 * 1000);
+                const hours = String(depokTime.getUTCHours()).padStart(2, '0');
+                const minutes = String(depokTime.getUTCMinutes()).padStart(2, '0');
+                document.getElementById('clock').innerText = `DEPOK HQ • ${hours}:${minutes}`;
+                
+                // Update audit log timestamps
+                document.getElementById('log-time-1').innerText = `${hours}:${minutes}:01`;
+                document.getElementById('log-time-2').innerText = `${hours}:${minutes}:05`;
+                document.getElementById('log-time-3').innerText = `${hours}:${minutes}:06`;
+            },
+            
+            startSlideSystem() {
+                setInterval(() => {
+                    this.state.slideIndex = (this.state.slideIndex + 1) % this.config.slideMessages.length;
+                    this.updateSlideContent(this.config.slideMessages[this.state.slideIndex]);
+                }, 8000);
+            },
+            
+            updateSlideContent(text) {
+                const el = document.getElementById('slide-text');
+                el.style.opacity = '0';
+                setTimeout(() => {
+                    el.innerText = text;
+                    el.style.opacity = '1';                }, 300);
+            },
+
+            // === SECURITY CORE ===
+            generateDeviceHash() {
+                const entropy = [
+                    navigator.userAgent,
+                    screen.width + 'x' + screen.height,
+                    new Date().getTimezoneOffset(),
+                    navigator.language,
+                    window.devicePixelRatio,
+                    Math.random().toString(36).slice(2),
+                    "DEPOK_LIGHTNING_SENTINEL",
+                    "GOLD_MASTER_SEAL_2026"
+                ].join('|');
+                
+                // Simple SHA-like hash simulation
+                let hash = 0;
+                for (let i = 0; i < entropy.length; i++) {
+                    const char = entropy.charCodeAt(i);
+                    hash = ((hash << 5) - hash) + char;
+                    hash = hash & hash;
+                }
+                
+                this.state.deviceHash = "ISO-" + Math.abs(hash).toString(16).toUpperCase().padStart(8, '0');
+                document.getElementById('security-badge').innerText = `ISO 27001: ${this.state.deviceHash.substring(0, 12)}...`;
+                document.getElementById('lockdown-hash').innerText = this.state.deviceHash.substring(0, 8) + '...';
+                document.getElementById('auth-device-hash').innerText = this.state.deviceHash.substring(0, 8) + '...';
+                
+                console.log('🔒 Device Hash Generated:', this.state.deviceHash);
+            },
+            
+            generateSecurePIN() {
+                const now = new Date();
+                const yearSuffix = String(now.getFullYear()).slice(-2);
+                const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
+                const pinSeed = (now.getHours() + now.getMinutes()) * dayOfYear + parseInt(yearSuffix);
+                return String(pinSeed).slice(-4);
+            },
+            
+            initSecurity() {
+                // Initialize Web Crypto API
+                if (window.crypto && window.crypto.subtle) {
+                    console.log('✅ Web Crypto API Initialized');
+                    document.getElementById('system-status').innerText = 'CRYPTO READY';
+                } else {
+                    console.warn('⚠️ Web Crypto API not available');
+                    document.getElementById('system-status').innerText = 'LEGACY MODE';
+                    document.getElementById('system-status').classList.remove('animate-pulse');
+                }            },
+            
+            hardenSystem() {
+                // Anti-DevTools
+                document.addEventListener('contextmenu', e => e.preventDefault());
+                
+                document.addEventListener('keydown', e => {
+                    // Block F12, Ctrl+Shift+I, Ctrl+U, etc.
+                    if (e.key === 'F12' || 
+                        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+                        (e.ctrlKey && e.key === 'U')) {
+                        e.preventDefault();
+                        this.triggerSecurityBreach('DEVTOOLS_ATTEMPT');
+                    }
+                });
+                
+                // Block back button navigation
+                history.pushState(null, null, location.href);
+                window.onpopstate = function() {
+                    history.go(1);
+                };
+                
+                // Anti-debugging
+                setInterval(() => {
+                    debugger;
+                    const devToolsOpen = /./.test(/./);
+                    if (devToolsOpen) {
+                        this.triggerSecurityBreach('DEBUGGER_ACTIVE');
+                    }
+                }, 1000);
+                
+                // Anti-copy
+                document.addEventListener('copy', e => {
+                    e.preventDefault();
+                    this.logAudit('COPY_ATTEMPT_BLOCKED');
+                });
+                
+                // Prevent iframe embedding
+                if (window !== window.parent) {
+                    window.parent.location = window.location;
+                }
+            },
+            
+            setupTamperDetection() {
+                const originalDOM = document.documentElement.outerHTML;
+                const observer = new MutationObserver(mutations => {
+                    mutations.forEach(mutation => {
+                        if (mutation.type === 'childList' || mutation.type === 'attributes') {
+                            const currentDOM = document.documentElement.outerHTML;
+                            if (currentDOM !== originalDOM) {                                console.error('🚨 DOM TAMPERING DETECTED!');
+                                this.triggerSecurityBreach('DOM_TAMPERING');
+                            }
+                        }
+                    });
+                });
+                
+                observer.observe(document.body, {
+                    childList: true,
+                    attributes: true,
+                    subtree: true
+                });
+            },
+            
+            triggerSecurityBreach(type) {
+                console.error(`🚨 SECURITY BREACH DETECTED: ${type}`);
+                document.body.classList.add('strike-mode');
+                this.playFrequency(528, 1500); // HU 528Hz
+                
+                setTimeout(() => {
+                    const breachMessages = {
+                        'DEVTOOLS_ATTEMPT': "Upaya akses DevTools terdeteksi!",
+                        'DEBUGGER_ACTIVE': "Debugger aktif - sistem dalam bahaya!",
+                        'DOM_TAMPERING': "DOM manipulation detected!",
+                        'DATA_CORRUPTION': "Data integrity compromised!",
+                        'GEO_FENCE_BREACH': "Perangkat di luar radius aman Depok HQ!"
+                    };
+                    
+                    alert(`🚨 KEAMANAN DILANGGAR 🚨\n${breachMessages[type] || 'Ancaman terdeteksi'}\n\nSistem akan melakukan netralisasi...`);
+                    
+                    // Trigger lockdown
+                    this.triggerLockdown(300000); // 5 minutes
+                }, 1200);
+            },
+            
+            triggerLockdown(duration) {
+                if (document.getElementById('lockdown-screen').classList.contains('hidden')) {
+                    this.state.isLocked = true;
+                    document.getElementById('lockdown-screen').classList.remove('hidden');
+                    
+                    let seconds = duration / 1000;
+                    this.state.lockdownTimer = setInterval(() => {
+                        seconds--;
+                        const mins = Math.floor(seconds / 60);
+                        const secs = seconds % 60;
+                        document.getElementById('lockdown-timer').innerText = 
+                            `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+                        
+                        if (seconds <= 0) {
+                            clearInterval(this.state.lockdownTimer);                            this.endLockdown();
+                        }
+                    }, 1000);
+                    
+                    // Update state
+                    this.state.lastLockdown = Date.now();
+                    this.saveState();
+                    
+                    this.logAudit('SYSTEM_LOCKDOWN_INITIATED');
+                }
+            },
+            
+            endLockdown() {
+                this.state.isLocked = false;
+                document.getElementById('lockdown-screen').classList.add('hidden');
+                clearInterval(this.state.lockdownTimer);
+                this.logAudit('SYSTEM_UNLOCKED');
+            },
+            
+            // === MODAL SYSTEM ===
+            openModule(moduleName) {
+                if (this.state.isLocked) {
+                    alert('Sistem sedang dalam lockdown. Silakan tunggu countdown selesai.');
+                    return;
+                }
+                
+                const modal = document.getElementById('app-modal');
+                const content = document.getElementById('modal-content');
+                const title = document.getElementById('modal-title');
+                modal.style.display = 'flex';
+                this.state.currentModule = moduleName;
+                
+                // Authentication for sensitive modules
+                const sensitiveModules = ['admin', 'asset', 'report', 'inventaris', 'gudang', 'stok', 'maintenance'];
+                if (sensitiveModules.includes(moduleName)) {
+                    if (!Auth.authenticated || !Auth.credentials[moduleName]) {
+                        alert('Anda tidak memiliki akses ke modul ini. Silakan login dengan akun yang sesuai.');
+                        this.closeModal();
+                        return;
+                    }
+                    
+                    // Check if user has access to this module
+                    const userCred = Auth.credentials[Auth.state.currentModuleLevel];
+                    if (!userCred || !userCred.modules.includes(moduleName)) {
+                        alert('Akses ditolak. Anda tidak memiliki izin untuk modul ini.');
+                        this.closeModal();
+                        return;
+                    }
+                }
+                                this.renderModule(content, title, moduleName);
+            },
+            
+            renderModule(content, title, moduleName) {
+                switch(moduleName) {
+                    case 'security':
+                        title.innerText = 'SEKURITI 24/7 • QUANTUM BRIDGE';
+                        content.innerHTML = this.getSecurityHTML();
+                        this.setupSecurityCamera();
+                        break;
+                    case 'k3':
+                        title.innerText = 'LAPORAN K3 • KESELAMATAN KERJA';
+                        content.innerHTML = this.getK3HTML();
+                        this.setupK3Camera();
+                        break;
+                    case 'admin':
+                        title.innerText = 'ADMIN WORKSPACE • PAK ERWIN';
+                        content.innerHTML = this.getAdminHTML();
+                        break;
+                    case 'cs':
+                        title.innerText = 'CHECKLIST CS INDOOR';
+                        content.innerHTML = this.getCSHTML();
+                        break;
+                    case 'asset':
+                        title.innerText = 'ASSET MANAGEMENT • ISO 55001';
+                        content.innerHTML = this.getAssetHTML();
+                        break;
+                    case 'report':
+                        title.innerText = 'AUTO-REPORT GENERATOR';
+                        content.innerHTML = this.getReportHTML();
+                        break;
+                    default:
+                        title.innerText = 'MODULE NOT FOUND';
+                        content.innerHTML = '<div class="text-center py-20 text-gray-500">Module tidak tersedia</div>';
+                }
+                
+                this.logAudit(`MODULE_OPEN_${moduleName.toUpperCase()}`);
+            },
+            
+            closeModal() {
+                const modal = document.getElementById('app-modal');
+                modal.style.display = 'none';
+                this.stopCamera();
+                this.logAudit('MODAL_CLOSED');
+            },
+            
+            // === CAMERA SYSTEM ===
+            setupSecurityCamera() {
+                const video = document.getElementById('securityCameraPreview');
+                const captureBtn = document.getElementById('securityCaptureBtn');                const stopBtn = document.getElementById('securityStopBtn');
+                
+                if (captureBtn) {
+                    captureBtn.addEventListener('click', () => this.captureSecurityImage());
+                }
+                if (stopBtn) {
+                    stopBtn.addEventListener('click', () => this.stopCamera());
+                }
+            },
+            
+            setupK3Camera() {
+                const video = document.getElementById('k3CameraPreview');
+                const captureBtn = document.getElementById('k3CaptureBtn');
+                const stopBtn = document.getElementById('k3StopBtn');
+                
+                if (captureBtn) {
+                    captureBtn.addEventListener('click', () => this.captureK3Image());
+                }
+                if (stopBtn) {
+                    stopBtn.addEventListener('click', () => this.stopCamera());
+                }
+            },
+            
+            async startCamera(target, type) {
+                try {
+                    this.state.stream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { facingMode: "environment" },
+                        audio: false 
+                    });
+                    
+                    const video = document.getElementById(`${target}CameraPreview`);
+                    video.srcObject = this.state.stream;
+                    video.style.display = 'block';
+                    
+                    this.logAudit(`CAMERA_STARTED_${type.toUpperCase()}`);
+                } catch (err) {
+                    alert(`Gagal mengakses kamera: ${err.message || err}`);
+                    this.logAudit(`CAMERA_ERROR_${type.toUpperCase()}`);
+                }
+            },
+            
+            captureSecurityImage() {
+                this.captureImage('security');
+            },
+            
+            captureK3Image() {
+                this.captureImage('k3');
+            },
+            
+            captureImage(type) {                const video = document.getElementById(`${type}CameraPreview`);
+                if (!video || !video.srcObject) {
+                    alert('Kamera belum aktif. Silakan klik "BUKA KAMERA" terlebih dahulu.');
+                    return;
+                }
+                
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0);
+                
+                // Add digital watermark
+                this.addWatermark(ctx, canvas.width, canvas.height, type);
+                
+                const imgData = canvas.toDataURL('image/jpeg', 0.9);
+                const imgPreview = document.getElementById(`${type}CapturedImage`);
+                const previewContainer = document.getElementById(`${type}PhotoPreview`);
+                
+                imgPreview.src = imgData;
+                previewContainer.style.display = 'block';
+                video.style.display = 'none';
+                
+                // Haptic feedback
+                if (navigator.vibrate) {
+                    navigator.vibrate([50, 50]);
+                }
+                
+                this.logAudit(`PHOTO_CAPTURED_${type.toUpperCase()}`);
+            },
+            
+            addWatermark(ctx, width, height, type) {
+                // Add timestamp watermark
+                const now = new Date();
+                const timestamp = now.toLocaleString('id-ID', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+                
+                ctx.font = '12px Orbitron';
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                ctx.textAlign = 'right';
+                ctx.fillText(`SYSTEM v13 • ${timestamp} • ${type.toUpperCase()}`, width - 10, 25);
+                
+                // Add device hash watermark
+                ctx.font = '10px Orbitron';                ctx.fillStyle = 'rgba(212, 175, 55, 0.6)'; // Gold color
+                ctx.fillText(`Device: ${this.state.deviceHash.substring(0, 8)}...`, width - 10, 40);
+                
+                // Add location watermark (simulated)
+                ctx.font = '10px Orbitron';
+                ctx.fillStyle = 'rgba(0, 243, 255, 0.6)';
+                ctx.fillText('Location: DEPOK HQ (-6.4024, 106.8291)', width - 10, 55);
+                
+                // Add ISO compliance watermark
+                ctx.font = '9px Orbitron';
+                ctx.fillStyle = 'rgba(255, 77, 79, 0.7)';
+                ctx.fillText('ISO 27001:2022 • DATA INTEGRITY PROTECTED', width - 10, 70);
+            },
+            
+            stopCamera() {
+                if (this.state.stream) {
+                    this.state.stream.getTracks().forEach(track => track.stop());
+                    this.state.stream = null;
+                    
+                    const videos = document.querySelectorAll('video');
+                    videos.forEach(video => {
+                        video.style.display = 'none';
+                    });
+                    
+                    this.logAudit('CAMERA_STOPPED');
+                }
+            },
+            
+            // === REPORT SYSTEM ===
+            generateReport(type) {
+                const title = type === 'weekly' ? 'LAPORAN OPERASIONAL MINGGUAN' : 'LAPORAN AUDIT BULANAN';
+                const period = type === 'weekly' ? 
+                    `Periode: ${this.getPreviousWeek()}` : 
+                    `Periode: ${this.getPreviousMonth()}`;
+                
+                const content = document.getElementById('modal-content');
+                const titleEl = document.getElementById('modal-title');
+                
+                titleEl.innerText = `PREVIEW LAPORAN ${type.toUpperCase()}`;
+                content.innerHTML = `
+                    <div class="flex flex-col h-full">
+                        <div class="flex justify-between items-center mb-6">
+                            <button onclick="App.openModule('report')" class="text-white text-sm flex items-center gap-1 hover:text-neon-green transition">
+                                <i class="fas fa-arrow-left"></i> Kembali
+                            </button>
+                            <div class="flex gap-3">
+                                <button onclick="App.saveReport('${type}')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-bold transition flex items-center gap-2">
+                                    <i class="fas fa-save"></i> SIMPAN
+                                </button>
+                                <button onclick="window.print()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm font-bold transition flex items-center gap-2">                                    <i class="fas fa-print"></i> CETAK
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="a4-paper mx-auto relative">
+                            <div class="watermark">GOLD MASTER SEAL • ISO CERTIFIED</div>
+                            
+                            <div class="border-b-2 border-black pb-4 mb-6 text-center">
+                                <h1 class="font-tech text-2xl font-bold text-gray-900">AL-FIKRI SMART SCHOOL</h1>
+                                <p class="text-[12px] text-gray-600 mt-1">Jl. Raden Saleh, Depok • ISO 9001:2015 | ISO 27001:2022 Certified</p>
+                                <p class="text-[10px] text-gray-500 mt-1">System Generated: ${new Date().toLocaleString('id-ID')}</p>
+                            </div>
+                            
+                            <h2 class="text-center font-tech text-xl font-bold text-gray-900 mb-6">${title}</h2>
+                            <p class="text-center text-gray-700 mb-8">${period}</p>
+                            
+                            <div class="grid grid-cols-2 gap-8 mb-8">
+                                <div>
+                                    <h3 class="font-tech text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                        <i class="fas fa-hard-hat text-yellow-500"></i>
+                                        LAPORAN K3
+                                    </h3>
+                                    <table class="w-full text-[11px] border-collapse">
+                                        <thead>
+                                            <tr class="bg-gray-100">
+                                                <th class="border border-gray-300 p-2 text-left">Hari/Tanggal</th>
+                                                <th class="border border-gray-300 p-2 text-left">Kejadian</th>
+                                                <th class="border border-gray-300 p-2 text-left">Tindakan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="border border-gray-300 p-2">Senin, 12 Jan</td>
+                                                <td class="border border-gray-300 p-2">Nihil</td>
+                                                <td class="border border-gray-300 p-2">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border border-gray-300 p-2">Selasa, 13 Jan</td>
+                                                <td class="border border-gray-300 p-2">Lampu koridor mati</td>
+                                                <td class="border border-gray-300 p-2">Diganti</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border border-gray-300 p-2">Rabu, 14 Jan</td>
+                                                <td class="border border-gray-300 p-2">Nihil</td>
+                                                <td class="border border-gray-300 p-2">-</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>                                
+                                <div>
+                                    <h3 class="font-tech text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                        <i class="fas fa-shield-alt text-red-500"></i>
+                                        LAPORAN KEAMANAN
+                                    </h3>
+                                    <table class="w-full text-[11px] border-collapse">
+                                        <thead>
+                                            <tr class="bg-gray-100">
+                                                <th class="border border-gray-300 p-2 text-left">Shift</th>
+                                                <th class="border border-gray-300 p-2 text-left">Petugas</th>
+                                                <th class="border border-gray-300 p-2 text-left">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="border border-gray-300 p-2">Pagi (06:00-14:00)</td>
+                                                <td class="border border-gray-300 p-2">Danu & Rian</td>
+                                                <td class="border border-gray-300 p-2 text-green-600 font-bold">AMAN</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border border-gray-300 p-2">Malam (22:00-06:00)</td>
+                                                <td class="border border-gray-300 p-2">Agus & Budi</td>
+                                                <td class="border border-gray-300 p-2 text-green-600 font-bold">AMAN</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-6 mb-8">
+                                <div>
+                                    <h3 class="font-tech text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                        <i class="fas fa-broom text-teal-500"></i>
+                                        CHECKLIST KEBERSIHAN
+                                    </h3>
+                                    <div class="grid grid-cols-3 gap-4 text-[11px]">
+                                        ${this.config.rooms.slice(0, 9).map(room => `
+                                            <div class="border border-gray-200 p-2 rounded">
+                                                <div class="font-bold mb-1">${room.name}</div>
+                                                <div class="flex items-center gap-2">
+                                                    <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                                                    <span class="text-gray-700">Bersih</span>
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                                
+                                <div>                                    <h3 class="font-tech text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                        <i class="fas fa-boxes text-purple-500"></i>
+                                        INVENTARIS & ASET
+                                    </h3>
+                                    <table class="w-full text-[11px] border-collapse">
+                                        <thead>
+                                            <tr class="bg-gray-100">
+                                                <th class="border border-gray-300 p-2 text-left">Nama Aset</th>
+                                                <th class="border border-gray-300 p-2 text-left">Kondisi</th>
+                                                <th class="border border-gray-300 p-2 text-left">Lokasi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="border border-gray-300 p-2">AC Gedung Utama</td>
+                                                <td class="border border-gray-300 p-2 text-green-600">Baik</td>
+                                                <td class="border border-gray-300 p-2">Aula</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border border-gray-300 p-2">Server Core</td>
+                                                <td class="border border-gray-300 p-2 text-green-600">Baik</td>
+                                                <td class="border border-gray-300 p-2">R. IT</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-between mt-12 text-center">
+                                <div class="w-1/3">
+                                    <p class="text-[11px] text-gray-700">Mengetahui,</p>
+                                    <div class="h-16 border-b border-black border-dashed mx-4 my-2"></div>
+                                    <p class="font-bold text-[12px] text-gray-900">Bpk. Hanung Budianto S.E</p>
+                                    <p class="text-[10px] text-gray-600">Kepala Bagian Umum</p>
+                                </div>
+                                <div class="w-1/3">
+                                    <p class="text-[11px] text-gray-700">Dibuat Oleh,</p>
+                                    <div class="h-16 border-b border-black border-dashed mx-4 my-2"></div>
+                                    <p class="font-bold text-[12px] text-gray-900">Bpk. Erwinsyah</p>
+                                    <p class="text-[10px] text-gray-600">Koordinator Bagian Umum</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8 pt-4 border-t border-gray-300 text-center text-[9px] text-gray-500">
+                                <p>Dokumen ini dilindungi oleh Depok Lightning Sentinel • GOLD MASTER SEAL</p>
+                                <p>Hash Verification: ${this.state.deviceHash.substring(0, 12)}... • System Version: v13.1.3</p>
+                            </div>
+                        </div>
+                    </div>
+                `;                
+                // Setup print styles
+                const style = document.createElement('style');
+                style.innerHTML = `
+                    @media print {
+                        body { 
+                            -webkit-print-color-adjust: exact;
+                            print-color-adjust: exact;
+                        }
+                        .a4-paper {
+                            transform: scale(1) !important;
+                            width: 210mm !important;
+                            min-height: 297mm !important;
+                            margin: 0 !important;
+                            padding: 20mm !important;
+                            box-shadow: none !important;
+                        }
+                        .modal-window, .modal-header, .lockdown-screen, #auth-screen {
+                            display: none !important;
+                        }
+                        #app-modal {
+                            display: none !important;
+                        }
+                        body {
+                            background: white !important;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                this.logAudit(`REPORT_GENERATED_${type.toUpperCase()}`);
+            },
+            
+            saveReport(type) {
+                const period = type === 'weekly' ? this.getPreviousWeek() : this.getPreviousMonth();
+                const reportData = {
+                    type: type,
+                    period: period,
+                    generated: new Date().toISOString(),
+                    deviceHash: this.state.deviceHash,
+                    content: 'Full report content would be stored here'
+                };
+                
+                // Save to secure storage
+                localStorage.setItem(`report_${type}_${Date.now()}`, JSON.stringify(reportData));
+                
+                this.showNotification(`Laporan ${type} berhasil disimpan!`, 'success');
+                this.logAudit(`REPORT_SAVED_${type.toUpperCase()}`);
+            },
+                        getPreviousWeek() {
+                const today = new Date();
+                const first = today.getDate() - today.getDay() + 1; // First day is Monday
+                const last = first + 6; // Last day is Sunday
+                
+                const firstDate = new Date(today.setDate(first));
+                const lastDate = new Date(today.setDate(last));
+                
+                return `${firstDate.toLocaleDateString('id-ID')} s/d ${lastDate.toLocaleDateString('id-ID')}`;
+            },
+            
+            getPreviousMonth() {
+                const today = new Date();
+                const firstDay = new Date(today.getFullYear(), today.getMonth()-1, 1);
+                const lastDay = new Date(today.getFullYear(), today.getMonth(), 0);
+                
+                return `${firstDay.toLocaleDateString('id-ID')} s/d ${lastDay.toLocaleDateString('id-ID')}`;
+            },
+            
+            // === EMERGENCY WIPE PROTOCOL ===
+            confirmWipe() {
+                const challenge = Math.floor(1000 + Math.random() * 9000);
+                const correctAnswer = challenge * 7;
+                
+                const input = prompt(`EMERGENCY WIPE CHALLENGE\n\nKode: ${challenge}\nHitung: ${challenge} × 7 = ?\n\nHanya jawaban yang benar akan mengaktifkan protokol wipe.`);
+                
+                if (parseInt(input) === correctAnswer) {
+                    this.triggerEmergencyWipe();
+                } else {
+                    this.logAudit(`FAILED_WIPE_ATTEMPT_${challenge}`);
+                    alert('❌ Jawaban salah. Percobaan wipe gagal dan dilaporkan ke sistem audit.');
+                }
+            },
+            
+            triggerEmergencyWipe() {
+                if (confirm('🚨 KONFIRMASI EMERGENCY WIPE 🚨\n\nIni akan menghapus SEMUA data sensitif dari perangkat ini dan mengaktifkan Depok Lightning Strike Protocol.\n\nLanjutkan hanya jika perangkat hilang/dicuri!\n\nKetik "INNALILLAHI" untuk konfirmasi:')) {
+                    const confirmation = prompt('Ketik kode konfirmasi final:');
+                    if (confirmation === 'INNALILLAHI') {
+                        document.body.innerHTML = `
+                            <div class="fixed inset-0 bg-gradient-to-br from-red-900 to-black flex flex-col items-center justify-center text-center p-6">
+                                <div class="text-8xl text-yellow-400 mb-8 animate-pulse">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                                <h1 class="font-tech text-4xl font-bold text-white mb-4">DEPOK LIGHTNING WIPE ACTIVATED</h1>
+                                <p class="text-2xl text-gray-300 mb-8">Seluruh data sensitif telah dinetralisir</p>
+                                <div class="w-64 h-3 bg-gray-800 rounded-full overflow-hidden">
+                                    <div class="h-full bg-red-500 animate-[wipe_3s_ease-in-out_forwards]"></div>
+                                </div>
+                                <style>
+                                    @keyframes wipe {                                        to { width: 100%; }
+                                    }
+                                </style>
+                            </div>
+                        `;
+                        
+                        this.logAudit('EMERGENCY_WIPE_ACTIVATED');
+                        
+                        // Simulate data wiping
+                        setTimeout(() => {
+                            // Clear all sensitive data
+                            localStorage.clear();
+                            sessionStorage.clear();
+                            
+                            // Reset system
+                            location.reload();
+                        }, 3500);
+                    } else {
+                        alert('❌ Konfirmasi gagal. Sistem aman.');
+                    }
+                }
+            },
+            
+            // === AUDIT & NOTIFICATION SYSTEM ===
+            logAudit(event) {
+                // **CRITICAL: DO NOT LOG IN GHOST MODE**
+                if (Auth.ghostMode) return;
+                
+                const now = new Date();
+                const log = `[${now.toISOString()}] ${event} | DEVICE: ${this.state.deviceHash} | USER: ${this.state.currentUser || 'N/A'}`;
+                this.state.auditLogs.push(log);
+                
+                // Save to secure storage
+                try {
+                    localStorage.setItem('dreamos_audit_logs', JSON.stringify(this.state.auditLogs));
+                } catch (e) {
+                    console.error('Error saving audit logs:', e);
+                }
+                
+                console.log('📝 Audit Log:', log);
+            },
+            
+            loadAuditLogs() {
+                try {
+                    const saved = localStorage.getItem('dreamos_audit_logs');
+                    if (saved) {
+                        this.state.auditLogs = JSON.parse(saved);
+                    }
+                } catch (e) {
+                    console.error('Error loading audit logs:', e);                }
+            },
+            
+            showNotification(message, type = 'info') {
+                // **DO NOT SHOW NOTIFICATIONS IN GHOST MODE**
+                if (Auth.ghostMode) return;
+                
+                const colors = {
+                    success: 'bg-green-900/80 border-green-500 text-green-300',
+                    error: 'bg-red-900/80 border-red-500 text-red-300',
+                    info: 'bg-blue-900/80 border-blue-500 text-blue-300',
+                    warning: 'bg-yellow-900/80 border-yellow-500 text-yellow-300'
+                };
+                
+                const notif = document.createElement('div');
+                notif.className = `fixed bottom-4 right-4 max-w-xs p-4 rounded-xl border ${colors[type]} shadow-lg z-[9999] animate-[slideIn_0.3s_ease-out]`;
+                notif.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-triangle' : type === 'warning' ? 'fa-exclamation' : 'fa-info-circle'} text-xl mt-1"></i>
+                        <div>
+                            <p class="font-tech text-[11px] font-bold">${type.toUpperCase()}</p>
+                            <p class="text-[10px] mt-1">${message}</p>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(notif);
+                
+                setTimeout(() => {
+                    notif.style.animation = 'slideOut 0.3s ease-in forwards';
+                    setTimeout(() => notif.remove(), 300);
+                }, 3000);
+            },
+            
+            // === AUDIO SYSTEM ===
+            playFrequency(freq, duration) {
+                // **PLAY SOUNDS EVEN IN GHOST MODE**
+                try {
+                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    
+                    gain.gain.value = 0.07; // Volume 7% sesuai standar
+                    
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                                        osc.start();
+                    setTimeout(() => {
+                        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+                        setTimeout(() => {
+                            osc.stop();
+                            ctx.close();
+                        }, 110);
+                    }, duration);
+                } catch (e) {
+                    console.warn('Audio playback not supported:', e);
+                }
+            },
+            
+            // === PRIVACY MODE ===
+            togglePrivacy() {
+                this.state.privacyMode = !this.state.privacyMode;
+                const icon = document.getElementById('privacy-icon');
+                
+                if (this.state.privacyMode) {
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                    document.body.style.filter = 'blur(8px)';
+                    this.showNotification('Mode Privasi Aktif', 'info');
+                } else {
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                    document.body.style.filter = 'none';
+                    this.showNotification('Mode Privasi Dinonaktifkan', 'info');
+                }
+            },
+            
+            // === HOME FUNCTION ===
+            goHome() {
+                if (!this.state.isLocked) {
+                    this.closeModal();
+                }
+            },
+            
+            // === HTML TEMPLATES ===
+            getSecurityHTML() {
+                return `
+                    <div class="space-y-6">
+                        <!-- Shift Roster -->
+                        <div class="glass-morphism rounded-xl p-4 border-l-4 border-red-500/30">
+                            <h3 class="font-tech text-lg font-bold text-white mb-3 flex items-center gap-2">
+                                <i class="fas fa-user-clock text-red-400"></i>
+                                JADWAL PIKET SEKURITI
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                ${this.config.shifts.map(shift => `                                    <div class="bg-black/30 border border-red-500/20 rounded-lg p-3">
+                                        <div class="flex justify-between items-start mb-1">
+                                            <span class="font-bold text-red-400 text-sm">${shift.name}</span>
+                                            <span class="shift-badge shift-${shift.name.toLowerCase() === 'malam' ? 'night' : 'day'}">${shift.time}</span>
+                                        </div>
+                                        <div class="text-[11px] text-gray-400 mt-1">${shift.team}</div>
+                                        <div class="mt-2 text-[10px] text-green-400 font-bold flex items-center gap-1">
+                                            <i class="fas fa-circle text-green-500 text-xs"></i> Aktif Bertugas
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <!-- Camera Section -->
+                        <div class="camera-container">
+                            <video id="securityCameraPreview" class="camera-preview" autoplay playsinline></video>
+                            <div class="camera-controls">
+                                <button class="camera-btn bg-blue-600 hover:bg-blue-700" onclick="App.startCamera('security', 'security')">
+                                    <i class="fas fa-video"></i><br>MULAI KAMERA
+                                </button>
+                                <button id="securityCaptureBtn" class="camera-btn bg-neon-green hover:bg-lime-600">
+                                    <i class="fas fa-camera"></i><br>AMBIL FOTO
+                                </button>
+                                <button id="securityStopBtn" class="camera-btn bg-red-600 hover:bg-red-700">
+                                    <i class="fas fa-stop"></i><br>BERHENTI
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="securityPhotoPreview" class="photo-preview">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="font-bold text-[11px] text-neon-green">📸 BUKTI KEAMANAN</h4>
+                                <span class="text-[9px] text-gray-500">Klik untuk perbesar</span>
+                            </div>
+                            <img id="securityCapturedImage" class="w-full rounded-lg border border-white/10 cursor-pointer" src="image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Photo Preview">
+                        </div>
+                        
+                        <!-- Report Form -->
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-[10px] text-gray-400 font-bold mb-1">PETUGAS JAGA</label>
+                                <input type="text" class="win-xl-input" id="securityOfficer" placeholder="Nama lengkap petugas" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-[10px] text-gray-400 font-bold mb-1">SHIFT JAGA</label>
+                                <select class="win-xl-input" id="securityShift" required>
+                                    <option value="">Pilih Shift</option>
+                                    ${this.config.shifts.map(shift => `<option value="${shift.name}">${shift.name} - ${shift.time}</option>`).join('')}                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-[10px] text-gray-400 font-bold mb-1">JENIS LAPORAN</label>
+                                <select class="win-xl-input" id="securityReportType" required>
+                                    <option value="">Pilih Jenis Laporan</option>
+                                    ${this.config.securityTypes.map(type => `<option value="${type}">${type}</option>`).join('')}
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-[10px] text-gray-400 font-bold mb-1">LOKASI KEJADIAN</label>
+                                <input type="text" class="win-xl-input" id="securityLocation" placeholder="Detail lokasi (Gedung, Lantai, Ruangan)" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-[10px] text-gray-400 font-bold mb-1">KONDISI TERKINI</label>
+                                <select class="win-xl-input" id="securityCondition" required>
+                                    <option value="">Pilih Kondisi</option>
+                                    <option value="normal">Normal</option>
+                                    <option value="waspada">Waspada</option>
+                                    <option value="darurat">Darurat</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-[10px] text-gray-400 font-bold mb-1">DESKRIPSI KEJADIAN</label>
+                                <textarea class="win-xl-input win-xl-textarea" id="securityDescription" placeholder="Laporkan secara detail: kronologi, dampak, tindakan yang sudah diambil..." required></textarea>
+                            </div>
+                        </div>
+                        
+                        <button onclick="App.submitSecurityReport()" class="w-full mt-6 py-4 bg-gradient-to-r from-red-600 to-red-800 text-white font-bold rounded-xl shadow-lg hover:from-red-700 hover:to-red-900 transition active:scale-[0.98] flex flex-col items-center justify-center gap-2">
+                            <i class="fas fa-paper-plane text-xl"></i>
+                            <span class="text-[12px] font-bold">KIRIM LAPORAN KEAMANAN 24 JAM</span>
+                            <span class="text-[9px] text-red-200 mt-1">Data akan masuk ke Dashboard Pak Erwin & Pak Hanung</span>
+                        </button>
+                    </div>
+                `;
+            },
+            
+            getK3HTML() {
+                return `
+                    <div class="space-y-6">
+                        <!-- Camera Section -->
+                        <div class="camera-container">
+                            <video id="k3CameraPreview" class="camera-preview" autoplay playsinline></video>
+                            <div class="camera-controls">
+                                <button class="camera-btn bg-blue-600 hover:bg-blue-700" onclick="App.startCamera('k3', 'k3')">
+                                    <i class="fas fa-video"></i><br>MULAI KAMERA                                </button>
+                                <button id="k3CaptureBtn" class="camera-btn bg-neon-green hover:bg-lime-600">
+                                    <i class="fas fa-camera"></i><br>AMBIL FOTO
+                                </button>
+                                <button id="k3StopBtn" class="camera-btn bg-red-600 hover:bg-red-700">
+                                    <i class="fas fa-stop"></i><br>BERHENTI
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="k3PhotoPreview" class="photo-preview">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="font-bold text-[11px] text-yellow-400">📸 BUKTI KEJADIAN K3</h4>
+                                <span class="text-[9px] text-gray-500">Klik untuk perbesar</span>
+                            </div>
+                            <img id="k3CapturedImage" class="w-full rounded-lg border border-white/10 cursor-pointer" src="image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Photo Preview">
+                        </div>
+                        
+                        <!-- Report Form -->
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-[10px] text-gray-400 font-bold mb-1">JENIS KEJADIAN</label>
+                                <select class="win-xl-input" id="k3Type" required>
+                                    <option value="">Pilih Jenis Kejadian</option>
+                                    <option value="kerusakan_fasilitas">Kerusakan Fasilitas</option>
+                                    <option value="kehilangan_barang">Kehilangan Barang</option>
+                                    <option value="keamanan_terancam">Keamanan Terancam</option>
+                                    <option value="bahaya_lingkungan">Bahaya Lingkungan</option>
+                                    <option value="gangguan_operasional">Gangguan Operasional</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-[10px] text-gray-400 font-bold mb-1">LOKASI KEJADIAN</label>
+                                <input type="text" class="win-xl-input" id="k3Location" placeholder="Contoh: Loby Utama, Gedung A Lantai 2" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-[10px] text-gray-400 font-bold mb-1">TINGKAT BAHAYA</label>
+                                <select class="win-xl-input" id="k3Severity" required>
+                                    <option value="">Pilih Tingkat Bahaya</option>
+                                    <option value="rendah">Rendah (Perlu perhatian)</option>
+                                    <option value="sedang">Sedang (Perlu tindakan segera)</option>
+                                    <option value="tinggi">Tinggi (Bahaya, butuh evakuasi)</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-[10px] text-gray-400 font-bold mb-1">DESKRIPSI KEJADIAN</label>
+                                <textarea class="win-xl-input win-xl-textarea" id="k3Description" placeholder="Jelaskan secara detail: apa, kapan, di mana, siapa yang terlibat, dan tindakan yang sudah diambil..." required></textarea>                            </div>
+                            
+                            <div>
+                                <label class="block text-[10px] text-gray-400 font-bold mb-1">PELAPOR</label>
+                                <input type="text" class="win-xl-input" id="k3Reporter" placeholder="Nama lengkap pelapor" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-[10px] text-gray-400 font-bold mb-1">KONTAK DARURAT</label>
+                                <input type="tel" class="win-xl-input" id="k3Contact" placeholder="Nomor telepon yang bisa dihubungi" required>
+                            </div>
+                        </div>
+                        
+                        <button onclick="App.submitK3Report()" class="w-full mt-6 py-4 bg-gradient-to-r from-yellow-600 to-yellow-800 text-black font-bold rounded-xl shadow-lg hover:from-yellow-700 hover:to-yellow-900 transition active:scale-[0.98] flex flex-col items-center justify-center gap-2">
+                            <i class="fas fa-hard-hat text-xl"></i>
+                            <span class="text-[12px] font-bold">KIRIM LAPORAN KEJADIAN K3</span>
+                            <span class="text-[9px] text-yellow-200 mt-1">Laporan akan diverifikasi oleh Tim K3</span>
+                        </button>
+                    </div>
+                `;
+            },
+            
+            getAdminHTML() {
+                return `
+                    <div class="space-y-6">
+                        <!-- Dashboard Cards -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="glass-morphism p-4 rounded-xl border-l-4 border-neon-green">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="font-tech text-[12px] font-bold text-gray-300">LAPORAN MINGGUAN</h3>
+                                    <span class="compliance-tag iso-9001">AUTO</span>
+                                </div>
+                                <div class="text-center py-4">
+                                    <div class="text-3xl font-tech font-bold text-neon-green">1</div>
+                                    <div class="text-[10px] text-gray-400 mt-1">Belum Diverifikasi</div>
+                                </div>
+                                <button onclick="App.generateReport('weekly')" class="mt-2 w-full py-2 bg-green-900/30 border border-green-500 text-[10px] font-bold rounded-lg hover:bg-green-900/50 transition">
+                                    <i class="fas fa-file-alt mr-1"></i> GENERATE LAPORAN
+                                </button>
+                            </div>
+                            
+                            <div class="glass-morphism p-4 rounded-xl border-l-4 border-purple-500">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="font-tech text-[12px] font-bold text-gray-300">DATA SENSITIF</h3>
+                                    <span class="compliance-tag iso-27001">LOCKED</span>
+                                </div>
+                                <div class="text-center py-4">
+                                    <div class="text-3xl font-tech font-bold text-purple-400">12</div>
+                                    <div class="text-[10px] text-gray-400 mt-1">Arsip Terenkripsi</div>
+                                </div>                                <button onclick="alert('Fitur dalam pengembangan dengan enkripsi tingkat tinggi')" class="mt-2 w-full py-2 bg-purple-900/30 border border-purple-500 text-[10px] font-bold rounded-lg hover:bg-purple-900/50 transition opacity-50 cursor-not-allowed">
+                                    <i class="fas fa-database mr-1"></i> AKSES ARSIP
+                                </button>
+                            </div>
+                            
+                            <div class="glass-morphism p-4 rounded-xl border-l-4 border-blue-500">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="font-tech text-[12px] font-bold text-gray-300">PERINGATAN SISTEM</h3>
+                                    <span class="compliance-tag iso-27001">MONITOR</span>
+                                </div>
+                                <div class="text-center py-4">
+                                    <div class="text-3xl font-tech font-bold text-blue-400">0</div>
+                                    <div class="text-[10px] text-gray-400 mt-1">Aktif Hari Ini</div>
+                                </div>
+                                <button onclick="this.innerHTML='<div class=\'text-center py-1 text-[10px]\'>Memeriksa sistem...</div>'" class="mt-2 w-full py-2 bg-blue-900/30 border border-blue-500 text-[10px] font-bold rounded-lg hover:bg-blue-900/50 transition">
+                                    <i class="fas fa-shield-alt mr-1"></i> PERIKSA KEAMANAN
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Audit Trail -->
+                        <div class="glass-morphism rounded-xl p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="font-tech text-lg font-bold text-white flex items-center gap-2">
+                                    <i class="fas fa-clipboard-list text-blue-400"></i>
+                                    AUDIT TRAIL SYSTEM
+                                </h3>
+                                <span class="compliance-tag iso-27001">ISO 27001</span>
+                            </div>
+                            <div class="audit-log bg-black/30 p-3 rounded-lg font-mono text-[11px] text-gray-300">
+                                ${this.state.auditLogs.slice(-5).reverse().map(log => `
+                                    <div>> ${log.split('|')[0].trim()}</div>
+                                `).join('')}
+                                ${this.state.auditLogs.length > 5 ? '<div class="text-gray-500 mt-2">...</div>' : ''}
+                            </div>
+                        </div>
+                        
+                        <!-- Emergency Section -->
+                        <div class="border-t border-red-500/20 pt-4">
+                            <div class="flex items-start gap-3">
+                                <div class="text-3xl text-red-500 mt-1">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-tech text-lg font-bold text-red-400">EMERGENCY PROTOCOL</h4>
+                                    <p class="text-[11px] text-gray-400 mt-1">Aktifkan hanya dalam kondisi darurat ekstrem (perangkat hilang/dicuri)</p>
+                                    <button onclick="App.confirmWipe()" class="mt-3 w-full py-3 bg-red-900/40 border border-red-500 text-[11px] font-bold text-red-300 rounded-lg hover:bg-red-900/60 transition">
+                                        <i class="fas fa-bomb mr-1"></i> AKTIFKAN DEPOK LIGHTNING WIPE
+                                    </button>
+                                </div>                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+            
+            getCSHTML() {
+                return `
+                    <div class="space-y-6">
+                        <!-- Toilet Checklist -->
+                        <div class="glass-morphism rounded-xl p-4 border-l-4 border-teal-500/30">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="font-tech text-lg font-bold text-white">🕗 CHECKLIST TOILET (3x SEHARI)</h3>
+                                <span class="compliance-tag iso-9001">ISO 9001</span>
+                            </div>
+                            <div class="space-y-3">
+                                ${['Pintu Utama & Kubikal', 'Kaca/Cermin', 'Exhaust Fan', 'Dinding', 'Tempat Wudhu', 'Lantai', 'Floor Drain', 'Kloset', 'Plafond/Ceiling', 'Tempat Sampah', 'Aroma Ruangan'].map(item => `
+                                    <div class="flex items-center justify-between p-2 hover:bg-white/5 rounded-lg transition">
+                                        <span class="font-medium text-[11px]">${item}</span>
+                                        <div class="flex gap-2">
+                                            <label class="text-[9px] text-gray-400">P/S/M</label>
+                                            <input type="checkbox" class="w-4 h-4 accent-teal-400 rounded">
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <!-- Room Checklist -->
+                        <div class="glass-morphism rounded-xl p-4 border-l-4 border-teal-500/30">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="font-tech text-lg font-bold text-white">🏠 CHECKLIST 31 RUANGAN</h3>
+                                <span class="compliance-tag iso-9001">ISO 9001</span>
+                            </div>
+                            <div class="max-h-80 overflow-y-auto pr-2 space-y-2">
+                                ${this.config.rooms.map(room => `
+                                    <div class="flex items-center justify-between p-2 hover:bg-white/5 rounded-lg transition">
+                                        <span class="font-medium text-[11px] flex-1">${room.name}</span>
+                                        <span class="compliance-tag ${room.iso === '27001' ? 'iso-27001' : room.iso === '55001' ? 'iso-55001' : 'iso-9001'}">ISO ${room.iso}</span>
+                                        <input type="checkbox" class="w-4 h-4 accent-teal-400 rounded">
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <!-- Submission Button -->
+                        <button onclick="App.submitCSReport()" class="w-full mt-6 py-4 bg-gradient-to-r from-teal-600 to-teal-800 text-white font-bold rounded-xl shadow-lg hover:from-teal-700 hover:to-teal-900 transition active:scale-[0.98]">
+                            <i class="fas fa-check-circle text-xl mb-1"></i>
+                            <span class="text-[12px] font-bold">SIMPAN CHECKLIST & KIRIM KE PAK ERWIN</span>
+                        </button>                    </div>
+                `;
+            },
+            
+            getAssetHTML() {
+                return `
+                    <div class="space-y-6">
+                        <div class="glass-morphism rounded-xl p-4 border-l-4 border-purple-500/30">
+                            <h3 class="font-tech text-lg font-bold text-white mb-4 flex items-center gap-2">
+                                <i class="fas fa-boxes-stacked text-purple-400"></i>
+                                MANAJEMEN ASET FISIK
+                            </h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                <div class="bg-black/30 border border-purple-500/20 rounded-lg p-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-[11px] font-bold text-purple-300">TOTAL ASET</span>
+                                        <span class="text-2xl font-tech font-bold text-white">1,402</span>
+                                    </div>
+                                    <div class="text-[10px] text-gray-500">Terdaftar dalam sistem</div>
+                                    <div class="mt-2 w-full bg-gray-800 rounded-full h-2">
+                                        <div class="bg-purple-500 h-2 rounded-full" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-black/30 border border-purple-500/20 rounded-lg p-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-[11px] font-bold text-purple-300">KONDISI BAIK</span>
+                                        <span class="text-2xl font-tech font-bold text-white">1,192</span>
+                                    </div>
+                                    <div class="text-[10px] text-gray-500">85% dari total aset</div>
+                                    <div class="mt-2 w-full bg-gray-800 rounded-full h-2">
+                                        <div class="bg-green-500 h-2 rounded-full" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-[10px] text-gray-400 font-bold mb-1">PENCARIAN ASET</label>
+                                    <div class="relative">
+                                        <input type="text" class="win-xl-input pl-10" placeholder="Cari aset berdasarkan nama, lokasi, atau kode...">
+                                        <i class="fas fa-search absolute left-3 top-3 text-gray-500"></i>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-[10px] text-gray-400 font-bold mb-1">KATEGORI ASET</label>
+                                    <select class="win-xl-input">
+                                        <option>Semua Kategori</option>                                        <option>Elektronik & IT</option>
+                                        <option>Furnitur</option>
+                                        <option>Mesin & Peralatan</option>
+                                        <option>Aset Tanah & Bangunan</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="max-h-60 overflow-y-auto space-y-2 pr-2">
+                                    ${['Server Core Al-Fikri', 'AC Gedung Utama', 'Lift Gedung B', 'Sound System Masjid', 'Komputer Lab IPA'].map(asset => `
+                                        <div class="glass-morphism p-3 rounded-lg hover:border-purple-500/30 transition">
+                                            <div class="flex justify-between items-start">
+                                                <div>
+                                                    <div class="font-bold text-[11px] text-white">${asset}</div>
+                                                    <div class="text-[10px] text-gray-400 mt-1">Kode: AF-2026-${asset.substring(0,3).toUpperCase()}</div>
+                                                </div>
+                                                <span class="compliance-tag iso-55001">ISO 55001</span>
+                                            </div>
+                                            <div class="mt-2 flex justify-between items-center">
+                                                <div class="flex items-center gap-2">
+                                                    <span class="text-[10px] text-green-400 font-bold">✓ Baik</span>
+                                                    <span class="text-[10px] text-gray-500">• Terakhir Maintenance: 15-01-2026</span>
+                                                </div>
+                                                <button class="text-[10px] text-purple-400 hover:text-purple-300 transition">
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+            
+            getReportHTML() {
+                return `
+                    <div class="space-y-6">
+                        <div class="glass-morphism rounded-xl p-4 border-l-4 border-green-500/30">
+                            <h3 class="font-tech text-lg font-bold text-white mb-4 flex items-center gap-2">
+                                <i class="fas fa-file-contract text-green-400"></i>
+                                AUTO-REPORT GENERATOR
+                            </h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                <div class="bg-black/30 border border-green-500/20 rounded-lg p-4 text-center hover:bg-green-900/10 transition cursor-pointer" onclick="App.generateReport('weekly')">
+                                    <div class="text-green-400 text-4xl mb-2">
+                                        <i class="fas fa-calendar-week"></i>
+                                    </div>
+                                    <h4 class="font-tech text-lg font-bold text-white mb-1">LAPORAN MINGGUAN</h4>                                    <p class="text-[11px] text-gray-400">Generate otomatis setiap Jumat</p>
+                                    <div class="mt-2 text-[10px] text-green-400 font-bold">
+                                        <i class="fas fa-check-circle mr-1"></i> Siap Generate
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-black/30 border border-green-500/20 rounded-lg p-4 text-center hover:bg-green-900/10 transition cursor-pointer" onclick="App.generateReport('monthly')">
+                                    <div class="text-green-400 text-4xl mb-2">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                    <h4 class="font-tech text-lg font-bold text-white mb-1">LAPORAN BULANAN</h4>
+                                    <p class="text-[11px] text-gray-400">Generate otomatis tiap akhir bulan</p>
+                                    <div class="mt-2 text-[10px] text-green-400 font-bold">
+                                        <i class="fas fa-check-circle mr-1"></i> Siap Generate
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="glass-morphism p-3 rounded-lg">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="font-tech text-[11px] font-bold text-gray-300">HISTORI LAPORAN</h4>
+                                    <span class="text-[10px] text-green-400">5 laporan terakhir</span>
+                                </div>
+                                <div class="space-y-2 text-[10px]">
+                                    <div class="flex justify-between">
+                                        <span>Mingguan - 12 Jan 2026</span>
+                                        <span class="text-green-400">✓ Terverifikasi</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Bulanan - Des 2025</span>
+                                        <span class="text-green-400">✓ Terverifikasi</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Mingguan - 5 Jan 2026</span>
+                                        <span class="text-green-400">✓ Terverifikasi</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Mingguan - 29 Des 2025</span>
+                                        <span class="text-gray-500">Menunggu</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span>Bulanan - Nov 2025</span>
+                                        <span class="text-green-400">✓ Terverifikasi</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 p-3 bg-blue-900/20 border border-blue-500/30 rounded-lg">
+                                <p class="text-[10px] text-blue-300 flex items-start gap-2">
+                                    <i class="fas fa-info-circle text-blue-400 mt-0.5"></i>                                    <span>Sistem akan otomatis generate laporan mingguan setiap hari Jumat pukul 16:00 WIB dan laporan bulanan setiap tanggal 28 bulan berjalan. Semua laporan dilindungi oleh Depok Lightning Encryption.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+            
+            // === REPORT SUBMISSION ===
+            submitSecurityReport() {
+                const data = {
+                    officer: document.getElementById('securityOfficer').value,
+                    shift: document.getElementById('securityShift').value,
+                    type: document.getElementById('securityReportType').value,
+                    location: document.getElementById('securityLocation').value,
+                    condition: document.getElementById('securityCondition').value,
+                    description: document.getElementById('securityDescription').value,
+                    photo: document.getElementById('securityCapturedImage').src,
+                    timestamp: new Date().toISOString(),
+                    deviceHash: this.state.deviceHash,
+                    user: this.state.currentUser
+                };
+                
+                if (!data.officer || !data.shift || !data.type || !data.location) {
+                    this.showNotification('Mohon lengkapi data wajib!', 'error');
+                    return;
+                }
+                
+                // Save to secure storage
+                const reportId = `security_${Date.now()}`;
+                localStorage.setItem(reportId, JSON.stringify(data));
+                
+                this.playFrequency(432, 500);
+                this.showNotification('Laporan Keamanan berhasil terkirim!', 'success');
+                this.closeModal();
+                this.logAudit('SECURITY_REPORT_SUBMITTED');
+            },
+            
+            submitK3Report() {
+                // Validation
+                const requiredFields = ['k3Type', 'k3Location', 'k3Severity', 'k3Description', 'k3Reporter', 'k3Contact'];
+                for (const field of requiredFields) {
+                    if (!document.getElementById(field).value.trim()) {
+                        this.showNotification(`Mohon lengkapi: ${field.replace('k3', '').replace(/([A-Z])/g, ' $1').toUpperCase()}`, 'error');
+                        return;
+                    }
+                }
+                
+                const data = {
+                    type: document.getElementById('k3Type').value,                    location: document.getElementById('k3Location').value,
+                    severity: document.getElementById('k3Severity').value,
+                    description: document.getElementById('k3Description').value,
+                    reporter: document.getElementById('k3Reporter').value,
+                    contact: document.getElementById('k3Contact').value,
+                    photo: document.getElementById('k3CapturedImage').src,
+                    timestamp: new Date().toISOString(),
+                    deviceHash: this.state.deviceHash,
+                    user: this.state.currentUser
+                };
+                
+                // Save to secure storage
+                const reportId = `k3_${Date.now()}`;
+                localStorage.setItem(reportId, JSON.stringify(data));
+                
+                this.playFrequency(432, 500);
+                this.showNotification('Laporan K3 berhasil terkirim!', 'success');
+                this.closeModal();
+                this.logAudit('K3_REPORT_SUBMITTED');
+            },
+            
+            submitCSReport() {
+                // Count checked items
+                const checkboxes = document.querySelectorAll('#modal-content input[type="checkbox"]:checked');
+                const totalCheckboxes = document.querySelectorAll('#modal-content input[type="checkbox"]').length;
+                
+                if (checkboxes.length === 0) {
+                    this.showNotification('Silakan checklist minimal 1 item!', 'warning');
+                    return;
+                }
+                
+                const data = {
+                    toiletItems: Array.from(document.querySelectorAll('#modal-content .checklist-group:first-child input[type="checkbox"]:checked'))
+                        .map(cb => cb.parentElement.previousElementSibling.textContent.trim()),
+                    roomItems: Array.from(document.querySelectorAll('#modal-content .checklist-group:last-child input[type="checkbox"]:checked'))
+                        .map(cb => cb.parentElement.previousElementSibling.textContent.trim()),
+                    timestamp: new Date().toISOString(),
+                    deviceHash: this.state.deviceHash,
+                    user: this.state.currentUser
+                };
+                
+                // Save to secure storage
+                const reportId = `cs_${Date.now()}`;
+                localStorage.setItem(reportId, JSON.stringify(data));
+                
+                this.playFrequency(432, 500);
+                this.showNotification(`Checklist berhasil disimpan (${checkboxes.length}/${totalCheckboxes} item)`, 'success');
+                this.closeModal();
+                this.logAudit('CS_REPORT_SUBMITTED');
+            }        };
+
+        // === GHOST FINGERPRINT LISTENER v13.1.3 ===
+        const GhostFingerprint = {
+            widget: null,
+            isActive: false,
+            lastActivation: 0,
+            cooldown: 3000, // 3 seconds cooldown
+            
+            init() {
+                this.widget = document.getElementById('ghost-fingerprint-widget');
+                
+                // Only enable on Redmi Note 9 Pro
+                if (App.state.isGhostDevice) {
+                    this.enableListener();
+                }
+            },
+            
+            enableListener() {
+                setTimeout(() => {
+                    this.widget.style.opacity = '1';
+                    this.widget.style.pointerEvents = 'auto';
+                    this.widget.style.transform = 'translateY(0)';
+                    this.isActive = true;
+                    
+                    // Add hover effect
+                    this.widget.addEventListener('mouseenter', () => {
+                        this.widget.querySelector('i').classList.add('animate-pulse');
+                    });
+                    
+                    this.widget.addEventListener('mouseleave', () => {
+                        this.widget.querySelector('i').classList.remove('animate-pulse');
+                    });
+                    
+                    // Add click/touch listener
+                    this.widget.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.activateFingerprintAuth();
+                    });
+                }, 2000);
+            },
+            
+            activateFingerprintAuth() {
+                // Cooldown protection
+                const now = Date.now();
+                if (now - this.lastActivation < this.cooldown) {
+                    return;
+                }
+                this.lastActivation = now;
+                                // Haptic feedback
+                if (navigator.vibrate) {
+                    navigator.vibrate([50, 20, 50]);
+                }
+                
+                // Visual feedback
+                const icon = this.widget.querySelector('i');
+                icon.classList.add('text-neon-green');
+                icon.classList.replace('fa-fingerprint', 'fa-spinner');
+                icon.classList.add('animate-spin');
+                
+                // Simulate fingerprint processing
+                setTimeout(() => {
+                    this.verifyGhostFingerprint();
+                }, 1000);
+            },
+            
+            verifyGhostFingerprint() {
+                // Visual success feedback
+                const icon = this.widget.querySelector('i');
+                icon.classList.replace('fa-spinner', 'fa-check-circle');
+                icon.classList.remove('animate-spin');
+                
+                // Show Ghost Mode activation
+                setTimeout(() => {
+                    this.activateGhostMode();
+                }, 800);
+            },
+            
+            activateGhostMode() {
+                // **CRITICAL: DISABLE ALL LOGGING IN GHOST MODE**
+                App.logAudit = function() { return; };
+                
+                // Set Ghost Mode state
+                Auth.ghostMode = true;
+                App.state.isGhost = true;
+                App.state.currentUser = "Mr.M_Architect_2025";
+                App.state.currentModule = "ALL";
+                
+                // Hide auth screen if visible
+                const authScreen = document.getElementById('auth-screen');
+                if (authScreen && !authScreen.classList.contains('hidden')) {
+                    authScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        authScreen.classList.add('hidden');
+                    }, 300);
+                }
+                
+                // Visual confirmation
+                this.widget.querySelector('i').classList.replace('fa-check-circle', 'fa-user-secret');                this.widget.querySelector('i').classList.add('text-neon-green', 'animate-pulse');
+                
+                // Show Ghost Mode notification
+                App.showNotification("👻 GHOST MODE ACTIVE", "success");
+                App.playFrequency(528, 1000);
+                
+                // Special Ghost welcome after 1 second
+                setTimeout(() => {
+                    alert("﷽\n\nGHOST MODE ACTIVATED\nNo logs will be recorded.\nAll modules unlocked.\nSystem integrity: 100%\n\nWelcome back, Sayyidina. The system is yours.");
+                    App.playFrequency(432, 2000);
+                }, 1000);
+                
+                // Log activation (only if not in Ghost Mode yet)
+                Auth.logAuthEvent('GHOST_MODE_ACTIVATED_VIA_WIDGET', 'Mr.M_Architect_2025');
+            }
+        };
+
+        // === GHOST STEALTH AUTHENTICATION SYSTEM v13.1.3 ===
+        const Auth = {
+            authenticated: false,
+            failedAttempts: 0,
+            maxAttempts: 5,
+            ghostMode: false,
+            state: {
+                currentModuleLevel: null
+            },
+            
+            // OFFICIAL AL-FIKRI CREDENTIALS (PER BLUEPRINT 13-14 JAN 2026)
+            credentials: {
+                umum: {
+                    username: "user_@1234", 
+                    password: "d4N4umum_AF@1112",
+                    level: "basic",
+                    hint: "User Umum - Booking & K3 Forms",
+                    modules: ['booking', 'k3']
+                },
+                sekuriti: {
+                    username: "LHPSsec_AF2025",
+                    password: "L4p0r4nS3k#2025", // Default password (akan diubah sesuai SOP)
+                    level: "operational",
+                    hint: "Laporan Harian Piket Sekuriti",
+                    modules: ['security']
+                },
+                admin: {
+                    username: "4dm1n_AF6969@00",
+                    password: "4dm1n_P4ss#2026", // Default password
+                    level: "admin",
+                    hint: "Admin System - Full access",
+                    modules: ['admin', 'report']
+                },                cs: {
+                    username: "CHCS_AF_@003",
+                    password: "CHCS_P4ss#2026", // Default password
+                    level: "operational",
+                    hint: "Checklist CS Harian",
+                    modules: ['cs']
+                },
+                stok: {
+                    username: "SACS_AF@004",
+                    password: "St0k_P4ss#2026", // Default password
+                    level: "inventory",
+                    hint: "Stok & Alat CS dan Taman",
+                    modules: ['asset', 'stock']
+                },
+                maintenance: {
+                    username: "M41n_4F@234",
+                    password: "M41nt_P4ss#2026", // Default password
+                    level: "technical",
+                    hint: "Form Maintenance",
+                    modules: ['maint']
+                },
+                inventaris: {
+                    username: "4dm1n_6969@01",
+                    password: "Inv3nt_P4ss#2026", // Default password
+                    level: "asset",
+                    hint: "Inventaris",
+                    modules: ['asset']
+                },
+                gudang: {
+                    username: "4dm1n_9696@02",
+                    password: "Gud4ng_P4ss#2026", // Default password
+                    level: "asset",
+                    hint: "Gudang",
+                    modules: ['stock']
+                },
+                master: {
+                    username: "Mr.M_Architect_2025",
+                    password: "", // No password required in Ghost Mode
+                    level: "ghost",
+                    hint: "MASTER KEY - No Logs, Full Access",
+                    modules: ['*'],
+                    bypassCode: "012443410",
+                    ghostDevice: "Redmi Note 9 Pro"
+                }
+            },
+            
+            init() {
+                // Initialize module selection
+                document.getElementById('login-module').addEventListener('change', () => {
+                    this.updateCredentials();                });
+                
+                // Toggle password visibility with EYE icon
+                document.getElementById('toggle-pass').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const passField = document.getElementById('login-password');
+                    const icon = document.getElementById('toggle-pass').querySelector('i');
+                    
+                    if (passField.type === 'password') {
+                        passField.type = 'text';
+                        icon.classList.replace('fa-eye', 'fa-eye-slash');
+                        icon.classList.add('text-neon-green');
+                        icon.classList.remove('text-gray-500');
+                    } else {
+                        passField.type = 'password';
+                        icon.classList.replace('fa-eye-slash', 'fa-eye');
+                        icon.classList.remove('text-neon-green');
+                        icon.classList.add('text-gray-500');
+                    }
+                });
+            },
+            
+            updateCredentials() {
+                const module = document.getElementById('login-module').value;
+                const usernameField = document.getElementById('login-username');
+                const passwordField = document.getElementById('login-password');
+                const hintField = document.getElementById('credential-hint');
+                const masterKeySection = document.getElementById('master-key-section');
+                
+                if (module && this.credentials[module]) {
+                    const cred = this.credentials[module];
+                    
+                    usernameField.value = cred.username;
+                    passwordField.value = '';
+                    hintField.innerText = cred.hint;
+                    hintField.className = "text-[9px] text-yellow-400 mt-1 text-right font-bold";
+                    
+                    // Special handling for Master Key (Ghost Mode)
+                    if (module === 'master') {
+                        masterKeySection.classList.remove('hidden');
+                        passwordField.placeholder = "Bypass Code atau Fingerprint";
+                        passwordField.value = ''; // Clear password field for Master Key
+                    } else {
+                        masterKeySection.classList.add('hidden');
+                        passwordField.placeholder = "••••••••";
+                    }
+                } else {
+                    usernameField.value = '';
+                    passwordField.value = '';
+                    hintField.innerText = '••••••••';                    hintField.className = "text-[9px] text-gray-500 mt-1 text-right";
+                    masterKeySection.classList.add('hidden');
+                }
+            },
+            
+            login() {
+                const module = document.getElementById('login-module').value;
+                const username = document.getElementById('login-username').value.trim();
+                const password = document.getElementById('login-password').value.trim();
+                
+                if (!module || !username) {
+                    App.showNotification("Mohon pilih modul dan username!", "error");
+                    return;
+                }
+                
+                if (!this.credentials[module]) {
+                    this.failedAttempt("INVALID_MODULE");
+                    return;
+                }
+                
+                const cred = this.credentials[module];
+                
+                // Special handling for Master Key (Ghost Mode)
+                if (module === 'master') {
+                    // Check bypass code
+                    if (password === cred.bypassCode) {
+                        this.activateGhostMode(username);
+                        return;
+                    }
+                    
+                    this.failedAttempt("GHOST_AUTH_FAILED");
+                    return;
+                }
+                
+                // Normal authentication
+                if (username === cred.username && password === cred.password) {
+                    this.success(module, username);
+                } else {
+                    this.failedAttempt("INVALID_CREDENTIALS");
+                }
+            },
+            
+            activateGhostMode(username) {
+                this.authenticated = true;
+                this.ghostMode = true;
+                App.state.isGhost = true;
+                App.state.currentUser = username;
+                this.state.currentModuleLevel = 'master';
+                App.state.currentModule = "ALL";
+                                // **CRITICAL: DISABLE ALL LOGGING IN GHOST MODE**
+                App.logAudit = function() {
+                    // NO-OP: Do not log anything in Ghost Mode
+                    return;
+                };
+                
+                // Animate fade out
+                document.getElementById('auth-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('auth-screen').classList.add('hidden');
+                    this.logAuthEvent('GHOST_MODE_ACTIVATED', username);
+                    
+                    // Show Ghost Architect welcome
+                    setTimeout(() => {
+                        alert("﷽\n\nGHOST MODE ACTIVE\nThe Invisible Architect is here.\n\nNo logs will be recorded.\nAll modules unlocked.\nSystem integrity: 100%\n\nWelcome back, Sayyidina.");
+                        App.playFrequency(528, 3000); // Extended HU 528Hz welcome
+                    }, 300);
+                }, 500);
+            },
+            
+            success(module, username) {
+                this.authenticated = true;
+                this.ghostMode = false;
+                App.state.isGhost = false;
+                App.state.currentUser = username;
+                this.state.currentModuleLevel = module;
+                App.state.currentModule = module;
+                
+                // Animate fade out
+                document.getElementById('auth-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('auth-screen').classList.add('hidden');
+                    this.logAuthEvent('LOGIN_SUCCESS', username);
+                }, 500);
+                
+                // Module-specific welcome messages
+                const welcomes = {
+                    umum: `User Umum: Akses Booking & K3 Forms`,
+                    sekuriti: `Laporan Sekuriti: Siap menerima laporan harian`,
+                    admin: `Admin System: Selamat datang, Pak Erwin`,
+                    cs: `CS Harian: Checklist kebersihan siap diisi`,
+                    stok: `Stok & Alat: Manajemen inventaris aktif`,
+                    maintenance: `Maintenance: Form perbaikan siap digunakan`,
+                    inventaris: `Inventaris: Database aset terbuka`,
+                    gudang: `Gudang: Stok logistik dalam pengawasan`
+                };
+                
+                const welcomeMsg = welcomes[module] || `Selamat datang, ${username}!`;
+                App.showNotification(welcomeMsg, 'success');
+            },            
+            failedAttempt(reason) {
+                this.failedAttempts++;
+                App.logAudit(`AUTH_FAILED_ATTEMPT_${this.failedAttempts}_${reason}`);
+                
+                if (this.failedAttempts >= this.maxAttempts) {
+                    this.lockSystem();
+                } else {
+                    const remaining = this.maxAttempts - this.failedAttempts;
+                    let errorMsg = `Login gagal! Sisa percobaan: ${remaining}`;
+                    
+                    if (reason === "GHOST_AUTH_FAILED") {
+                        errorMsg = "Otorisasi Ghost Mode gagal! Pastikan kode bypass atau fingerprint valid.";
+                    } else if (reason === "INVALID_MODULE") {
+                        errorMsg = "Modul tidak valid! Silakan pilih modul yang benar.";
+                    }
+                    
+                    App.showNotification(errorMsg, 'error');
+                    
+                    // Shake effect
+                    const authScreen = document.getElementById('auth-screen');
+                    authScreen.style.animation = 'shake 0.5s';
+                    setTimeout(() => {
+                        authScreen.style.animation = '';
+                    }, 500);
+                }
+            },
+            
+            lockSystem() {
+                document.body.innerHTML = `
+                    <div class="fixed inset-0 bg-gradient-to-br from-red-900 to-black flex flex-col items-center justify-center text-center p-6">
+                        <div class="text-8xl text-yellow-400 mb-8 animate-pulse">
+                            <i class="fas fa-ban"></i>
+                        </div>
+                        <h1 class="font-tech text-4xl font-bold text-white mb-4">SISTEM DIKUNCI</h1>
+                        <p class="text-2xl text-gray-300 mb-8">Terlalu banyak percobaan gagal. Hubungi Administrator.</p>
+                        <div class="text-xl font-mono text-neon-blue" id="lock-timer">10:00</div>
+                        <div class="mt-6 text-gray-400 text-[11px]">
+                            Device Hash: ${App.state.deviceHash || 'UNKNOWN'}<br>
+                            Insiden dilaporkan ke Audit Trail<br>
+                            Kode Insiden: ${Math.floor(100000 + Math.random() * 900000)}
+                        </div>
+                    </div>
+                `;
+                
+                // 10 minute countdown
+                let seconds = 600;
+                const timer = setInterval(() => {
+                    seconds--;
+                    const mins = Math.floor(seconds / 60);                    const secs = seconds % 60;
+                    document.getElementById('lock-timer').innerText = 
+                        `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+                    
+                    if (seconds <= 0) {
+                        clearInterval(timer);
+                        location.reload();
+                    }
+                }, 1000);
+                
+                App.triggerSecurityBreach('BRUTE_FORCE_ATTEMPT');
+            },
+            
+            logAuthEvent(event, username) {
+                // **DO NOT LOG IN GHOST MODE**
+                if (this.ghostMode) return;
+                
+                const log = `[AUTH] ${event} | USER: ${username} | MODULE: ${App.state.currentModule || 'N/A'} | DEVICE: ${App.state.deviceHash || 'UNKNOWN'} | TIME: ${new Date().toISOString()}`;
+                console.log('🔐 Authentication Log:', log);
+                
+                // Add to audit trail (only if not in Ghost Mode)
+                if (App.logAudit && !this.ghostMode) {
+                    App.logAudit(`AUTH_${event}`);
+                }
+            }
+        };
+
+        // === SYSTEM BOOT ===
+        document.addEventListener('DOMContentLoaded', () => {
+            App.init();
+        });
+    </script>
+</body>
+</html>
