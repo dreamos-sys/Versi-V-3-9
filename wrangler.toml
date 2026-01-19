@@ -8,7 +8,3 @@ command = "npm run build"
 [build.upload]
 format = "modules"
 dir = "dist"
-
-[site]
-bucket = "./dist"
-entry-point = "workers-site"
