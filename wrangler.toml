@@ -1,31 +1,14 @@
-name = "dream-os-quantum"
-type = "javascript"
-account_id = "YOUR_ACCOUNT_ID"
-workers_dev = true
-route = "dreamos.yourdomain.com/*"
-zone_id = "YOUR_ZONE_ID"
-
-[env.production]
-name = "dream-os-prod"
-compatibility_date = "2024-01-01"
-
-[site]
-bucket = "./build"
-entry-point = "workers-site"
-
-[[rules]]
-type = "Text"
-globs = ["**/*.html"]
-headers = { "Cache-Control" = "no-cache, no-store, must-revalidate" }
-
-[[rules]]
-type = "Text"
-globs = ["**/*.css", "**/*.js"]
-headers = { "Cache-Control" = "public, max-age=31536000" }
-
-[vars]
-DREAM_OS_VERSION = "13.1.9"
-ENVIRONMENT = "production"
+name = "purple-mode-3382"
+main = "service-worker-nuclear.js"
+compatibility_date = "2026-01-19"
 
 [build]
 command = "npm run build"
+
+[build.upload]
+format = "modules"
+dir = "dist"
+
+[site]
+bucket = "./dist"
+entry-point = "workers-site"
