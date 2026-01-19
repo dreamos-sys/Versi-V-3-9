@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#050810">
+    <title>DREAM OS v13.1.9 | QUANTUM SEAL</title>
+    
+    <!-- SIMPLE CSS -->
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #050810;
+            color: #e2e8f0;
+            font-family: system-ui, -apple-system, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+        #loading-screen {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, #0f172a, #020617);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+        .loading-logo {
+            font-size: 4rem;
+            color: #d4af37;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+        #loading-bar {
+            width: 200px;
+            height: 3px;
+            background: rgba(255,255,255,0.1);
+            margin: 2rem auto;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        #loading-bar div {
+            height: 100%;
+            width: 0%;
+            background: #00ff9d;
+            transition: width 0.3s;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        .hidden { display: none !important; }
+        #app-container { 
+            opacity: 0; 
+            transition: opacity 0.3s; 
+            height: 100vh;
+        }
+        #app-container.loaded { opacity: 1; }
+        
+        /* Glass Panel */
+        .glass {
+            background: rgba(20, 25, 40, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+        }
+        
+        /* Module Card */
+        .module-card {
+            aspect-ratio: 1;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(20, 25, 40, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .module-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: scale(0.97);
+        }
+        
+        /* Animations */
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+    </style>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <!-- ==================== LOADING SCREEN ==================== -->
+    <div id="loading-screen">
+        <div style="text-align: center; padding: 2rem;">
+            <div class="loading-logo">ه</div>
+            <h1 style="font-size: 2rem; margin-bottom: 1rem; color: #00ff9d;">DREAM OS v13.1.9</h1>
+            <div style="font-size: 0.7rem; color: #00f3ff; margin: 1rem 0; padding: 0.3rem 0.8rem; background: rgba(0, 255, 157, 0.1); border-radius: 20px; display: inline-block;">
+                QUANTUM SEAL EDITION
+            </div>
+            <p style="color: #94a3b8; margin-top: 2rem;">Initializing Secure System...</p>
+            <div id="loading-bar"><div id="loading-progress"></div></div>
+            <p style="font-size: 0.8rem; color: #64748b; margin-top: 2rem;">
+                <span id="loading-status">Starting Quantum Engine...</span><br>
+                Powered by: Mr. M & Dream Team
+            </p>
+        </div>
+    </div>
+
+    <!-- ==================== MAIN APP ==================== -->
+    <div id="app-container">
+        <!-- TOP BAR -->
+        <div style="height: 64px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.2);">
+            <div>
+                <h1 style="font-size: 1.25rem; font-weight: bold; color: white;">
+                    DREAM<span style="color: #00ff9d;">OS</span>
+                    <span style="font-size: 0.625rem; background: rgba(212,175,55,0.2); padding: 0.125rem 0.5rem; border-radius: 0.5rem; margin-left: 0.5rem;">v13.1.9</span>
+                </h1>
+                <div id="clock" style="font-size: 0.625rem; color: #00f3ff; font-family: monospace; margin-top: 0.125rem;">--:--:--</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <div style="text-align: right;">
+                    <div style="font-size: 9px; color: #94a3b8; text-transform: uppercase;">System Status</div>
+                    <div style="font-size: 10px; font-weight: bold; color: #00ff9d;">
+                        <i class="fas fa-shield-check"></i> QUANTUM SECURE
+                    </div>
+                </div>
+                <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(30,64,175,0.3); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(0,243,255,0.3);">
+                    <i class="fas fa-cloud-bolt" style="color: #fbbf24; font-size: 1.5rem;"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE BANNER -->
+        <div style="height: 36px; background: linear-gradient(90deg, rgba(0,30,60,0.9), transparent); border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <div id="slide-text" style="font-size: 10px; font-weight: bold; color: #00ff9d; text-transform: uppercase;">
+                QUANTUM VAULT ACTIVATED • DATA PERSISTENCE ENABLED
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <main style="flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 80px;">
+            <!-- NOTIFICATION -->
+            <div style="margin-bottom: 24px; background: rgba(30,58,138,0.2); border: 1px solid rgba(59,130,246,0.3); border-radius: 8px; padding: 8px; overflow: hidden;">
+                <div style="white-space: nowrap; animation: marquee 18s linear infinite; font-size: 10px; font-weight: bold; color: #93c5fd;">
+                    INFO: STORAGE PERSISTENCE ENABLED • DATA TIDAK AKAN DIHAPUS OTOMATIS • KILL SWITCH ACTIVE
+                </div>
+            </div>
+
+            <!-- MODULE GRID -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
+                <!-- Security -->
+                <button onclick="openModule('security')" class="module-card">
+                    <div style="font-size: 2rem; color: #ef4444;"><i class="fas fa-shield-halved"></i></div>
+                    <span style="font-size: 9px; font-weight: bold; color: #e2e8f0; text-transform: uppercase;">Sekuriti 24/7</span>
+                    <span style="font-size: 6px; background: rgba(255,77,79,0.2); color: #ff4d4f; padding: 2px 6px; border-radius: 8px; font-weight: bold;">QUANTUM</span>
+                </button>
+
+                <!-- K3 -->
+                <button onclick="openModule('k3')" class="module-card">
+                    <div style="font-size: 2rem; color: #f59e0b;"><i class="fas fa-hard-hat"></i></div>
+                    <span style="font-size: 9px; font-weight: bold; color: #e2e8f0; text-transform: uppercase;">Form K3</span>
+                    <span style="font-size: 6px; background: rgba(245,158,11,0.2); color: #f59e0b; padding: 2px 6px; border-radius: 8px; font-weight: bold;">STEGANO</span>
+                </button>
+
+                <!-- Admin -->
+                <button onclick="openModule('admin')" class="module-card" style="border: 2px solid rgba(212,175,55,0.3); background: rgba(212,175,55,0.05);">
+                    <div style="font-size: 2rem; color: #d4af37;"><i class="fas fa-user-crown"></i></div>
+                    <span style="font-size: 9px; font-weight: bold; color: #e2e8f0; text-transform: uppercase;">Admin Room</span>
+                    <span style="font-size: 6px; background: rgba(255,77,79,0.2); color: #ff4d4f; padding: 2px 6px; border-radius: 8px; font-weight: bold;">KILL SWITCH</span>
+                </button>
+
+                <!-- CS Indoor -->
+                <button onclick="openModule('cs')" class="module-card">
+                    <div style="font-size: 2rem; color: #2dd4bf;"><i class="fas fa-broom"></i></div>
+                    <span style="font-size: 9px; font-weight: bold; color: #e2e8f0; text-transform: uppercase;">CS Indoor</span>
+                    <span style="font-size: 6px; background: rgba(59,130,246,0.2); color: #3b82f6; padding: 2px 6px; border-radius: 8px; font-weight: bold;">PERSISTENT</span>
+                </button>
+
+                <!-- Asset Mgmt -->
+                <button onclick="openModule('asset')" class="module-card">
+                    <div style="font-size: 2rem; color: #a855f7;"><i class="fas fa-boxes-stacked"></i></div>
+                    <span style="font-size: 9px; font-weight: bold; color: #e2e8f0; text-transform: uppercase;">Asset Mgmt</span>
+                    <span style="font-size: 6px; background: rgba(34,197,94,0.2); color: #22c55e; padding: 2px 6px; border-radius: 8px; font-weight: bold;">GEO-LOCK</span>
+                </button>
+
+                <!-- Reports -->
+                <button onclick="openModule('report')" class="module-card">
+                    <div style="font-size: 2rem; color: #22c55e;"><i class="fas fa-file-contract"></i></div>
+                    <span style="font-size: 9px; font-weight: bold; color: #e2e8f0; text-transform: uppercase;">Reports</span>
+                    <span style="font-size: 6px; background: rgba(168,85,247,0.2); color: #a855f7; padding: 2px 6px; border-radius: 8px; font-weight: bold;">AUTO-SYNC</span>
+                </button>
+            </div>
+
+            <!-- AUDIT LOG -->
+            <div style="margin-top: 32px;">
+                <h3 style="font-size: 10px; color: #64748b; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-clipboard-list" style="color: #00f3ff;"></i>
+                    Quantum Audit Log
+                </h3>
+                <div class="glass" style="padding: 12px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 9px; padding-bottom: 4px; margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <span style="color: #00ff9d; font-family: monospace;">SYSTEM_BOOT_COMPLETE</span>
+                        <span style="color: #94a3b8;" id="log-time-1">--:--:--</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 9px; padding-bottom: 4px; margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <span style="color: #60a5fa; font-family: monospace;">STORAGE_ACTIVATED</span>
+                        <span style="color: #94a3b8;" id="log-time-2">--:--:--</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 9px;">
+                        <span style="color: #fbbf24; font-family: monospace;">ALL_MODULES_READY</span>
+                        <span style="color: #94a3b8;" id="log-time-3">--:--:--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STORAGE STATUS -->
+            <div style="margin-top: 24px;">
+                <h3 style="font-size: 10px; color: #64748b; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-database" style="color: #a855f7;"></i>
+                    Quantum Storage Status
+                </h3>
+                <div class="glass" style="padding: 16px;">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; font-size: 9px;">
+                        <div>
+                            <div style="color: #94a3b8; margin-bottom: 4px;">Persistence</div>
+                            <div style="font-weight: bold; color: #00ff9d;" id="persistence-status">ACTIVE</div>
+                        </div>
+                        <div>
+                            <div style="color: #94a3b8; margin-bottom: 4px;">Status</div>
+                            <div style="font-weight: bold; color: #00ff9d;" id="backup-status">ONLINE</div>
+                        </div>
+                        <div>
+                            <div style="color: #94a3b8; margin-bottom: 4px;">Encryption</div>
+                            <div style="font-weight: bold; color: #00ff9d;">AES-256</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- NAVIGATION -->
+        <nav style="height: 80px; background: rgba(2,4,8,0.9); border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-around; align-items: center; padding: 0 16px; position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;">
+            <button onclick="goHome()" style="display: flex; flex-direction: column; align-items: center; gap: 4px; color: #6b7280; background: none; border: none; cursor: pointer;">
+                <i class="fas fa-house" style="font-size: 1.125rem;"></i>
+                <span style="font-size: 8px; font-weight: bold;">Home</span>
+            </button>
+            
+            <button onclick="togglePrivacy()" style="width: 64px; height: 64px; background: linear-gradient(135deg, #1a1f2e, #050810); border-radius: 50%; border: 2px solid rgba(0,243,255,0.3); box-shadow: 0 0 25px rgba(0,243,255,0.35); display: flex; align-items: center; justify-content: center; color: #00f3ff; cursor: pointer; margin-top: -32px;">
+                <i id="privacy-icon" class="fas fa-eye" style="font-size: 1.25rem;"></i>
+            </button>
+
+            <button onclick="triggerLockout()" style="display: flex; flex-direction: column; align-items: center; gap: 4px; color: #6b7280; background: none; border: none; cursor: pointer;">
+                <i class="fas fa-power-off" style="font-size: 1.125rem;"></i>
+                <span style="font-size: 8px; font-weight: bold;">Lock</span>
+            </button>
+        </nav>
+
+        <!-- MODAL CONTAINER -->
+        <div id="app-modal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,3,8,0.95); z-index: 100; display: none; flex-direction: column; justify-content: flex-end;">
+            <div style="background: linear-gradient(180deg, #0b101b, #050810); height: 92vh; width: 100%; border-radius: 30px 30px 0 0; border-top: 1px solid rgba(0,243,255,0.2); display: flex; flex-direction: column;">
+                <div style="height: 48px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <div style="width: 16px;"></div>
+                    <div id="modal-title" style="font-weight: 800; font-size: 14px; color: white;">MODULE</div>
+                    <div onclick="closeModal()" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: #ff3333; font-size: 18px; cursor: pointer;">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+                <div id="modal-content" style="flex: 1; overflow-y: auto; padding: 20px;">
+                    <!-- Content akan diisi -->
+                </div>
+            </div>
+        </div>
+
+        <!-- AUTH SCREEN -->
+        <div id="auth-screen" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #020617, #0f172a); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px; transition: opacity 0.5s;">
+            <div style="text-align: center; margin-bottom: 32px;">
+                <div style="font-size: 6rem; color: #d4af37; margin-bottom: 16px; animation: pulse 2s infinite;">ه</div>
+            </div>
+            
+            <div class="glass" style="width: 100%; max-width: 28rem; padding: 24px; border: 1px solid rgba(0,243,255,0.2);">
+                <h1 style="font-size: 2rem; font-weight: bold; color: white; text-align: center; margin-bottom: 8px;">DREAM OS v13</h1>
+                <p style="text-align: center; color: #94a3b8; margin-bottom: 24px;">QUANTUM SEAL EDITION</p>
+                
+                <div style="margin-bottom: 24px;">
+                    <div style="margin-bottom: 16px;">
+                        <label style="display: block; font-size: 10px; color: #94a3b8; font-weight: bold; text-transform: uppercase; margin-bottom: 4px;">TEST MODE</label>
+                        <p style="color: #fbbf24; font-size: 12px; text-align: center;">System ready. Click button below to enter.</p>
+                    </div>
+                    
+                    <button onclick="login()" style="width: 100%; margin-top: 8px; padding: 12px; background: linear-gradient(to right, #00f3ff, #d4af37); color: black; font-weight: bold; border-radius: 12px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <i class="fas fa-fingerprint"></i> ENTER SYSTEM
+                    </button>
+                </div>
+                
+                <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; font-size: 9px; color: #64748b;">
+                    <p>Dream OS v13.1.9 • GitHub Pages Compatible</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SIMPLIFIED JAVASCRIPT ==================== -->
+    <script>
+        // ==================== GLOBAL STATE ====================
+        const DreamOS = {
+            state: {
+                isLocked: false,
+                privacyMode: false,
+                currentModule: null,
+                deviceHash: null,
+                slideIndex: 0,
+                lockdownTimer: null,
+                authenticated: false,
+                slideMessages: [
+                    "QUANTUM VAULT ACTIVATED • DATA PERSISTENCE ENABLED",
+                    "STORAGE PERSISTENCE GRANTED • DATA AMAN DARI AUTO-CLEAN",
+                    "KILL SWITCH ACTIVE • SYSTEM AUTO-RECOVERY",
+                    "ALL MODULES READY • SYSTEM INTEGRITY 100%"
+                ]
+            },
+
+            // ==================== INITIALIZATION ====================
+            init() {
+                console.log('🚀 DREAM OS Initializing...');
+                
+                this.updateLoadingStatus("Starting Quantum Engine...");
+                this.showLoadingProgress(20);
+                
+                // Generate device hash
+                this.generateDeviceHash();
+                
+                this.updateLoadingStatus("Setting up UI...");
+                this.showLoadingProgress(60);
+                
+                // Setup basic systems
+                this.updateClock();
+                setInterval(() => this.updateClock(), 1000);
+                
+                // Start slide system
+                this.startSlideSystem();
+                
+                this.updateLoadingStatus("Finalizing...");
+                this.showLoadingProgress(100);
+                
+                // Hide loading screen after 1 second
+                setTimeout(() => {
+                    this.hideLoadingScreen();
+                }, 1000);
+            },
+            
+            // Loading functions
+            updateLoadingStatus(text) {
+                const el = document.getElementById('loading-status');
+                if (el) el.textContent = text;
+            },
+            
+            showLoadingProgress(percent) {
+                const el = document.getElementById('loading-progress');
+                if (el) el.style.width = percent + '%';
+            },
+            
+            hideLoadingScreen() {
+                const loading = document.getElementById('loading-screen');
+                if (loading) {
+                    loading.style.opacity = '0';
+                    setTimeout(() => {
+                        loading.style.display = 'none';
+                        document.getElementById('app-container').classList.add('loaded');
+                        document.getElementById('auth-screen').style.display = 'flex';
+                    }, 500);
+                }
+            },
+            
+            // Device hash
+            generateDeviceHash() {
+                const hash = 'DREAM-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+                this.state.deviceHash = hash;
+                console.log('🔒 Device ID:', hash);
+            },
+            
+            // Clock
+            updateClock() {
+                const now = new Date();
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+                
+                const clock = document.getElementById('clock');
+                if (clock) clock.textContent = `${hours}:${minutes}:${seconds}`;
+                
+                // Update logs
+                const log1 = document.getElementById('log-time-1');
+                const log2 = document.getElementById('log-time-2');
+                const log3 = document.getElementById('log-time-3');
+                
+                if (log1) log1.textContent = `${hours}:${minutes}:${seconds}`;
+                if (log2) log2.textContent = `${hours}:${minutes}:${String(parseInt(seconds) + 1).padStart(2, '0')}`;
+                if (log3) log3.textContent = `${hours}:${minutes}:${String(parseInt(seconds) + 2).padStart(2, '0')}`;
+            },
+            
+            // Slide system
+            startSlideSystem() {
+                setInterval(() => {
+                    this.state.slideIndex = (this.state.slideIndex + 1) % this.state.slideMessages.length;
+                    this.updateSlideContent();
+                }, 8000);
+            },
+            
+            updateSlideContent() {
+                const el = document.getElementById('slide-text');
+                if (el) {
+                    el.style.opacity = '0';
+                    setTimeout(() => {
+                        el.textContent = this.state.slideMessages[this.state.slideIndex];
+                        el.style.opacity = '1';
+                    }, 300);
+                }
+            },
+            
+            // Module system
+            openModule(moduleName) {
+                if (this.state.isLocked) {
+                    this.showNotification('System locked', 'error');
+                    return;
+                }
+                
+                const modal = document.getElementById('app-modal');
+                const content = document.getElementById('modal-content');
+                const title = document.getElementById('modal-title');
+                
+                if (!modal || !content || !title) return;
+                
+                modal.style.display = 'flex';
+                this.state.currentModule = moduleName;
+                
+                const modules = {
+                    'security': {
+                        title: 'SEKURITI 24/7',
+                        html: this.getSecurityHTML()
+                    },
+                    'k3': {
+                        title: 'FORM K3',
+                        html: this.getK3HTML()
+                    },
+                    'admin': {
+                        title: 'ADMIN ROOM',
+                        html: this.getAdminHTML()
+                    },
+                    'cs': {
+                        title: 'CS INDOOR',
+                        html: this.getCSHTML()
+                    },
+                    'asset': {
+                        title: 'ASSET MANAGEMENT',
+                        html: this.getAssetHTML()
+                    },
+                    'report': {
+                        title: 'REPORTS',
+                        html: this.getReportHTML()
+                    }
+                };
+                
+                const module = modules[moduleName];
+                if (module) {
+                    title.textContent = module.title;
+                    content.innerHTML = module.html;
+                }
+            },
+            
+            closeModal() {
+                const modal = document.getElementById('app-modal');
+                if (modal) modal.style.display = 'none';
+            },
+            
+            goHome() {
+                this.closeModal();
+            },
+            
+            togglePrivacy() {
+                this.state.privacyMode = !this.state.privacyMode;
+                const icon = document.getElementById('privacy-icon');
+                
+                if (!icon) return;
+                
+                if (this.state.privacyMode) {
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                    document.body.style.filter = 'blur(8px)';
+                    this.showNotification('Privacy Mode Active', 'info');
+                } else {
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                    document.body.style.filter = 'none';
+                    this.showNotification('Privacy Mode Disabled', 'info');
+                }
+            },
+            
+            triggerLockout() {
+                if (this.state.isLocked) return;
+                
+                this.state.isLocked = true;
+                this.showNotification('System locked for 30 seconds', 'warning');
+                
+                setTimeout(() => {
+                    this.state.isLocked = false;
+                    this.showNotification('System unlocked', 'success');
+                }, 30000);
+            },
+            
+            // Notification system
+            showNotification(message, type = 'info') {
+                const colors = {
+                    success: { bg: '#16a34a', icon: 'fa-check-circle' },
+                    error: { bg: '#dc2626', icon: 'fa-exclamation-triangle' },
+                    info: { bg: '#3b82f6', icon: 'fa-info-circle' },
+                    warning: { bg: '#f59e0b', icon: 'fa-exclamation' }
+                };
+                
+                const config = colors[type] || colors.info;
+                
+                const notif = document.createElement('div');
+                notif.style.cssText = `
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    max-width: 300px;
+                    padding: 12px 16px;
+                    background: ${config.bg};
+                    border-radius: 12px;
+                    color: white;
+                    z-index: 9999;
+                    animation: slideIn 0.3s ease-out;
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+                `;
+                
+                notif.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <i class="fas ${config.icon}" style="font-size: 1.25rem;"></i>
+                        <div style="font-size: 14px;">${message}</div>
+                    </div>
+                `;
+                
+                document.body.appendChild(notif);
+                
+                setTimeout(() => {
+                    notif.style.animation = 'slideOut 0.3s ease-in forwards';
+                    setTimeout(() => {
+                        if (notif.parentNode) notif.parentNode.removeChild(notif);
+                    }, 300);
+                }, 3000);
+            },
+            
+            // HTML Templates
+            getSecurityHTML() {
+                return `
+                    <div style="padding: 24px; text-align: center;">
+                        <i class="fas fa-shield-halved" style="font-size: 3rem; color: #ef4444; margin-bottom: 1rem;"></i>
+                        <h3 style="color: #ef4444; margin-bottom: 1rem;">Security Module</h3>
+                        <p style="color: #cbd5e1; margin-bottom: 2rem;">Laporan keamanan harian dengan enkripsi</p>
+                        <button onclick="DreamOS.showNotification('Laporan disimpan', 'success')" style="padding: 12px 24px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                            Save Security Report
+                        </button>
+                    </div>
+                `;
+            },
+            
+            getK3HTML() {
+                return `
+                    <div style="padding: 24px;">
+                        <h3 style="color: #f59e0b; margin-bottom: 1rem;">K3 Safety Form</h3>
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: block; color: #f59e0b; margin-bottom: 0.5rem;">Safety Status</label>
+                            <select style="width: 100%; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid #f59e0b; color: white; border-radius: 8px;">
+                                <option>All Clear</option>
+                                <option>Minor Issues</option>
+                                <option>Needs Attention</option>
+                            </select>
+                        </div>
+                        <button onclick="DreamOS.showNotification('K3 form submitted', 'success')" style="width: 100%; padding: 12px; background: #f59e0b; color: black; border: none; border-radius: 8px; cursor: pointer;">
+                            Submit K3 Form
+                        </button>
+                    </div>
+                `;
+            },
+            
+            getAdminHTML() {
+                return `
+                    <div style="padding: 24px; text-align: center;">
+                        <i class="fas fa-user-crown" style="font-size: 3rem; color: #d4af37; margin-bottom: 1rem;"></i>
+                        <h3 style="color: #d4af37; margin-bottom: 1rem;">Admin Panel</h3>
+                        <p style="color: #cbd5e1; margin-bottom: 2rem;">Full system control</p>
+                        <button onclick="DreamOS.showNotification('Database backed up', 'success')" style="padding: 12px 24px; background: #d4af37; color: black; border: none; border-radius: 8px; cursor: pointer;">
+                            Backup System
+                        </button>
+                    </div>
+                `;
+            },
+            
+            getCSHTML() {
+                return `
+                    <div style="padding: 24px;">
+                        <h3 style="color: #2dd4bf; margin-bottom: 1rem;">CS Checklist</h3>
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; color: #cbd5e1; margin-bottom: 0.5rem;">
+                                <input type="checkbox"> Floor Cleaning
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; color: #cbd5e1; margin-bottom: 0.5rem;">
+                                <input type="checkbox"> Window Cleaning
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; color: #cbd5e1;">
+                                <input type="checkbox"> Restroom Check
+                            </label>
+                        </div>
+                        <button onclick="DreamOS.showNotification('Checklist completed', 'success')" style="width: 100%; padding: 12px; background: #2dd4bf; color: black; border: none; border-radius: 8px; cursor: pointer;">
+                            Complete Checklist
+                        </button>
+                    </div>
+                `;
+            },
+            
+            getAssetHTML() {
+                return `
+                    <div style="padding: 24px; text-align: center;">
+                        <i class="fas fa-boxes-stacked" style="font-size: 3rem; color: #a855f7; margin-bottom: 1rem;"></i>
+                        <h3 style="color: #a855f7; margin-bottom: 1rem;">Asset Management</h3>
+                        <div style="background: rgba(168,85,247,0.1); padding: 1rem; border-radius: 8px; margin-bottom: 2rem;">
+                            <p style="color: #a855f7;">Total Assets: <strong>42</strong></p>
+                            <p style="color: #22c55e;">Available: <strong>34</strong></p>
+                        </div>
+                        <button onclick="DreamOS.showNotification('Asset report exported', 'success')" style="padding: 12px 24px; background: #a855f7; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                            Export Report
+                        </button>
+                    </div>
+                `;
+            },
+            
+            getReportHTML() {
+                return `
+                    <div style="padding: 24px;">
+                        <h3 style="color: #22c55e; margin-bottom: 1rem;">Report Generator</h3>
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: block; color: #22c55e; margin-bottom: 0.5rem;">Report Type</label>
+                            <select style="width: 100%; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid #22c55e; color: white; border-radius: 8px;">
+                                <option>Daily</option>
+                                <option>Weekly</option>
+                                <option>Monthly</option>
+                            </select>
+                        </div>
+                        <button onclick="DreamOS.showNotification('Report generated', 'success')" style="width: 100%; padding: 12px; background: #22c55e; color: black; border: none; border-radius: 8px; cursor: pointer;">
+                            Generate Report
+                        </button>
+                    </div>
+                `;
+            }
+        };
+
+        // Global helper functions
+        function openModule(module) {
+            DreamOS.openModule(module);
+        }
+        
+        function closeModal() {
+            DreamOS.closeModal();
+        }
+        
+        function goHome() {
+            DreamOS.goHome();
+        }
+        
+        function togglePrivacy() {
+            DreamOS.togglePrivacy();
+        }
+        
+        function triggerLockout() {
+            DreamOS.triggerLockout();
+        }
+        
+        function login() {
+            const authScreen = document.getElementById('auth-screen');
+            if (authScreen) {
+                authScreen.style.opacity = '0';
+                setTimeout(() => {
+                    authScreen.style.display = 'none';
+                    DreamOS.showNotification('Welcome to DREAM OS', 'success');
+                }, 500);
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            DreamOS.init();
+        });
+
+        // Add marquee animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes marquee {
+                0% { transform: translateX(100%); }
+                100% { transform: translateX(-100%); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        console.log('DREAM OS v13.1.9 - GitHub Pages Edition Loaded');
+    </script>
+</body>
+</html>
