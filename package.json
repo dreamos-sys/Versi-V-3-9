@@ -1,7 +1,0 @@
-{
-  "name": "dreamos-v13",
-  "version": "13.1.9",
-  "scripts": {
-    "build": "node build.mjs"
-  }
-}
