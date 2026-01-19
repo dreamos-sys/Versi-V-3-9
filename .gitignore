@@ -1,11 +1,58 @@
-# DREAM OS v13 - Quantum Seal
-name = "purple-mode-3382"
-main = "service-worker-nuclear.js"
-compatibility_date = "2026-01-19"
+# DREAM OS - Quantum Seal Edition
 
-[build]
-command = "npm run build"
+# Secret files (aman)
+.env*
+*.env.local
+config.json
+credentials.json
+sri_hashes.json
+firebase.json
+service-account.json
+private.key
+*.key
+*.pem
+*.crt
+cf-token.json
 
-[build.upload]
-format = "modules"
-dir = "dist"
+# Build folders
+build/
+dist/
+.cache/
+.wrangler/
+.cloudflare/
+.pnpm-store/
+node_modules/
+workers-site/
+
+# Logs & debug
+audit-*.json
+logs/
+debug.log
+npm-debug.log*
+yarn-debug.log*
+report.html
+scan-result.json
+coverage/
+.nyc_output/
+
+# OS & editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Security patterns
+*-secret.js
+*-keys.js
+*password*
+*apikey*
+*secret*
+
+# Temp files
+*.bak
+*.backup
+*.tmp
+tmp/
+temp/
