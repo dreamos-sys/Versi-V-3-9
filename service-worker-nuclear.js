@@ -1,45 +1,21 @@
 const CACHE_NAME = 'dreamos-v13.1.9-quantum-cache';
-const KILL_SWITCH_URL = 'https://kill-switch.dreamos-api.com/v13';
+// Sementara matikan kill-switch untuk testing
+// const KILL_SWITCH_URL = 'https://kill-switch.dreamos-api.com/v13';
 const CURRENT_VERSION = '13.1.9-quantum-seal';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
-  event.waitUntil(checkKillSwitch());
+  // event.waitUntil(checkKillSwitch()); // Matikan sementara
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(self.clients.claim());
-  setInterval(checkKillSwitch, 5 * 60 * 1000);
+  // setInterval(checkKillSwitch, 5 * 60 * 1000); // Matikan sementara
 });
 
-async function checkKillSwitch() {
-  try {
-    const response = await fetch(KILL_SWITCH_URL, {
-      method: 'POST',
-      headers: { 'X-Request-Type': 'kill-switch-check' },
-      signal: AbortSignal.timeout(3000)
-    });
-    
-    const data = await response.json();
-    
-    if (data.status === 'KILL' || data.version !== CURRENT_VERSION) {
-      await self.registration.unregister();
-      const cacheNames = await caches.keys();
-      await Promise.all(cacheNames.map(name => caches.delete(name)));
-      
-      const clients = await self.clients.matchAll();
-      clients.forEach(client => {
-        client.navigate('https://dreamos-api.com/update-required');
-      });
-      
-      return false;
-    }
-    
-    return true;
-  } catch (error) {
-    return true;
-  }
-}
+// async function checkKillSwitch() {
+//   ... kode lama ...
+// }
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
