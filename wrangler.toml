@@ -1,3 +1,4 @@
+# DREAM OS v13 - Quantum Seal
 name = "purple-mode-3382"
 main = "service-worker-nuclear.js"
 compatibility_date = "2026-01-19"
@@ -6,5 +7,5 @@ compatibility_date = "2026-01-19"
 command = "npm run build"
 
 [build.upload]
-format = "modules"
+format = "service-worker"  # ← INI YANG BENAR!
 dir = "dist"
